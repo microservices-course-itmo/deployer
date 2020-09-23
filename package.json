@@ -5,7 +5,8 @@
   "main": "src/index.tsx",
   "scripts": {
     "dev": "NODE_ENV=development webpack-dev-server --open --config ./build-tools/webpack.config.js",
-    "build": "rm -rf dist && webpack --config ./build-tools/webpack.config.js"
+    "build": "rm -rf dist && webpack --config ./build-tools/webpack.config.js",
+    "lint": "eslint --config .eslintrc.json --ext .ts,.tsx --color src && tsc --pretty --noEmit"
   },
   "author": "",
   "dependencies": {
