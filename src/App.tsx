@@ -1,6 +1,11 @@
 import React from 'react'
+import { RecoilRoot } from 'recoil'
 import Router from './Router'
 
-const App = () => <Router />
+const App = () => (
+  <RecoilRoot>
+    <Router />
+  </RecoilRoot>
+)
 
 export default App
