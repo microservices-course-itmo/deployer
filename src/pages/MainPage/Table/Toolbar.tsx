@@ -28,9 +28,8 @@ const useToolbarStyles = makeStyles((theme) => ({
   },
 }))
 
-const EnhancedTableToolbar = (props) => {
+const EnhancedTableToolbar = ({ numSelected }) => {
   const classes = useToolbarStyles()
-  const { numSelected } = props
 
   return (
     <Toolbar
