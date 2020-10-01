@@ -1,3 +1,4 @@
+const path = require('path');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const { isProd, paths } = require('./utils');
@@ -10,7 +11,7 @@ module.exports = {
     },
     
     output: {
-        filename: 'assets/js/[name].[contenthash].js',
+        filename: path.join('assets', 'js', '[name].[contenthash].js'),
         path: paths.dist,
         publicPath: '/'
     },
@@ -67,7 +68,7 @@ module.exports = {
                         loader: 'css-loader'
                     }
                 ],
-                include: `${paths.res}/css`,
+                include: path.join(paths.res, 'css'),
             },
         ]
     },
@@ -78,12 +79,12 @@ module.exports = {
     
     plugins: [
         new MiniCssExtractPlugin({
-            filename: `assets/css/[name].[hash].css`
+            filename: path.join('assets', 'css', '[name].[hash].css')
         }),
         
         new HtmlWebpackPlugin({
-            template: `${paths.public}/index.html`,
-            filename: './index.html'
+            template: path.join(paths.public, 'index.html'),
+            filename: path.join('.', 'index.html')
         })
     ],
     
