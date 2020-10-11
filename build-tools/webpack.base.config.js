@@ -1,11 +1,9 @@
 const path = require('path');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const { isProd, paths } = require('./utils');
+const { paths } = require('./utils');
 
 module.exports = {
-    mode: isProd ? 'production' : 'development',
-    
     entry: {
         app: paths.src
     },
@@ -86,13 +84,5 @@ module.exports = {
             template: path.join(paths.public, 'index.html'),
             filename: path.join('.', 'index.html')
         })
-    ],
-    
-    devServer: !isProd ?
-        {
-            port: 8081,
-            overlay: true,
-            historyApiFallback: true,
-            contentBase: paths.dist
-        } : undefined
+    ]
 };
