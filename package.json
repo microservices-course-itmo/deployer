@@ -12,10 +12,12 @@
   "dependencies": {
     "@material-ui/core": "^4.11.0",
     "@material-ui/icons": "^4.9.1",
+    "@material-ui/lab": "^4.0.0-alpha.56",
     "classnames": "^2.2.6",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-router-dom": "^5.2.0",
+    "react-virtualized": "^9.22.2",
     "recoil": "0.0.13",
     "styled-components": "^5.2.0"
   },

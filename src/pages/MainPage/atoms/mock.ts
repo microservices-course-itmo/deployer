@@ -16,6 +16,19 @@ const rows = [
   createData('Marshmallow', 318, 0, 81, '-'),
   createData('Nougat', 'Rebooting', 19.0, 9, '-'),
   createData('Oreo', 'Active', 18.0, 63, '-'),
+  createData('Oreo1', 'Active', 18.0, 63, '-'),
+  createData('Oreo2', 'Active', 18.0, 63, '-'),
+  createData('Oreo3', 'Active', 18.0, 63, '-'),
+  createData('Oreo4', 'Active', 18.0, 63, '-'),
+  createData('Oreo5', 'Active', 18.0, 63, '-'),
+  createData('Oreo6', 'Active', 18.0, 63, '-'),
+  createData('Oreo7', 'Active', 18.0, 63, '-'),
+  createData('Oreo8', 'Active', 18.0, 63, '-'),
+  createData('Oreo9', 'Active', 18.0, 63, '-'),
+  createData('Oreo10', 'Active', 18.0, 63, '-'),
+  createData('Oreo11', 'Active', 18.0, 63, '-'),
+  createData('Oreo12', 'Active', 18.0, 63, '-'),
+  createData('Oreo13', 'Active', 18.0, 63, '-'),
 ]
 
 export default {
