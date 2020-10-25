@@ -8,7 +8,7 @@ const devWebpackConfig = merge(baseWebpackConfig, {
         port: 8081,
         overlay: true,
         historyApiFallback: true,
-        contentBase: paths.dist
+        contentBase: paths.dist,
     }
 });
 
