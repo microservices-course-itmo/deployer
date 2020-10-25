@@ -1,6 +1,7 @@
 const path = require('path');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const ESLintPlugin = require('eslint-webpack-plugin');
 const { paths } = require('./utils');
 
 module.exports = {
@@ -16,13 +17,6 @@ module.exports = {
     
     module: {
         rules: [
-            {
-                enforce: 'pre',
-                test: /\.(ts|tsx)$/,
-                exclude: /node_modules/,
-                loader: 'eslint-loader',
-            },
-            
             {
                 test: /\.(ts|tsx)$/,
                 loader: 'babel-loader',
@@ -76,6 +70,10 @@ module.exports = {
     },
     
     plugins: [
+        new ESLintPlugin({
+            extensions: ['ts', 'tsx']
+        }),
+        
         new MiniCssExtractPlugin({
             filename: path.join('assets', 'css', '[name].[hash].css')
         }),
