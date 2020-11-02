@@ -1,5 +1,6 @@
 import React from 'react'
 import { IApplicationInstance } from '../../../../types/Application'
+import { ApplicationInstanceTable } from './ApplicationInstanceTable/ApplicationInstanceTable'
 
 interface IApplicationPageTabDeployProps {
   description?: string
@@ -17,5 +18,6 @@ export const ApplicationPageTabDeploy = ({
     {description}
     {templateVersion}
     {JSON.stringify(instances)}
+    <ApplicationInstanceTable data={instances} />
   </div>
 )
