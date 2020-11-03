@@ -68,4 +68,11 @@ export const mockData = {
       url: '127.0.0.1:48080/order-service/swagger-ui.html',
     },
   ],
+  versions: ['2.0.0', '2.0.1', '2.0.2', '2.0.3', '2.0.4'],
+  history: [
+    {
+      date: '02/10/2020',
+      log: 'created new env var',
+    },
+  ],
 }
