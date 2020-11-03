@@ -2,9 +2,9 @@ import React from 'react'
 import { IApplicationInstance } from '../../../../types/Application'
 
 interface IApplicationPageTabDeployProps {
-  description?: string
-  templateVersion?: string
-  instances?: IApplicationInstance[]
+  description: string
+  templateVersion: string
+  instances: IApplicationInstance[]
 }
 
 export const ApplicationPageTabDeploy = ({

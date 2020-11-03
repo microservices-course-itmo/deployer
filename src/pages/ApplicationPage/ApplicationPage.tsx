@@ -15,7 +15,7 @@ export const ApplicationPage = ({
   },
 }: RouteComponentProps<IApplicationPageRouteParams>) => {
   const [currentTab, setCurrentTab] = useState(ApplicationPageTabType.DEPLOY)
-  const [applicationData, setApplicationData] = useState<IApplicationData>({})
+  const [applicationData, setApplicationData] = useState<IApplicationData | undefined>()
 
   useEffect(() => {
     setTimeout(() => {

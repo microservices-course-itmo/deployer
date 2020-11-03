@@ -6,30 +6,38 @@ export enum ApplicationPageTabType {
 }
 
 export interface IApplicationData {
-  templateVersion?: string
-  createdBy?: string
-  name?: string
-  'port-mappings'?: string[]
-  volumes?: string[]
-  description?: string
-  env?: IEnvironmentVariable[]
-  instances?: IApplicationInstance[]
+  name: string
+  description: string
+  templateVersion: string
+  createdBy: string
+
+  'port-mappings': string[]
+  volumes: string[]
+  env: IEnvironmentVariable[]
+  instances: IApplicationInstance[]
+  versions: string[]
+  history: IHistoryLog[]
 }
 
 export interface IApplicationInstance {
-  appId?: string
-  templateId?: string
-  version?: string
-  containerId?: string
-  dateCreated?: string
-  userCreated?: string
-  status?: string
-  url?: string
+  appId: string
+  templateId: string
+  version: string
+  containerId: string
+  dateCreated: string
+  userCreated: string
+  status: string
+  url: string
 }
 
 export interface IEnvironmentVariable {
   name: string
   value: string
+}
+
+export interface IHistoryLog {
+  date: string
+  log: string
 }
 
 // export enum ApplicationInstanceStatusType {
