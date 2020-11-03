@@ -9,15 +9,16 @@ interface IApplicationPageTabDeployProps {
 }
 
 export const ApplicationPageTabDeploy = ({
-  description,
-  templateVersion,
+  // description,
+  // templateVersion,
   instances,
 }: IApplicationPageTabDeployProps) => (
   <div>
     <h3>ApplicationPageTabDeploy</h3>
-    {description}
-    {templateVersion}
-    {JSON.stringify(instances)}
     <ApplicationInstanceTable data={instances} />
   </div>
 )
+
+// {JSON.stringify(instances)}
+// {templateVersion}
+// {description}

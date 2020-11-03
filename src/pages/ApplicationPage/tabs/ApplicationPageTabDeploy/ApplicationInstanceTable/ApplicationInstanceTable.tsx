@@ -1,6 +1,6 @@
 import React from 'react'
-import { makeStyles } from '@material-ui/core/styles'
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from '@material-ui/core'
+import { createMuiTheme, makeStyles, ThemeProvider } from '@material-ui/core/styles'
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, IconButton } from '@material-ui/core'
 import { IApplicationInstance } from 'types/Application'
 import PlayArrowIcon from '@material-ui/icons/PlayArrow'
 import StopIcon from '@material-ui/icons/Stop'
@@ -24,6 +24,18 @@ const useStyles = makeStyles({
     width: '1000px',
     overflowX: 'auto',
     margin: 'auto',
+  },
+})
+
+const theme = createMuiTheme({
+  palette: {
+    primary: {
+      main: '#d50000',
+    },
+    secondary: {
+      main: '#1b5e20',
+    },
+    type: 'light',
   },
 })
 
@@ -59,9 +71,17 @@ export const ApplicationInstanceTable = ({ data }: IApplicationInstanceTableProp
                 <TableCell align='center'>{Data.status}</TableCell>
                 <TableCell align='center'>
                   <div>
-                    <PlayArrowIcon />
-                    <StopIcon />
-                    <ReplayIcon />
+                    <ThemeProvider theme={theme}>
+                      <IconButton color='secondary' aria-label='Play'>
+                        <PlayArrowIcon fontSize='large' />
+                      </IconButton>
+                      <IconButton color='primary' aria-label='Stop'>
+                        <StopIcon fontSize='large' />
+                      </IconButton>
+                      <IconButton aria-label='Replay'>
+                        <ReplayIcon fontSize='large' />
+                      </IconButton>
+                    </ThemeProvider>
                   </div>
                 </TableCell>
                 <TableCell align='center'>{Data.alias}</TableCell>
