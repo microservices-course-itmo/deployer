@@ -28,7 +28,7 @@ const useStyles = makeStyles({
 })
 
 interface IApplicationInstanceTableProps {
-  data?: IApplicationInstance[]
+  data: IApplicationInstance[]
 }
 
 export const ApplicationInstanceTable = ({ data }: IApplicationInstanceTableProps) => {

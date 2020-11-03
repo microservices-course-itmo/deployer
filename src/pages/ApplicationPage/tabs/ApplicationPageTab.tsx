@@ -7,24 +7,26 @@ import { ApplicationPageTabVolumes } from './ApplicationPageTabVolumes/Applicati
 
 interface IApplicationPageTabProps {
   tab: ApplicationPageTabType
-  data: IApplicationData
+  data?: IApplicationData
 }
 
 export const ApplicationPageTab = memo(({ tab, data }: IApplicationPageTabProps) => {
+  if (!data) return <div>Loading...</div>
+
   switch (tab) {
     case ApplicationPageTabType.ENVIRONMENT:
-      return <ApplicationPageTabEnvironment env={data?.env} />
+      return <ApplicationPageTabEnvironment env={data.env} />
     case ApplicationPageTabType.PORTS:
-      return <ApplicationPageTabPorts ports={data?.['port-mappings']} />
+      return <ApplicationPageTabPorts ports={data['port-mappings']} />
     case ApplicationPageTabType.VOLUMES:
-      return <ApplicationPageTabVolumes volumes={data?.volumes} />
+      return <ApplicationPageTabVolumes volumes={data.volumes} />
     case ApplicationPageTabType.DEPLOY:
     default:
       return (
         <ApplicationPageTabDeploy
-          description={data?.description}
-          instances={data?.instances}
-          templateVersion={data?.templateVersion}
+          description={data.description}
+          instances={data.instances}
+          templateVersion={data.templateVersion}
         />
       )
   }

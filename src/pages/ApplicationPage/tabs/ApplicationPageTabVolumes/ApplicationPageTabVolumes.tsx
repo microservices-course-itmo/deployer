@@ -1,7 +1,7 @@
 import React from 'react'
 
 interface IApplicationPageTabVolumesProps {
-  volumes?: string[]
+  volumes: string[]
 }
 
 export const ApplicationPageTabVolumes = ({ volumes }: IApplicationPageTabVolumesProps) => (

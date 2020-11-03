@@ -3,9 +3,9 @@ import { IApplicationInstance } from '../../../../types/Application'
 import { ApplicationInstanceTable } from './ApplicationInstanceTable/ApplicationInstanceTable'
 
 interface IApplicationPageTabDeployProps {
-  description?: string
-  templateVersion?: string
-  instances?: IApplicationInstance[]
+  description: string
+  templateVersion: string
+  instances: IApplicationInstance[]
 }
 
 export const ApplicationPageTabDeploy = ({
