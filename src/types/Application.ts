@@ -28,6 +28,7 @@ export interface IApplicationInstance {
   userCreated: string
   status: string
   url: string
+  alias: string
 }
 
 export interface IEnvironmentVariable {

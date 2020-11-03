@@ -24,6 +24,7 @@ export const mockData = {
       dateCreated: '23412351245',
       userCreated: 'asukhoa',
       status: 'STARTING',
+      alias: 'new feature added',
       url: '127.0.0.1:48080/order-service/swagger-ui.html',
     },
     {
@@ -34,6 +35,7 @@ export const mockData = {
       dateCreated: '23412351245',
       userCreated: 'asukhoa',
       status: 'STARTING',
+      alias: 'new feature added',
       url: '127.0.0.1:48080/order-service/swagger-ui.html',
     },
     {
@@ -55,6 +57,7 @@ export const mockData = {
       dateCreated: '23412351245',
       userCreated: 'asukhoa',
       status: 'STARTING',
+      alias: 'new feature added',
       url: '127.0.0.1:48080/order-service/swagger-ui.html',
     },
     {
@@ -65,6 +68,7 @@ export const mockData = {
       dateCreated: '23412351245',
       userCreated: 'asukhoa',
       status: 'STARTING',
+      alias: 'new feature added',
       url: '127.0.0.1:48080/order-service/swagger-ui.html',
     },
   ],
