@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { RouteComponentProps } from 'react-router-dom'
 import { AppBar, Tab, Tabs } from '@material-ui/core'
-import { ApplicationPageTabType, IApplicationData } from 'types/Application'
+import { ApplicationPageTabType, IApplicationData } from '../../types/Application'
 import { ApplicationPageTab } from './tabs/ApplicationPageTab'
 import { mockData } from './mock'
 
