@@ -23,9 +23,9 @@ export const ApplicationPage = ({
     }, 250)
   }, [])
 
-  // const handleTabChange = (event: React.ChangeEvent<unknown>, newTab: ApplicationPageTabType) => {
-  //   setCurrentTab(newTab)
-  // }
+  const handleTabChange = (event: React.ChangeEvent<unknown>, newTab: ApplicationPageTabType) => {
+    setCurrentTab(newTab)
+  }
 
   return (
     <div>

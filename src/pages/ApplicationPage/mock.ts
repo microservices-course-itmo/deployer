@@ -5,6 +5,7 @@ export const mockData = {
   'port-mappings': ['8080:8080', '8081:48081'],
   volumes: ['opt/kafka'],
   description: 'service for ...',
+  lastRelease: '1.0.1',
   env: [
     {
       name: 'POSTGRES_HOST',

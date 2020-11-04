@@ -1,5 +1,5 @@
 import React from 'react'
-import { FormControl, Container, Grid, MenuItem, Select, Button, InputLabel } from '@material-ui/core'
+import { FormControl, Container, Grid, MenuItem, Select, Button, InputLabel, TextField } from '@material-ui/core'
 import { createStyles, makeStyles } from '@material-ui/core/styles'
 import { IApplicationInstance } from '../../../../types/Application'
 import { ApplicationInstanceTable } from './ApplicationInstanceTable/ApplicationInstanceTable'
@@ -8,6 +8,8 @@ interface IApplicationPageTabDeployProps {
   description: string
   templateVersion: string
   instances: IApplicationInstance[]
+  possibleVersions: string[]
+  lastRelease: string
 }
 
 const useStyles = makeStyles(() =>
@@ -22,13 +24,22 @@ export const ApplicationPageTabDeploy = ({
   description,
   templateVersion,
   instances,
+  possibleVersions,
+  lastRelease,
 }: IApplicationPageTabDeployProps) => {
   console.log(templateVersion)
-  console.log(JSON.stringify(instances))
-  const [currency, setCurrency] = React.useState('1')
-  // const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-  //   setCurrency(event.target.value)
-  // }
+  const [vers, setVers] = React.useState(possibleVersions[possibleVersions.length - 1])
+  const handleVersionChange = (event: React.ChangeEvent<{ value: string }>) => {
+    setVers(event.target.value)
+  }
+  const [alias, setAlias] = React.useState('')
+  const handleAliasChange = (event: React.ChangeEvent<{ value: string }>) => {
+    setAlias(event.target.value)
+  }
+  const onClickDeploy = () => {
+    setVers('')
+    setAlias('')
+  }
   const classes = useStyles()
   return (
     <div>
@@ -36,7 +47,7 @@ export const ApplicationPageTabDeploy = ({
         <Grid container direction='row' justify='space-between' alignItems='center'>
           <Grid item>
             <h3>Description: {description}</h3>
-            <h3>Last release: V1.5</h3>
+            <h3>Last release: {lastRelease}</h3>
           </Grid>
           <Grid item>
             <InputLabel id='demo-simple-select-filled-label'>Version</InputLabel>
@@ -44,23 +55,33 @@ export const ApplicationPageTabDeploy = ({
               <Select
                 labelId='demo-simple-select-filled-label'
                 id='demo-simple-select-filled'
-                value={currency}
+                value={vers}
+                onChange={handleVersionChange}
               >
-                <MenuItem value='none'>
-                  <em>None</em>
-                </MenuItem>
-                <MenuItem value={10}>V1.5</MenuItem>
-                <MenuItem value={20}>V1.6</MenuItem>
-                <MenuItem value={30}>V1.7</MenuItem>
+                {possibleVersions.map((version) => (
+                  <MenuItem key={version} value={version}>
+                    {version}
+                  </MenuItem>
+                ))}
               </Select>
+              <TextField
+                required
+                id='standard-required'
+                label='Required'
+                variant='filled'
+                value={alias}
+                onChange={handleAliasChange}
+              />
             </FormControl>
-            <h3>Alias: mongo</h3>
           </Grid>
           <Grid item>
-            <Button variant='contained'>Deploy</Button>
+            <Button variant='contained' disabled={!vers || !alias} onClick={() => onClickDeploy()}>
+              Deploy
+            </Button>
           </Grid>
         </Grid>
       </Container>
+      <ApplicationInstanceTable data={instances} />
     </div>
   )
 }
