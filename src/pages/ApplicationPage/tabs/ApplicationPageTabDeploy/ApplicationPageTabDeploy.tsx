@@ -29,8 +29,8 @@ export const ApplicationPageTabDeploy = ({
 }: IApplicationPageTabDeployProps) => {
   console.log(templateVersion)
   const [vers, setVers] = React.useState(possibleVersions[possibleVersions.length - 1])
-  const handleVersionChange = (event: React.ChangeEvent<{ value: string }>) => {
-    setVers(event.target.value)
+  const handleVersionChange = (event: React.ChangeEvent<{ value: unknown }>) => {
+    setVers(event.target.value as string)
   }
   const [alias, setAlias] = React.useState('')
   const handleAliasChange = (event: React.ChangeEvent<{ value: string }>) => {
@@ -75,7 +75,7 @@ export const ApplicationPageTabDeploy = ({
             </FormControl>
           </Grid>
           <Grid item>
-            <Button variant='contained' disabled={!vers || !alias} onClick={() => onClickDeploy()}>
+            <Button variant='contained' disabled={!vers || !alias} onClick={onClickDeploy}>
               Deploy
             </Button>
           </Grid>
