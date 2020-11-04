@@ -2,7 +2,7 @@ import React from 'react'
 import { IEnvironmentVariable } from '../../../../types/Application'
 
 interface IApplicationPageTabEnvironmentProps {
-  env?: IEnvironmentVariable[]
+  env: IEnvironmentVariable[]
 }
 
 export const ApplicationPageTabEnvironment = ({ env }: IApplicationPageTabEnvironmentProps) => (

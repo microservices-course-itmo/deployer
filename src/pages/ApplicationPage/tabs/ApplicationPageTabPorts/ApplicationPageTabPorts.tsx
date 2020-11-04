@@ -1,7 +1,7 @@
 import React from 'react'
 
 interface IApplicationPageTabPortsProps {
-  ports?: string[]
+  ports: string[]
 }
 
 export const ApplicationPageTabPorts = ({ ports }: IApplicationPageTabPortsProps) => (

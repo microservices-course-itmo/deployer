@@ -2,11 +2,12 @@ import React from 'react'
 import { FormControl, Container, Grid, MenuItem, Select, Button, InputLabel } from '@material-ui/core'
 import { createStyles, makeStyles } from '@material-ui/core/styles'
 import { IApplicationInstance } from '../../../../types/Application'
+import { ApplicationInstanceTable } from './ApplicationInstanceTable/ApplicationInstanceTable'
 
 interface IApplicationPageTabDeployProps {
-  description?: string
-  templateVersion?: string
-  instances?: IApplicationInstance[]
+  description: string
+  templateVersion: string
+  instances: IApplicationInstance[]
 }
 
 const useStyles = makeStyles(() =>
