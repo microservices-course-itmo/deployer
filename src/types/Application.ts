@@ -10,6 +10,7 @@ export interface IApplicationData {
   description: string
   templateVersion: string
   createdBy: string
+  lastRelease: string
 
   'port-mappings': string[]
   volumes: string[]

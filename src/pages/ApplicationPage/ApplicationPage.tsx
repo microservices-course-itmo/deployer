@@ -37,7 +37,7 @@ export const ApplicationPage = ({
           <Tab label='volumes' />
         </Tabs>
       </AppBar>
-      {name}
+      {console.log(name)}
       <ApplicationPageTab tab={currentTab} data={applicationData} />
     </div>
   )
