@@ -62,7 +62,7 @@ export const ApplicationInstanceTable = ({ data }: IApplicationInstanceTableProp
           </TableHead>
           <TableBody>
             {data?.map((Data) => (
-              <TableRow key={Data.appId}>
+              <TableRow key={Data.id}>
                 <TableCell align='center'>{Data.appId}</TableCell>
                 <TableCell align='center' className={classes.cell}>
                   {Data.version}
