@@ -21,6 +21,7 @@ export interface IApplicationData {
 }
 
 export interface IApplicationInstance {
+  id: string
   appId: string
   templateId: string
   version: string

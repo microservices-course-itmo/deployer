@@ -18,6 +18,7 @@ export const mockData = {
   ],
   instances: [
     {
+      id: '1',
       appId: 'order-service',
       templateId: '15',
       version: '1.0.1',
@@ -29,6 +30,7 @@ export const mockData = {
       url: '127.0.0.1:48080/order-service/swagger-ui.html',
     },
     {
+      id: '2',
       appId: 'order-service',
       templateId: '15',
       version: '1.0.2',
@@ -40,6 +42,7 @@ export const mockData = {
       url: '127.0.0.1:48080/order-service/swagger-ui.html',
     },
     {
+      id: '3',
       appId: 'order-service',
       alias: 'new_postgres',
       templateId: '15',
@@ -51,6 +54,7 @@ export const mockData = {
       url: '127.0.0.1:48080/order-service/swagger-ui.html',
     },
     {
+      id: '4',
       appId: 'order-service',
       templateId: '15',
       version: '1.0.4',
@@ -62,6 +66,7 @@ export const mockData = {
       url: '127.0.0.1:48080/order-service/swagger-ui.html',
     },
     {
+      id: '5',
       appId: 'order-service',
       templateId: '15',
       version: '1.0.5',
