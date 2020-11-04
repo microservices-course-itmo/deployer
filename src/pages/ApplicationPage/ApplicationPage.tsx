@@ -23,9 +23,9 @@ export const ApplicationPage = ({
     }, 250)
   }, [])
 
-  const handleTabChange = (event: React.ChangeEvent<unknown>, newTab: ApplicationPageTabType) => {
-    setCurrentTab(newTab)
-  }
+  // const handleTabChange = (event: React.ChangeEvent<unknown>, newTab: ApplicationPageTabType) => {
+  //   setCurrentTab(newTab)
+  // }
 
   return (
     <div>
@@ -37,7 +37,7 @@ export const ApplicationPage = ({
           <Tab label='volumes' />
         </Tabs>
       </AppBar>
-      {name}
+      {console.log(name)}
       <ApplicationPageTab tab={currentTab} data={applicationData} />
     </div>
   )
