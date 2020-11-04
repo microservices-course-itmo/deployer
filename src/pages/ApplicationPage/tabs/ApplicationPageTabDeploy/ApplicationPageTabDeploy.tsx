@@ -16,6 +16,24 @@ const useStyles = makeStyles(() =>
   createStyles({
     formControl: {
       marginTop: '1%',
+      marginBottom: '1%',
+    },
+    hrStyle: {
+      marginBottom: '1%',
+      height: '3px',
+      color: '#3F51B5',
+      borderWidth: '0',
+      backgroundColor: '#3F51B5',
+    },
+    h3Style: {
+      marginBottom: '1.5px',
+      padding: '5px',
+    },
+    buttonContainerStyle: {
+      marginRight: '4%',
+    },
+    inputLabelStyle: {
+      color: '#3F51B5',
     },
   })
 )
@@ -27,12 +45,12 @@ export const ApplicationPageTabDeploy = ({
   possibleVersions,
   lastRelease,
 }: IApplicationPageTabDeployProps) => {
-  console.log(templateVersion)
+  const classes = useStyles()
   const [vers, setVers] = React.useState(possibleVersions[possibleVersions.length - 1])
+  const [alias, setAlias] = React.useState('')
   const handleVersionChange = (event: React.ChangeEvent<{ value: unknown }>) => {
     setVers(event.target.value as string)
   }
-  const [alias, setAlias] = React.useState('')
   const handleAliasChange = (event: React.ChangeEvent<{ value: string }>) => {
     setAlias(event.target.value)
   }
@@ -40,17 +58,19 @@ export const ApplicationPageTabDeploy = ({
     setVers('')
     setAlias('')
   }
-  const classes = useStyles()
+  console.log(templateVersion)
   return (
     <div>
       <Container className={classes.formControl}>
-        <Grid container direction='row' justify='space-between' alignItems='center'>
+        <Grid container direction='row' justify='space-around' alignItems='center'>
           <Grid item>
-            <h3>Description: {description}</h3>
-            <h3>Last release: {lastRelease}</h3>
+            <h3 className={classes.h3Style}>Description: {description}</h3>
+            <h3 className={classes.h3Style}>Last release: {lastRelease}</h3>
           </Grid>
           <Grid item>
-            <InputLabel id='demo-simple-select-filled-label'>Version</InputLabel>
+            <InputLabel className={classes.inputLabelStyle} id='demo-simple-select-filled-label'>
+              Version
+            </InputLabel>
             <FormControl variant='filled'>
               <Select
                 labelId='demo-simple-select-filled-label'
@@ -74,13 +94,14 @@ export const ApplicationPageTabDeploy = ({
               />
             </FormControl>
           </Grid>
-          <Grid item>
+          <Grid item className={classes.buttonContainerStyle}>
             <Button variant='contained' disabled={!vers || !alias} onClick={onClickDeploy}>
               Deploy
             </Button>
           </Grid>
         </Grid>
       </Container>
+      <hr className={classes.hrStyle} />
       <ApplicationInstanceTable data={instances} />
     </div>
   )
