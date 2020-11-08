@@ -1,5 +1,5 @@
 import React from 'react'
-import { FormControl, Container, Grid, MenuItem, Select, Button, InputLabel, TextField } from '@material-ui/core'
+import { FormControl, Container, Grid, MenuItem, Select, Button, InputLabel, TextField, Box } from '@material-ui/core'
 import { createStyles, makeStyles } from '@material-ui/core/styles'
 import { IApplicationInstance, IHistoryLog } from '../../../../types/Application'
 import { ApplicationInstanceTable } from './ApplicationInstanceTable/ApplicationInstanceTable'
@@ -105,17 +105,16 @@ export const ApplicationPageTabDeploy = ({
         </Grid>
       </Container>
       <hr className={classes.hrStyle} />
-      <Container maxwidth='sm'>
+      <Container>
         <Grid container spacing={5} direction='column' justify='space-around' alignItems='center'>
-          <Grid item xs={14} md={8}>
+          <Box m={2}>
             <ApplicationInstanceTable data={instances} />
-          </Grid>
-          <Grid item xs={14} md={8}>
+          </Box>
+          <Box m={2}>
             <ApplicationHistoryLog variant={history} />
-          </Grid>
+          </Box>
         </Grid>
       </Container>
     </div>
   )
 }
-// <Grid item xs={12} md={6} />
