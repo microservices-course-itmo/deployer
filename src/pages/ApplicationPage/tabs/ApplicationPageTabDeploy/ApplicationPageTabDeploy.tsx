@@ -1,8 +1,9 @@
 import React from 'react'
 import { FormControl, Container, Grid, MenuItem, Select, Button, InputLabel, TextField } from '@material-ui/core'
 import { createStyles, makeStyles } from '@material-ui/core/styles'
-import { IApplicationInstance } from '../../../../types/Application'
+import { IApplicationInstance, IHistoryLog } from '../../../../types/Application'
 import { ApplicationInstanceTable } from './ApplicationInstanceTable/ApplicationInstanceTable'
+import { ApplicationHistoryLog } from './ApplicationHistoryLog/ApplicationHistoryLog'
 
 interface IApplicationPageTabDeployProps {
   description: string
@@ -10,6 +11,7 @@ interface IApplicationPageTabDeployProps {
   instances: IApplicationInstance[]
   possibleVersions: string[]
   lastRelease: string
+  history: IHistoryLog[]
 }
 
 const useStyles = makeStyles(() =>
@@ -44,6 +46,7 @@ export const ApplicationPageTabDeploy = ({
   instances,
   possibleVersions,
   lastRelease,
+  history,
 }: IApplicationPageTabDeployProps) => {
   const classes = useStyles()
   const [vers, setVers] = React.useState(possibleVersions[possibleVersions.length - 1])
@@ -102,7 +105,17 @@ export const ApplicationPageTabDeploy = ({
         </Grid>
       </Container>
       <hr className={classes.hrStyle} />
-      <ApplicationInstanceTable data={instances} />
+      <Container maxwidth='sm'>
+        <Grid container spacing={5} direction='column' justify='space-around' alignItems='center'>
+          <Grid item xs={14} md={8}>
+            <ApplicationInstanceTable data={instances} />
+          </Grid>
+          <Grid item xs={14} md={8}>
+            <ApplicationHistoryLog variant={history} />
+          </Grid>
+        </Grid>
+      </Container>
     </div>
   )
 }
+// <Grid item xs={12} md={6} />

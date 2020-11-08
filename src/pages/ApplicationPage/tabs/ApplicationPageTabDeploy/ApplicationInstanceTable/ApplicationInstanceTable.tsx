@@ -21,7 +21,7 @@ const useStyles = makeStyles({
     maxWidth: '20px',
   },
   paper: {
-    width: '1000px',
+    maxwidth: '1000px',
     overflowX: 'auto',
     margin: 'auto',
   },
