@@ -6,19 +6,20 @@ import { IHistoryLog } from 'types/Application'
 const useStyles = makeStyles({
   table: {
     maxWidth: '1000px',
+    width: '800px',
     background: '#F5F5F5',
     border: '0px',
   },
   cell: {
     maxwidth: '1px',
-    padding: '50px',
-    margin: '50px',
+    padding: '10px',
+    margin: '10px',
   },
   row: {
     maxWidth: '20px',
   },
   paper: {
-    width: '790px',
+    maxWidth: '1000px',
     overflowX: 'auto',
     margin: 'auto',
   },
