@@ -9,6 +9,7 @@ import ReplayIcon from '@material-ui/icons/Replay'
 const useStyles = makeStyles({
   table: {
     maxWidth: '1000px',
+    width: '800px',
     background: '#F5F5F5',
     border: '0px',
   },
@@ -21,7 +22,7 @@ const useStyles = makeStyles({
     maxWidth: '20px',
   },
   paper: {
-    width: '1000px',
+    maxwidth: '1000px',
     overflowX: 'auto',
     margin: 'auto',
   },

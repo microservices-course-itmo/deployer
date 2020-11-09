@@ -81,8 +81,34 @@ export const mockData = {
   versions: ['2.0.0', '2.0.1', '2.0.2', '2.0.3', '2.0.4'],
   history: [
     {
+      id: '1',
       date: '02/10/2020',
+      user: 'User',
       log: 'created new env var',
+    },
+    {
+      id: '2',
+      date: '04/10/2020',
+      user: 'User',
+      log: 'forward new port',
+    },
+    {
+      id: '3',
+      date: '06/10/2020',
+      user: 'User',
+      log: '...',
+    },
+    {
+      id: '4',
+      date: '07/10/2020',
+      user: 'User',
+      log: 'created new env var',
+    },
+    {
+      id: '5',
+      date: '09/10/2020',
+      user: 'User',
+      log: '...',
     },
   ],
 }
