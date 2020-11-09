@@ -48,7 +48,7 @@ export const ApplicationHistoryLog = ({ variant }: IHistoryLogProps) => {
             {variant?.map((Variant) => (
               <TableRow key={Variant.id}>
                 <TableCell align='center'>{Variant.date}</TableCell>
-                <TableCell align='center'>{Variant.changed_by}</TableCell>
+                <TableCell align='center'>changed by:</TableCell>
                 <TableCell align='center'>{Variant.user}</TableCell>
                 <TableCell align='center'>{Variant.log}</TableCell>
               </TableRow>

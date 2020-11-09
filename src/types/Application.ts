@@ -42,7 +42,6 @@ export interface IHistoryLog {
   id: string
   user: string
   date: string
-  changed_by: string
   log: string
 }
 
