@@ -19,7 +19,7 @@ export const ApplicationPage = ({
 
   useEffect(() => {
     setTimeout(() => {
-      setApplicationData(mockData)
+      setApplicationData(mockData as IApplicationData)
     }, 250)
   }, [])
 

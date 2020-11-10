@@ -12,7 +12,7 @@ export interface IApplicationData {
   createdBy: string
   lastRelease: string
 
-  'port-mappings': string[]
+  'port-mappings': IPortMapping[]
   volumes: string[]
   env: IEnvironmentVariable[]
   instances: IApplicationInstance[]
@@ -33,10 +33,9 @@ export interface IApplicationInstance {
   alias: string
 }
 
-export interface IEnvironmentVariable {
-  name: string
-  value: string
-}
+export type IPortMapping = [string, string]
+
+export type IEnvironmentVariable = [string, string]
 
 export interface IHistoryLog {
   id: string

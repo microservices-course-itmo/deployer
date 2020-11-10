@@ -2,19 +2,16 @@ export const mockData = {
   templateVersion: '15',
   createdBy: 'asukhoa',
   name: 'order-service',
-  'port-mappings': ['8080:8080', '8081:48081'],
   volumes: ['opt/kafka'],
   description: 'service for ...',
   lastRelease: '1.0.1',
+  'port-mappings': [
+    ['8080', '8080'],
+    ['8081', '48081'],
+  ],
   env: [
-    {
-      name: 'POSTGRES_HOST',
-      value: 'postgres',
-    },
-    {
-      name: 'POSTGRES_PORT',
-      value: '5432',
-    },
+    ['POSTGRES_HOST', 'postgres'],
+    ['POSTGRES_PORT', '5432'],
   ],
   instances: [
     {
