@@ -50,11 +50,16 @@ export const ApplicationPageTabDeploy = ({
 }: IApplicationPageTabDeployProps) => {
   const classes = useStyles()
   const [vers, setVers] = React.useState(possibleVersions[possibleVersions.length - 1])
+  const [alias, setAlias] = React.useState('')
   const handleVersionChange = (event: React.ChangeEvent<{ value: unknown }>) => {
     setVers(event.target.value as string)
   }
+  const handleAliasChange = (event: React.ChangeEvent<{ value: string }>) => {
+    setAlias(event.target.value)
+  }
   const onClickDeploy = () => {
     setVers('')
+    setAlias('')
   }
   console.log(templateVersion)
   return (
@@ -82,7 +87,13 @@ export const ApplicationPageTabDeploy = ({
                   </MenuItem>
                 ))}
               </Select>
-              <TextField id='standard-required' label='Alias' variant='filled' />
+              <TextField
+                id='standard-required'
+                label='Alias'
+                variant='filled'
+                value={alias}
+                onChange={handleAliasChange}
+              />
             </FormControl>
           </Grid>
           <Grid item className={classes.buttonContainerStyle}>
