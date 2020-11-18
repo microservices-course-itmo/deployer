@@ -7,9 +7,9 @@ import { SignIn } from './pages/LoginPage/LoginPage'
 const Router = () => (
   <BrowserRouter>
     <Switch>
+      <Route exact path='/login' component={SignIn} />
       <Route path='/app/:name' component={ApplicationPage} />
       <Route path='/' component={MainPage} />
-      <Route path='/registration/:name' component={SignIn} />
     </Switch>
   </BrowserRouter>
 )
