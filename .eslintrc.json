@@ -26,7 +26,7 @@
   "rules": {
     "consistent-return": 0,
     "import/prefer-default-export": 0,
-
+    "@typescript-eslint/no-unused-vars": 1,
     "react/no-unused-prop-types": 0,
     "react/require-default-props": 0,
     "react/jsx-one-expression-per-line": "off",
