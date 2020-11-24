@@ -30,7 +30,20 @@ const useStyles = makeStyles({
 })
 
 export const ApplicationPageTabEnvironment = ({ env }: IApplicationPageTabEnvironmentProps) => {
-  // const [envs, setEnv] = React.useState(env)
+  const [envs, setEnv] = React.useState(Object.fromEntries(env))
+  const handleChangeEnv = (event: any) => {
+    // setEnv(() => {
+    //   const newEnvs = envs.map((en) => {
+    //     if (en[0] === event.target.name) {
+    //       return [en[0], event.target.value]
+    //     }
+    //     return en
+    //   })
+    //   return newEnvs as IEnvironmentVariable
+    // })
+    // setEn([...envs, [event.target.name, event.target.value]])
+    console.log(event)
+  }
   // const tempEnvsCreate = (name: string, value: string) => {
   //   let tempEnvs: IEnvironmentVariable[]
   //   envs.forEach((element) => {
@@ -71,13 +84,13 @@ export const ApplicationPageTabEnvironment = ({ env }: IApplicationPageTabEnviro
             </TableRow>
           </TableHead>
           <TableBody>
-            {env.map((en) => (
+            {envs.map((en) => (
               <TableRow key={en[0]}>
                 <TableCell>
                   <TextField disabled id='standard-required' variant='filled' value={en[0]} />
                 </TableCell>
                 <TableCell align='right'>
-                  <TextField id='standard' name={en[0]} variant='filled' value={en[1]} />
+                  <TextField id='standard' name={en[0]} variant='filled' value={en[1]} onChange={handleChangeEnv} />
                 </TableCell>
               </TableRow>
             ))}
