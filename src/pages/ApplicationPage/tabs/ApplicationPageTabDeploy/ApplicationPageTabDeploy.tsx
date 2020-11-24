@@ -88,8 +88,9 @@ export const ApplicationPageTabDeploy = ({
                 ))}
               </Select>
               <TextField
+                required
                 id='standard-required'
-                label='Alias'
+                label='Required'
                 variant='filled'
                 value={alias}
                 onChange={handleAliasChange}
@@ -97,7 +98,7 @@ export const ApplicationPageTabDeploy = ({
             </FormControl>
           </Grid>
           <Grid item className={classes.buttonContainerStyle}>
-            <Button variant='contained' disabled={!vers} onClick={onClickDeploy}>
+            <Button variant='contained' disabled={!vers || !alias} onClick={onClickDeploy}>
               Deploy
             </Button>
           </Grid>
