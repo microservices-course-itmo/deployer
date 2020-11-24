@@ -29,8 +29,11 @@ const useStyles = makeStyles({
   },
 })
 
+const prepareData = (env: IEnvironmentVariable[]) =>
+  env.reduce((accum, value) => ({ ...accum, [value.name]: value.value }), {})
+
 export const ApplicationPageTabEnvironment = ({ env }: IApplicationPageTabEnvironmentProps) => {
-  const [envs, setEnv] = React.useState(Object.fromEntries(env))
+  const [envs, setEnv] = React.useState<{ [key: string]: string }>(prepareData(env))
   // const handleChangeEnv = (event: any) => {
   //   // setEnv(() => {
   //   //   const newEnvs = envs.map((en) => {
@@ -71,6 +74,12 @@ export const ApplicationPageTabEnvironment = ({ env }: IApplicationPageTabEnviro
   //   // }({ ...prevState, [event.target.name]: event.target.value }))
   // }
   /* onChange={handleChangeEnv(React.ChangeEvent<{value: unknown}>, en[0]) */
+
+  const handleChangeEnv = (event: any) => {
+    const { name, value } = event.target
+    setEnv((prevState) => ({ ...prevState, [name]: value }))
+  }
+
   const classes = useStyles()
   return (
     <div>
@@ -84,13 +93,13 @@ export const ApplicationPageTabEnvironment = ({ env }: IApplicationPageTabEnviro
             </TableRow>
           </TableHead>
           <TableBody>
-            {env.map((en) => (
-              <TableRow key={en[0]}>
+            {Object.keys(envs).map((name) => (
+              <TableRow key={name}>
                 <TableCell>
-                  <TextField disabled id='standard-required' variant='filled' value={en[0]} />
+                  <TextField disabled id='standard-required' variant='filled' value={name} />
                 </TableCell>
                 <TableCell align='right'>
-                  <TextField id='standard' name={en[0]} variant='filled' value={en[1]} />
+                  <TextField id='standard' name={name} variant='filled' value={envs[name]} onChange={handleChangeEnv} />
                 </TableCell>
               </TableRow>
             ))}

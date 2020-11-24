@@ -10,8 +10,8 @@ export const mockData = {
     ['8081', '48081'],
   ],
   env: [
-    ['POSTGRES_HOST', 'postgres'],
-    ['POSTGRES_PORT', '5432'],
+    { name: 'POSTGRES_HOST', value: 'postgres' },
+    { name: 'POSTGRES_PORT', value: '5432' },
   ],
   instances: [
     {

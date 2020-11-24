@@ -35,7 +35,10 @@ export interface IApplicationInstance {
 
 export type IPortMapping = [string, string]
 
-export type IEnvironmentVariable = [string, string]
+export interface IEnvironmentVariable {
+  name: string
+  value: string
+}
 
 export interface IHistoryLog {
   id: string
