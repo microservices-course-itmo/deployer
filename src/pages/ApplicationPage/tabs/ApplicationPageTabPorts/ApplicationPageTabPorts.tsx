@@ -1,4 +1,5 @@
 import React from 'react'
+<<<<<<< Updated upstream
 import { makeStyles } from '@material-ui/styles'
 import {
   Table,
@@ -14,9 +15,12 @@ import {
   // Checkbox,
 } from '@material-ui/core'
 import { IPortMapping } from '../../../../types/Application'
+=======
+import { IPorts } from '../../../../types/Application'
+>>>>>>> Stashed changes
 
 interface IApplicationPageTabPortsProps {
-  ports: IPortMapping[]
+  ports: IPorts
 }
 const useStyles = makeStyles({
   tableContainer: {

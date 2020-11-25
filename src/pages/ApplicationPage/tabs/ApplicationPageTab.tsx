@@ -7,12 +7,10 @@ import { ApplicationPageTabVolumes } from './ApplicationPageTabVolumes/Applicati
 
 interface IApplicationPageTabProps {
   tab: ApplicationPageTabType
-  data?: IApplicationData
+  data: IApplicationData
 }
 
 export const ApplicationPageTab = memo(({ tab, data }: IApplicationPageTabProps) => {
-  if (!data) return <div>Loading...</div>
-
   switch (tab) {
     case ApplicationPageTabType.ENVIRONMENT:
       return <ApplicationPageTabEnvironment env={data.env} />

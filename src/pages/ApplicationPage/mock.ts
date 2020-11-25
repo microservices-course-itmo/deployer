@@ -5,6 +5,7 @@ export const mockData = {
   volumes: ['opt/kafka'],
   description: 'service for ...',
   lastRelease: '1.0.1',
+<<<<<<< Updated upstream
   'port-mappings': [
     { port: '8080', value: '8080' },
     { port: '8081', value: '48081' },
@@ -13,6 +14,13 @@ export const mockData = {
     { name: 'POSTGRES_HOST', value: 'postgres' },
     { name: 'POSTGRES_PORT', value: '5432' },
   ],
+=======
+  ports: {
+    '8080': '8080',
+    '8081': '48081',
+  },
+  env: [{ name: 'POSTGRES_HOST', value: 'postgres' }],
+>>>>>>> Stashed changes
   instances: [
     {
       id: '1',

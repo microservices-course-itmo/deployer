@@ -58,7 +58,6 @@ export const ApplicationPageTabDeploy = ({
     setAlias(event.target.value)
   }
   const onClickDeploy = () => {
-    setVers('')
     setAlias('')
   }
   console.log(templateVersion)
