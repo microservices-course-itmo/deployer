@@ -1,11 +1,10 @@
 const path = require('path');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const { isProd, paths } = require('./utils');
+const ESLintPlugin = require('eslint-webpack-plugin');
+const { paths } = require('./utils');
 
 module.exports = {
-    mode: isProd ? 'production' : 'development',
-    
     entry: {
         app: paths.src
     },
@@ -18,13 +17,6 @@ module.exports = {
     
     module: {
         rules: [
-            {
-                enforce: 'pre',
-                test: /\.(ts|tsx)$/,
-                exclude: /node_modules/,
-                loader: 'eslint-loader',
-            },
-            
             {
                 test: /\.(ts|tsx)$/,
                 loader: 'babel-loader',
@@ -78,6 +70,10 @@ module.exports = {
     },
     
     plugins: [
+        new ESLintPlugin({
+            extensions: ['ts', 'tsx']
+        }),
+        
         new MiniCssExtractPlugin({
             filename: path.join('assets', 'css', '[name].[hash].css')
         }),
@@ -86,13 +82,5 @@ module.exports = {
             template: path.join(paths.public, 'index.html'),
             filename: path.join('.', 'index.html')
         })
-    ],
-    
-    devServer: !isProd ?
-        {
-            port: 8081,
-            overlay: true,
-            historyApiFallback: true,
-            contentBase: paths.dist
-        } : undefined
+    ]
 };

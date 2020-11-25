@@ -8,9 +8,6 @@ paths.public = path.join(paths.root, 'public');
 paths.res = path.join(paths.root, 'res');
 paths.src = path.join(paths.root, 'src');
 
-const isProd = process.env.NODE_ENV === 'production';
-
 module.exports = {
-    paths,
-    isProd
+    paths
 };
