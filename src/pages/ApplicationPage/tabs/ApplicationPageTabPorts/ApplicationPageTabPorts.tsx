@@ -43,7 +43,7 @@ export const ApplicationPageTabPorts = ({ ports }: IApplicationPageTabPortsProps
   return (
     <Grid className={classes.tableContainer} container direction='column' justify='center' alignItems='center'>
       <h3>ApplicationPageTabPorts</h3>
-      <TableContainer className={classes.table} component={Paper}>
+      <TableContainer component={Paper}>
         <Table>
           <TableHead>
             <TableRow>
