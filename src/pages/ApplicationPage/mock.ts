@@ -6,8 +6,8 @@ export const mockData = {
   description: 'service for ...',
   lastRelease: '1.0.1',
   'port-mappings': [
-    ['8080', '8080'],
-    ['8081', '48081'],
+    { port: '8080', value: '8080' },
+    { port: '8081', value: '48081' },
   ],
   env: [
     { name: 'POSTGRES_HOST', value: 'postgres' },

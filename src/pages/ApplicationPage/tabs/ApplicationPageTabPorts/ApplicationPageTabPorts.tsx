@@ -10,6 +10,7 @@ import {
   Paper,
   Button,
   TextField,
+  Grid,
   // Checkbox,
 } from '@material-ui/core'
 import { IPortMapping } from '../../../../types/Application'
@@ -18,38 +19,46 @@ interface IApplicationPageTabPortsProps {
   ports: IPortMapping[]
 }
 const useStyles = makeStyles({
-  table: {
-    width: '650px',
+  tableContainer: {
     marginLeft: '30%',
+    width: '650px',
   },
   saveBtn: {
     marginTop: '5px',
-    marginLeft: '30%',
-    padding: '10px 20px',
+    padding: '10px 60px',
+    backgroundColor: '#dc70e6',
   },
 })
 
+const preparePorts = (ports: IPortMapping[]) =>
+  ports.reduce((accum, value) => ({ ...accum, [value.port]: value.value }), {})
+
 export const ApplicationPageTabPorts = ({ ports }: IApplicationPageTabPortsProps) => {
   const classes = useStyles()
+  const [port, setPorts] = React.useState<{ [key: string]: string }>(preparePorts(ports))
+  const handleChangePorts = (event: any) => {
+    const { name, value } = event.target
+    setPorts((prevState) => ({ ...prevState, [name]: value }))
+  }
   return (
-    <div>
+    <Grid className={classes.tableContainer} container direction='column' justify='center' alignItems='center'>
       <h3>ApplicationPageTabPorts</h3>
       <TableContainer className={classes.table} component={Paper}>
         <Table>
           <TableHead>
             <TableRow>
-              <TableCell>Name</TableCell>
+              <TableCell>Port</TableCell>
               <TableCell align='right'>Value</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {ports.map((port) => (
-              <TableRow key={port[0]}>
+            {Object.keys(port).map((por) => (
+              <TableRow key={por}>
                 <TableCell>
-                  <TextField disabled id='standard-required' variant='filled' value={port[0]} />
+                  <TextField disabled id='standard-required' variant='filled' value={por} />
                 </TableCell>
                 <TableCell align='right'>
-                  <TextField id='standard' name={port[0]} variant='filled' value={port[1]} />
+                  <TextField id='standard' name={por} variant='filled' value={port[por]} onChange={handleChangePorts} />
                 </TableCell>
               </TableRow>
             ))}
@@ -59,6 +68,6 @@ export const ApplicationPageTabPorts = ({ ports }: IApplicationPageTabPortsProps
       <Button className={classes.saveBtn} variant='contained'>
         Save
       </Button>
-    </div>
+    </Grid>
   )
 }

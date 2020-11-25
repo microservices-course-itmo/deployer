@@ -33,7 +33,10 @@ export interface IApplicationInstance {
   alias: string
 }
 
-export type IPortMapping = [string, string]
+export interface IPortMapping {
+  port: string
+  value: string
+}
 
 export interface IEnvironmentVariable {
   name: string
