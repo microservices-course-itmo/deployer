@@ -20,14 +20,22 @@ const useStyles = makeStyles(({ spacing }) => ({
 }))
 
 interface IApplicationInstanceTableProps {
-  data: IApplicationInstance[]
+  data: IApplicationInstance
 }
 
-function delay(ms) {
+enum ButtonTypesEnum {
+  start,
+  stop,
+  restart,
+}
+
+type ButtonType = keyof typeof ButtonTypesEnum
+
+function delay(ms: number) {
   return new Promise((resolve) => setTimeout(resolve, ms))
 }
 
-const AVAILABLE_BUTTONS = {
+const AVAILABLE_BUTTONS: Record<string, string[]> = {
   RUNNING: ['stop', 'restart'],
   FAILED: ['restart'],
   STARTING: ['stop'],
@@ -36,7 +44,7 @@ const AVAILABLE_BUTTONS = {
   RESTARTING: ['stop'],
 }
 
-const ACTIONS = ['start', 'stop', 'restart']
+const ACTIONS: ButtonType[] = ['start', 'stop', 'restart']
 
 const ACTIONS_ICONS = {
   start: <PlayArrowIcon fontSize='large' />,
@@ -47,24 +55,24 @@ const ACTIONS_ICONS = {
 const ApplicationInstanceRow = ({ data }: IApplicationInstanceTableProps) => {
   const classes = useStyles()
 
-  const [loadingType, setLoadingType] = useState(null)
+  const [loadingType, setLoadingType] = useState('')
 
-  const handleClickInstance = (action) => {
+  const handleClickInstance = (action: string) => {
     setLoadingType(action)
     delay(2000)
       .then(() => {
         console.log('asd')
       })
       .finally(() => {
-        setLoadingType(null)
+        setLoadingType('')
       })
   }
 
-  const isButtonDisabled = (buttonType) => {
-    return !AVAILABLE_BUTTONS[data.status].includes(buttonType) || loadingType
+  const isButtonDisabled = (buttonType: ButtonType) => {
+    return !AVAILABLE_BUTTONS[data.status].includes(buttonType) || Boolean(loadingType)
   }
 
-  const getClasses = (buttonType) => {
+  const getClasses = (buttonType: ButtonType) => {
     if (buttonType === 'start') {
       return classes.startButtonColor
     }
@@ -76,9 +84,7 @@ const ApplicationInstanceRow = ({ data }: IApplicationInstanceTableProps) => {
   return (
     <TableRow key={data.id}>
       <TableCell align='center'>{data.appId}</TableCell>
-      <TableCell align='center' className={classes.cell}>
-        {data.version}
-      </TableCell>
+      <TableCell align='center'>{data.version}</TableCell>
       <TableCell align='center'>{data.userCreated}</TableCell>
       <TableCell align='center'>{data.status}</TableCell>
       <TableCell align='center'>
