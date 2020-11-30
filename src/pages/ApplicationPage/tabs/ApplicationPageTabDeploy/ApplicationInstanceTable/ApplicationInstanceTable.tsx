@@ -1,10 +1,9 @@
 import React from 'react'
-import { createMuiTheme, makeStyles, ThemeProvider } from '@material-ui/core/styles'
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, IconButton } from '@material-ui/core'
+import { makeStyles } from '@material-ui/core/styles'
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from '@material-ui/core'
 import { IApplicationInstance } from 'types/Application'
-import PlayArrowIcon from '@material-ui/icons/PlayArrow'
-import StopIcon from '@material-ui/icons/Stop'
-import ReplayIcon from '@material-ui/icons/Replay'
+
+import ApplicationInstanceRow from './ApplicetionInstanceRow'
 
 const useStyles = makeStyles({
   table: {
@@ -25,18 +24,6 @@ const useStyles = makeStyles({
     maxwidth: '1000px',
     overflowX: 'auto',
     margin: 'auto',
-  },
-})
-
-const theme = createMuiTheme({
-  palette: {
-    primary: {
-      main: '#d50000',
-    },
-    secondary: {
-      main: '#1b5e20',
-    },
-    type: 'light',
   },
 })
 
@@ -62,31 +49,8 @@ export const ApplicationInstanceTable = ({ data }: IApplicationInstanceTableProp
             </TableRow>
           </TableHead>
           <TableBody>
-            {data?.map((Data) => (
-              <TableRow key={Data.id}>
-                <TableCell align='center'>{Data.appId}</TableCell>
-                <TableCell align='center' className={classes.cell}>
-                  {Data.version}
-                </TableCell>
-                <TableCell align='center'>{Data.userCreated}</TableCell>
-                <TableCell align='center'>{Data.status}</TableCell>
-                <TableCell align='center'>
-                  <div>
-                    <ThemeProvider theme={theme}>
-                      <IconButton color='secondary' aria-label='Play'>
-                        <PlayArrowIcon fontSize='large' />
-                      </IconButton>
-                      <IconButton color='primary' aria-label='Stop'>
-                        <StopIcon fontSize='large' />
-                      </IconButton>
-                      <IconButton aria-label='Replay'>
-                        <ReplayIcon fontSize='large' />
-                      </IconButton>
-                    </ThemeProvider>
-                  </div>
-                </TableCell>
-                <TableCell align='center'>{Data.alias}</TableCell>
-              </TableRow>
+            {data?.map((rowData) => (
+              <ApplicationInstanceRow data={rowData} />
             ))}
           </TableBody>
         </Table>

@@ -19,6 +19,8 @@ export const ApplicationPage = ({
 
   useEffect(() => {
     setTimeout(() => {
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
       setApplicationData(mockData as IApplicationData)
     }, 250)
   }, [])

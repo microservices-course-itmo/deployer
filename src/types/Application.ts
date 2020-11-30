@@ -11,7 +11,6 @@ export interface IApplicationData {
   templateVersion: string
   createdBy: string
   lastRelease: string
-
   'port-mappings': IPortMapping[]
   volumes: string[]
   env: IEnvironmentVariable[]
@@ -43,11 +42,19 @@ export interface IEnvironmentVariable {
   value: string
 }
 
+export interface IHistoryState {
+  env: IEnvironmentVariable
+  volumes: string[]
+  ports: IPortMapping
+}
+
 export interface IHistoryLog {
   id: string
   user: string
   date: string
   log: string
+  prevState: IHistoryState
+  currentState: IHistoryState
 }
 
 // export enum ApplicationInstanceStatusType {
