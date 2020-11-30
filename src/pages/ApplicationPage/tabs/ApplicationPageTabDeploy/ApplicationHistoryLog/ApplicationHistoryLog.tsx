@@ -26,10 +26,10 @@ const useStyles = makeStyles({
 })
 
 interface IHistoryLogProps {
-  variant?: IHistoryLog[]
+  logs: IHistoryLog[]
 }
 
-export const ApplicationHistoryLog = ({ variant }: IHistoryLogProps) => {
+export const ApplicationHistoryLog = ({ logs }: IHistoryLogProps) => {
   const classes = useStyles()
 
   return (
@@ -45,12 +45,12 @@ export const ApplicationHistoryLog = ({ variant }: IHistoryLogProps) => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {variant?.map((Variant) => (
-              <TableRow key={Variant.id}>
-                <TableCell align='center'>{Variant.date}</TableCell>
+            {logs.map((log) => (
+              <TableRow key={log.id}>
+                <TableCell align='center'>{log.date}</TableCell>
                 <TableCell align='center'>changed by:</TableCell>
-                <TableCell align='center'>{Variant.user}</TableCell>
-                <TableCell align='center'>{Variant.log}</TableCell>
+                <TableCell align='center'>{log.user}</TableCell>
+                <TableCell align='center'>{log.log}</TableCell>
               </TableRow>
             ))}
           </TableBody>

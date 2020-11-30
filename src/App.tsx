@@ -1,11 +1,13 @@
 import React from 'react'
-import { RecoilRoot } from 'recoil'
+import { QueryCache, ReactQueryCacheProvider } from 'react-query'
 import Router from './Router'
 
+const queryCache = new QueryCache()
+
 const App = () => (
-  <RecoilRoot>
+  <ReactQueryCacheProvider queryCache={queryCache}>
     <Router />
-  </RecoilRoot>
+  </ReactQueryCacheProvider>
 )
 
 export default App
