@@ -1,7 +1,23 @@
-import React from 'react'
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from '@material-ui/core'
+import React, { useState } from 'react'
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
+  Button,
+  Dialog,
+  DialogTitle,
+  DialogActions,
+  Typography,
+  // ListItem,
+  // ListItemText,
+  List,
+} from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
-import { IHistoryLog } from 'types/Application'
+import { IHistoryLog, IHistoryState } from 'types/Application'
 
 const useStyles = makeStyles({
   table: {
@@ -23,39 +39,116 @@ const useStyles = makeStyles({
     overflowX: 'auto',
     margin: 'auto',
   },
+  dialog: {
+    padding: 20,
+    overflow: 'auto',
+  },
+  container: {
+    display: 'flex',
+    width: '100%',
+  },
+  containerCol: {
+    width: '50%',
+    marginBottom: 20,
+  },
 })
 
 interface IHistoryLogProps {
-  logs: IHistoryLog[]
+  variant?: IHistoryLog[]
 }
 
-export const ApplicationHistoryLog = ({ logs }: IHistoryLogProps) => {
+interface IListsProps {
+  type?: string
+  vars?: IHistoryState
+}
+
+const renderList = (vars?: IHistoryState, type?: string) => {
+  console.log(vars, type)
+  // if (type) {
+  //   return vars[type].map((item) => {
+  //     const [key, val] = typeof item === 'string' ? [item, ''] : [item[0], item[1]]
+  //
+  //     return (
+  //       <ListItem>
+  //         <ListItemText primary={key} secondary={val} />
+  //       </ListItem>
+  //     )
+  //   })
+  // }
+
+  return 'history'
+}
+
+const Lists = ({ type, vars }: IListsProps) => {
+  const classes = useStyles()
+  return (
+    <List component='div' subheader={<span>type</span>} className={classes.containerCol}>
+      {renderList(vars, type)}
+    </List>
+  )
+}
+
+export const ApplicationHistoryLog = ({ variant }: IHistoryLogProps) => {
   const classes = useStyles()
 
+  const [isHistoryOpenWithData, setIsHistoryOpenWithData] = useState<IHistoryLog | null>(null)
+
   return (
-    <Paper className={classes.paper}>
-      <TableContainer>
-        <Table className={classes.table} aria-label='simple table'>
-          <TableHead>
-            <TableRow className={classes.row}>
-              <TableCell align='center'>Data</TableCell>
-              <TableCell align='center'>Changed By</TableCell>
-              <TableCell align='center'>User</TableCell>
-              <TableCell align='center'>Alias</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {logs.map((log) => (
-              <TableRow key={log.id}>
-                <TableCell align='center'>{log.date}</TableCell>
-                <TableCell align='center'>changed by:</TableCell>
-                <TableCell align='center'>{log.user}</TableCell>
-                <TableCell align='center'>{log.log}</TableCell>
+    <>
+      <Paper className={classes.paper}>
+        <TableContainer>
+          <Table className={classes.table} aria-label='simple table'>
+            <TableHead>
+              <TableRow className={classes.row}>
+                <TableCell align='center'>Data</TableCell>
+                <TableCell align='center'>User</TableCell>
+                <TableCell align='center'>Alias</TableCell>
               </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
-    </Paper>
+            </TableHead>
+            <TableBody>
+              {variant?.map((Variant) => (
+                <TableRow key={Variant.id}>
+                  <TableCell align='center'>{Variant.date}</TableCell>
+                  <TableCell align='center'>
+                    <Button color='primary' size='small' onClick={() => setIsHistoryOpenWithData(Variant)}>
+                      Changed by: {Variant.user}
+                    </Button>
+                  </TableCell>
+                  <TableCell align='center'>{Variant.log}</TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
+      </Paper>
+      <Dialog fullWidth open={Boolean(isHistoryOpenWithData)} onClose={() => setIsHistoryOpenWithData(null)}>
+        <DialogTitle>History</DialogTitle>
+        <div className={classes.dialog}>
+          <div className={classes.container}>
+            <div className={classes.containerCol}>
+              <Typography variant='h6'>Previous</Typography>
+            </div>
+            <div className={classes.containerCol}>
+              <Typography variant='h6'>Current</Typography>
+            </div>
+          </div>
+          <div className={classes.container}>
+            <Lists type='env' vars={isHistoryOpenWithData?.prevState} />
+            <Lists type='env' vars={isHistoryOpenWithData?.currentState} />
+          </div>
+          <div className={classes.container}>
+            <Lists type='volumes' vars={isHistoryOpenWithData?.prevState} />
+            <Lists type='volumes' vars={isHistoryOpenWithData?.currentState} />
+          </div>
+          <div className={classes.container}>
+            <Lists type='ports' vars={isHistoryOpenWithData?.prevState} />
+            <Lists type='ports' vars={isHistoryOpenWithData?.currentState} />
+          </div>
+        </div>
+        <DialogActions>
+          <Button onClick={() => setIsHistoryOpenWithData(null)}>Close</Button>
+        </DialogActions>
+      </Dialog>
+    </>
   )
 }

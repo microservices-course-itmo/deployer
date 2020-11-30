@@ -43,11 +43,19 @@ export interface IEnvironmentVariable {
   value: string
 }
 
+export interface IHistoryState {
+  env: IEnvironmentVariable
+  volumes: string[]
+  ports: IPorts
+}
+
 export interface IHistoryLog {
   id: string
   user: string
   date: string
   log: string
+  prevState: IHistoryState
+  currentState: IHistoryState
 }
 
 // export enum ApplicationInstanceStatusType {
