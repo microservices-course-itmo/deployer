@@ -58,7 +58,7 @@ interface IHistoryLogProps {
 }
 
 interface IListsProps {
-  type?: string
+  type: string
   vars: string[]
 }
 
