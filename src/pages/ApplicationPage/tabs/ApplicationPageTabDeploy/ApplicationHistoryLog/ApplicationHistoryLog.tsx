@@ -1,4 +1,4 @@
-import React, { Fragment, useState } from 'react'
+import React, { useState } from 'react'
 import {
   Table,
   TableBody,
@@ -12,12 +12,12 @@ import {
   DialogTitle,
   DialogActions,
   Typography,
-  ListItem,
-  ListItemText,
+  // ListItem,
+  // ListItemText,
   List,
 } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
-import { IHistoryLog } from 'types/Application'
+import { IHistoryLog, IHistoryState } from 'types/Application'
 
 const useStyles = makeStyles({
   table: {
@@ -59,23 +59,31 @@ interface IHistoryLogProps {
 
 interface IListsProps {
   type?: string
-  vars: string[]
+  vars?: IHistoryState
+}
+
+const renderList = (vars?: IHistoryState, type?: string) => {
+  console.log(vars, type)
+  // if (type) {
+  //   return vars[type].map((item) => {
+  //     const [key, val] = typeof item === 'string' ? [item, ''] : [item[0], item[1]]
+  //
+  //     return (
+  //       <ListItem>
+  //         <ListItemText primary={key} secondary={val} />
+  //       </ListItem>
+  //     )
+  //   })
+  // }
+
+  return 'history'
 }
 
 const Lists = ({ type, vars }: IListsProps) => {
   const classes = useStyles()
   return (
-    <List component='div' subheader={type} className={classes.containerCol}>
-      {/* eslint-disable-next-line react/prop-types */}
-      {vars?.[type]?.map((item) => {
-        const [key, val] = typeof item === 'string' ? [item, ''] : [item[0], item[1]]
-
-        return (
-          <ListItem>
-            <ListItemText primary={key} secondary={val} />
-          </ListItem>
-        )
-      })}
+    <List component='div' subheader={<span>type</span>} className={classes.containerCol}>
+      {renderList(vars, type)}
     </List>
   )
 }
@@ -83,7 +91,7 @@ const Lists = ({ type, vars }: IListsProps) => {
 export const ApplicationHistoryLog = ({ variant }: IHistoryLogProps) => {
   const classes = useStyles()
 
-  const [isHistoryOpenWithData, setIsHistoryOpenWithData] = useState(null)
+  const [isHistoryOpenWithData, setIsHistoryOpenWithData] = useState<IHistoryLog | null>(null)
 
   return (
     <>
@@ -118,14 +126,10 @@ export const ApplicationHistoryLog = ({ variant }: IHistoryLogProps) => {
         <div className={classes.dialog}>
           <div className={classes.container}>
             <div className={classes.containerCol}>
-              <Typography variant='h6' className={classes.title}>
-                Previous
-              </Typography>
+              <Typography variant='h6'>Previous</Typography>
             </div>
             <div className={classes.containerCol}>
-              <Typography variant='h6' className={classes.title}>
-                Current
-              </Typography>
+              <Typography variant='h6'>Current</Typography>
             </div>
           </div>
           <div className={classes.container}>
