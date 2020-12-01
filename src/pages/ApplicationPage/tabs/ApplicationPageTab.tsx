@@ -26,8 +26,8 @@ export const ApplicationPageTab = memo(({ tab, data }: IApplicationPageTabProps)
           instances={data.instances}
           templateVersion={data.templateVersion}
           possibleVersions={data.versions}
-          dateCreated={data.dateCreated}
-          logs={data.logs}
+          lastRelease={data.dateCreated}
+          history={data.logs}
         />
       )
   }
