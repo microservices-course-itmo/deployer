@@ -54,7 +54,7 @@ const useStyles = makeStyles({
 })
 
 interface IHistoryLogProps {
-  variant?: IHistoryLog[]
+  logs?: IHistoryLog[]
 }
 
 interface IListsProps {
