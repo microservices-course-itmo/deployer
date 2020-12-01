@@ -13,10 +13,10 @@ import {
   Grid,
   // Checkbox,
 } from '@material-ui/core'
-import { IPortMapping } from '../../../../types/Application'
+import { IPorts } from '../../../../types/Application'
 
 interface IApplicationPageTabPortsProps {
-  ports: IPortMapping[]
+  ports: IPorts
 }
 const useStyles = makeStyles({
   tableContainer: {
@@ -30,12 +30,9 @@ const useStyles = makeStyles({
   },
 })
 
-const preparePorts = (ports: IPortMapping[]) =>
-  ports.reduce((accum, value) => ({ ...accum, [value.port]: value.value }), {})
-
 export const ApplicationPageTabPorts = ({ ports }: IApplicationPageTabPortsProps) => {
   const classes = useStyles()
-  const [port, setPorts] = React.useState<{ [key: string]: string }>(preparePorts(ports))
+  const [port, setPorts] = React.useState<{ [key: string]: string }>(ports)
   const handleChangePorts = (event: any) => {
     const { name, value } = event.target
     setPorts((prevState) => ({ ...prevState, [name]: value }))

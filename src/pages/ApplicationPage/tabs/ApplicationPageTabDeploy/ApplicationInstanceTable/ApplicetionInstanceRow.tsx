@@ -52,7 +52,7 @@ const ACTIONS_ICONS = {
   restart: <ReplayIcon fontSize='large' />,
 }
 
-const ApplicationInstanceRow = ({ data }: IApplicationInstanceTableProps) => {
+export const ApplicationInstanceRow = ({ data }: IApplicationInstanceTableProps) => {
   const classes = useStyles()
 
   const [loadingType, setLoadingType] = useState('')
@@ -122,5 +122,3 @@ const ApplicationInstanceRow = ({ data }: IApplicationInstanceTableProps) => {
     </TableRow>
   )
 }
-
-export default ApplicationInstanceRow

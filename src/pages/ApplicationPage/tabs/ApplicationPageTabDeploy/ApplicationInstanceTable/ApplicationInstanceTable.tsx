@@ -3,7 +3,7 @@ import { makeStyles } from '@material-ui/core/styles'
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from '@material-ui/core'
 import { IApplicationInstance } from 'types/Application'
 
-import ApplicationInstanceRow from './ApplicetionInstanceRow'
+import { ApplicationInstanceRow } from './ApplicetionInstanceRow'
 
 const useStyles = makeStyles({
   table: {
@@ -50,7 +50,7 @@ export const ApplicationInstanceTable = ({ data }: IApplicationInstanceTableProp
           </TableHead>
           <TableBody>
             {data?.map((rowData) => (
-              <ApplicationInstanceRow data={rowData} />
+              <ApplicationInstanceRow data={rowData} key={rowData.id} />
             ))}
           </TableBody>
         </Table>

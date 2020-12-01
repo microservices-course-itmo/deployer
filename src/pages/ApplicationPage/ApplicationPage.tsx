@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { RouteComponentProps } from 'react-router-dom'
 import { AppBar, Tab, Tabs } from '@material-ui/core'
+import { useQuery } from 'react-query'
 import { ApplicationPageTabType, IApplicationData } from '../../types/Application'
 import { ApplicationPageTab } from './tabs/ApplicationPageTab'
-import { mockData } from './mock'
 
 interface IApplicationPageRouteParams {
   name: string
@@ -15,18 +15,21 @@ export const ApplicationPage = ({
   },
 }: RouteComponentProps<IApplicationPageRouteParams>) => {
   const [currentTab, setCurrentTab] = useState(ApplicationPageTabType.DEPLOY)
-  const [applicationData, setApplicationData] = useState<IApplicationData | undefined>()
 
-  useEffect(() => {
-    setTimeout(() => {
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
-      setApplicationData(mockData as IApplicationData)
-    }, 250)
-  }, [])
+  const { isLoading, isError, data } = useQuery<IApplicationData>('applicationData', () =>
+    fetch(`${process.env.API}/get/byName/${name}`).then((res) => res.json())
+  )
 
   const handleTabChange = (event: React.ChangeEvent<unknown>, newTab: ApplicationPageTabType) => {
     setCurrentTab(newTab)
+  }
+
+  if (isLoading) {
+    return <span>Loading...</span>
+  }
+
+  if (isError) {
+    return <span>ERROR!</span>
   }
 
   return (
@@ -39,8 +42,7 @@ export const ApplicationPage = ({
           <Tab label='volumes' />
         </Tabs>
       </AppBar>
-      {console.log(name)}
-      <ApplicationPageTab tab={currentTab} data={applicationData} />
+      <ApplicationPageTab tab={currentTab} data={data!} />
     </div>
   )
 }

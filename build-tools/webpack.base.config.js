@@ -46,6 +46,14 @@ module.exports = {
                                 'camel2DashComponentName': false
                             },
                             'icons'
+                        ],
+                        [
+                            'inline-dotenv',
+                            {
+                                path: this.mode === 'production' ?
+                                    path.join(paths.root, '.env') :
+                                    path.join(paths.root, '.env.dev')
+                            }
                         ]
                     ]
                 },
