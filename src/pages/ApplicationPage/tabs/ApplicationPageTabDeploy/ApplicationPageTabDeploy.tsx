@@ -10,8 +10,8 @@ interface IApplicationPageTabDeployProps {
   templateVersion: string
   instances: IApplicationInstance[]
   possibleVersions: string[]
-  dateCreated: string
-  logs: IHistoryLog[]
+  lastRelease: string
+  history: IHistoryLog[]
 }
 
 const useStyles = makeStyles(() =>
@@ -42,11 +42,11 @@ const useStyles = makeStyles(() =>
 
 export const ApplicationPageTabDeploy = ({
   description,
-  // templateVersion,
+  templateVersion,
   instances,
   possibleVersions,
-  dateCreated,
-  logs,
+  lastRelease,
+  history,
 }: IApplicationPageTabDeployProps) => {
   const classes = useStyles()
   const [vers, setVers] = React.useState(possibleVersions[possibleVersions.length - 1])
@@ -58,15 +58,17 @@ export const ApplicationPageTabDeploy = ({
     setAlias(event.target.value)
   }
   const onClickDeploy = () => {
+    setVers('')
     setAlias('')
   }
+  console.log(templateVersion)
   return (
     <div>
       <Container className={classes.formControl}>
         <Grid container direction='row' justify='space-around' alignItems='center'>
           <Grid item>
             <h3 className={classes.h3Style}>Description: {description}</h3>
-            <h3 className={classes.h3Style}>Date Created: {dateCreated}</h3>
+            <h3 className={classes.h3Style}>Last release: {lastRelease}</h3>
           </Grid>
           <Grid item>
             <InputLabel className={classes.inputLabelStyle} id='demo-simple-select-filled-label'>
@@ -108,7 +110,7 @@ export const ApplicationPageTabDeploy = ({
             <ApplicationInstanceTable data={instances} />
           </Box>
           <Box m={2}>
-            <ApplicationHistoryLog logs={logs} />
+            <ApplicationHistoryLog variant={history} />
           </Box>
         </Grid>
       </Container>
