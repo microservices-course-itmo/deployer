@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { RouteComponentProps } from 'react-router-dom'
 import { AppBar, Tab, Tabs } from '@material-ui/core'
 import { useQuery } from 'react-query'
+import API from '../../api'
 import { ApplicationPageTabType, IApplicationData } from '../../types/Application'
 import { ApplicationPageTab } from './tabs/ApplicationPageTab'
 
@@ -16,9 +17,7 @@ export const ApplicationPage = ({
 }: RouteComponentProps<IApplicationPageRouteParams>) => {
   const [currentTab, setCurrentTab] = useState(ApplicationPageTabType.DEPLOY)
 
-  const { isLoading, isError, data } = useQuery<IApplicationData>('applicationData', () =>
-    fetch(`${process.env.API}/get/byName/${name}`).then((res) => res.json())
-  )
+  const { isLoading, isError, data } = useQuery<IApplicationData>(name, API.deploymentController.getAppByName)
 
   const handleTabChange = (event: React.ChangeEvent<unknown>, newTab: ApplicationPageTabType) => {
     setCurrentTab(newTab)

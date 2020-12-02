@@ -1,9 +1,12 @@
 import React from 'react'
 import { FormControl, Container, Grid, MenuItem, Select, Button, InputLabel, TextField, Box } from '@material-ui/core'
 import { createStyles, makeStyles } from '@material-ui/core/styles'
+import { useMutation } from 'react-query'
+import { useParams } from 'react-router-dom'
 import { IApplicationInstance, IHistoryLog } from '../../../../types/Application'
 import { ApplicationInstanceTable } from './ApplicationInstanceTable/ApplicationInstanceTable'
 import { ApplicationHistoryLog } from './ApplicationHistoryLog/ApplicationHistoryLog'
+import API from '../../../../api'
 
 interface IApplicationPageTabDeployProps {
   description: string
@@ -49,19 +52,29 @@ export const ApplicationPageTabDeploy = ({
   history,
 }: IApplicationPageTabDeployProps) => {
   const classes = useStyles()
-  const [vers, setVers] = React.useState(possibleVersions[possibleVersions.length - 1])
+  const { name: appName } = useParams<{ name: string }>()
+
+  const [version, setVersion] = React.useState(possibleVersions[possibleVersions.length - 1])
   const [alias, setAlias] = React.useState('')
+
+  const [mutate] = useMutation(API.deploymentController.deployInstance)
+
   const handleVersionChange = (event: React.ChangeEvent<{ value: unknown }>) => {
-    setVers(event.target.value as string)
+    setVersion(event.target.value as string)
   }
+
   const handleAliasChange = (event: React.ChangeEvent<{ value: string }>) => {
     setAlias(event.target.value)
   }
+
   const onClickDeploy = () => {
-    setVers('')
+    mutate({ alias, version, name: appName })
+    setVersion('')
     setAlias('')
   }
+
   console.log(templateVersion)
+
   return (
     <div>
       <Container className={classes.formControl}>
@@ -71,33 +84,20 @@ export const ApplicationPageTabDeploy = ({
             <h3 className={classes.h3Style}>Last release: {lastRelease}</h3>
           </Grid>
           <Grid item>
-            <InputLabel className={classes.inputLabelStyle} id='demo-simple-select-filled-label'>
-              Version
-            </InputLabel>
+            <InputLabel className={classes.inputLabelStyle}>Version</InputLabel>
             <FormControl variant='filled'>
-              <Select
-                labelId='demo-simple-select-filled-label'
-                id='demo-simple-select-filled'
-                value={vers}
-                onChange={handleVersionChange}
-              >
-                {possibleVersions.map((version) => (
-                  <MenuItem key={version} value={version}>
-                    {version}
+              <Select value={version} onChange={handleVersionChange}>
+                {possibleVersions.map((vers) => (
+                  <MenuItem key={vers} value={vers}>
+                    {vers}
                   </MenuItem>
                 ))}
               </Select>
-              <TextField
-                id='standard-required'
-                label='Alias'
-                variant='filled'
-                value={alias}
-                onChange={handleAliasChange}
-              />
+              <TextField label='Alias' variant='filled' value={alias} onChange={handleAliasChange} />
             </FormControl>
           </Grid>
           <Grid item className={classes.buttonContainerStyle}>
-            <Button variant='contained' disabled={!vers} onClick={onClickDeploy}>
+            <Button variant='contained' disabled={!version} onClick={onClickDeploy}>
               Deploy
             </Button>
           </Grid>
