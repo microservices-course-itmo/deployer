@@ -42,7 +42,6 @@ const useStyles = makeStyles(() =>
 
 export const ApplicationPageTabDeploy = ({
   description,
-  templateVersion,
   instances,
   possibleVersions,
   lastRelease,
@@ -58,10 +57,9 @@ export const ApplicationPageTabDeploy = ({
     setAlias(event.target.value)
   }
   const onClickDeploy = () => {
-    setVers('')
+    setVers(possibleVersions[possibleVersions.length - 1])
     setAlias('')
   }
-  console.log(templateVersion)
   return (
     <div>
       <Container className={classes.formControl}>
