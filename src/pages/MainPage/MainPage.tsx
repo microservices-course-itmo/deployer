@@ -3,19 +3,39 @@ import { createStyles, Theme, makeStyles } from '@material-ui/core/styles'
 import List from '@material-ui/core/List'
 import ListItem, { ListItemProps } from '@material-ui/core/ListItem'
 import ListItemText from '@material-ui/core/ListItemText'
-import Divider from '@material-ui/core/Divider'
+import { Container, Grid, TextField } from '@material-ui/core'
+import Autocomplete from '@material-ui/lab/Autocomplete'
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
+      textAlign: 'center',
+      width: '600px',
+      height: '600px',
+      position: 'absolute',
+      top: '35%',
+      left: '45%',
+      margin: '-200px 0 0 -200px',
+    },
+    container: {
+      alignItems: 'center',
+    },
+    main: {
+      margin: 0,
+      padding: 0,
       width: '100%',
-      maxWidth: 360,
-      backgroundColor: theme.palette.background.paper,
+      height: '100%',
+      backgroundColor: '#FFFFFF',
     },
   })
 )
 
-const services = ['deployment-service-1', 'deployer-demo', 'demo-3', 'service-demo']
+const services = [
+  { name: 'deployment-service-1' },
+  { name: 'deployer-demo' },
+  { name: 'demo-3' },
+  { name: 'service-demo' },
+]
 
 function ListItemLink(props: ListItemProps<'a', { button?: true }>) {
   // eslint-disable-next-line react/jsx-props-no-spreading
@@ -24,41 +44,42 @@ function ListItemLink(props: ListItemProps<'a', { button?: true }>) {
 
 export const MainPage = () => {
   const classes = useStyles()
-
-  const [searchTerm, setSearchTerm] = React.useState('')
-  const [searchResults, setSearchResults] = React.useState([])
-  const handleChange = (event) => {
-    setSearchTerm(event.target.value)
-  }
-  React.useEffect(() => {
-    const results = services.filter((service) => service.toLowerCase().includes(searchTerm))
-    setSearchResults(results)
-  }, [searchTerm])
-
   return (
-    <div className={classes.root}>
-      <input type='text' placeholder='Search' value={searchTerm} onChange={handleChange} />
-      {searchResults.map((item) => (
-        <li>{item}</li>
-      ))}
-      <List component='nav' aria-label='main mailbox folders'>
-        <ListItemLink href='deployment-service-1'>
-          <ListItemText primary='deployment-service-1' />
-        </ListItemLink>
-        <ListItemLink href='deployer-demo'>
-          <ListItemText primary='deployer-demo' />
-        </ListItemLink>
-      </List>
-      <Divider />
-      <List component='nav' aria-label='secondary mailbox folders'>
-        <ListItemLink href='demo-3'>
-          <ListItemText primary='demo-3' />
-        </ListItemLink>
-        <ListItemLink href='service-demo'>
-          <ListItemText primary='service-demo' />
-        </ListItemLink>
-      </List>
-    </div>
+    <Container className={classes.main}>
+      <Grid container direction='column' justify='space-around' alignItems='center'>
+        <div className={classes.root}>
+          <Autocomplete
+            id='free-solo-2-demo'
+            disableClearable
+            options={services.map((option) => option.name)}
+            renderInput={(params) => (
+              <TextField
+                // eslint-disable-next-line react/jsx-props-no-spreading
+                {...params}
+                label='Search input'
+                margin='normal'
+                variant='outlined'
+                InputProps={{ ...params.InputProps, type: 'search' }}
+              />
+            )}
+          />
+          <List component='nav' aria-label='main mailbox folders'>
+            <ListItemLink href='deployment-service-1'>
+              <ListItemText primary='deployment-service-1' />
+            </ListItemLink>
+            <ListItemLink href='deployer-demo'>
+              <ListItemText primary='deployer-demo' />
+            </ListItemLink>
+            <ListItemLink href='demo-3'>
+              <ListItemText primary='demo-3' />
+            </ListItemLink>
+            <ListItemLink href='service-demo'>
+              <ListItemText primary='service-demo' />
+            </ListItemLink>
+          </List>
+        </div>
+      </Grid>
+    </Container>
   )
 }
 
