@@ -32,7 +32,7 @@ const useStyles = makeStyles(() =>
 )
 
 const filterList = (value: string, list: string[]) =>
-  list.filter((item) => item.toLowerCase().includes(value.toLowerCase()))
+  list.filter((item) => item.toLowerCase().includes(value.replaceAll(' ', '').toLowerCase()))
 
 const ListItemLink = (props: ListItemProps<Link, { button?: true }>) => {
   return <ListItem button component={Link} {...props} />
@@ -41,14 +41,23 @@ const ListItemLink = (props: ListItemProps<Link, { button?: true }>) => {
 export const MainPage = () => {
   const classes = useStyles()
 
+  const [inputValue, setInputValue] = useState('')
+
+  const [searchItems, setSearchItems] = useState<string[]>([])
+
   const { isLoading, isError, data } = useQuery<string[]>('applicationNames', () =>
-    fetch(`${process.env.API}/names`).then((res) => res.json())
+    fetch(`${process.env.API}/names`)
+      .then((res) => res.json())
+      .then((items) => {
+        setSearchItems(items)
+        return items
+      })
   )
 
-  const [value, setValue] = useState('')
-
   const handleValueChange = (event: React.ChangeEvent<{ value: unknown }>) => {
-    setValue(event.target.value as string)
+    const { value } = event.target
+    setInputValue(value as string)
+    setSearchItems(filterList(value as string, data!))
   }
 
   if (isLoading) {
@@ -69,12 +78,12 @@ export const MainPage = () => {
             margin='normal'
             variant='outlined'
             InputProps={{ type: 'search' }}
-            value={value}
+            value={inputValue}
             onChange={handleValueChange}
           />
           <List component='nav' aria-label='main mailbox folders'>
-            {filterList(value, data!).map((item) => (
-              <ListItemLink to={`/app/${item}`}>
+            {searchItems.map((item) => (
+              <ListItemLink to={`/app/${item}`} key={item}>
                 <ListItemText primary={item} />
               </ListItemLink>
             ))}
@@ -84,30 +93,3 @@ export const MainPage = () => {
     </Container>
   )
 }
-
-// import { useQuery } from 'react-query'
-// import { Link } from 'react-router-dom'
-//
-// export const MainPage = () => {
-//   const { isLoading, isError, data } = useQuery<string[]>('applicationNames', () =>
-//     fetch(`${process.env.API}/names`).then((res) => res.json())
-//   )
-//
-//   if (isError) {
-//     return <span>Error</span>
-//   }
-//
-//   if (isLoading) {
-//     return <span>Loading...</span>
-//   }
-//
-//   return (
-//     <div>
-//       {data!.map((name) => (
-//         <Link key={name} to={`/app/${name}`} style={{ display: 'block' }}>
-//           {name}
-//         </Link>
-//       ))}
-//     </div>
-//   )
-// }

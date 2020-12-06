@@ -60,9 +60,7 @@ export const ApplicationInstanceRow = ({ data }: IApplicationInstanceTableProps)
   const handleClickInstance = (action: string) => {
     setLoadingType(action)
     delay(2000)
-      .then(() => {
-        console.log('asd')
-      })
+      .then(() => {})
       .finally(() => {
         setLoadingType('')
       })
@@ -97,7 +95,7 @@ export const ApplicationInstanceRow = ({ data }: IApplicationInstanceTableProps)
           classes={{ root: classes.rowActions }}
         >
           {ACTIONS.map((action) => (
-            <Grid item>
+            <Grid item key={action}>
               {loadingType === action ? (
                 <CircularProgress size={41} />
               ) : (
