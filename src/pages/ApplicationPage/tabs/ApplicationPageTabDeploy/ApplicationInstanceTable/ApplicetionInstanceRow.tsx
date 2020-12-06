@@ -59,11 +59,9 @@ export const ApplicationInstanceRow = ({ data }: IApplicationInstanceTableProps)
 
   const handleClickInstance = (action: string) => {
     setLoadingType(action)
-    delay(2000)
-      .then(() => {})
-      .finally(() => {
-        setLoadingType('')
-      })
+    delay(2000).finally(() => {
+      setLoadingType('')
+    })
   }
 
   const isButtonDisabled = (buttonType: ButtonType) => {
