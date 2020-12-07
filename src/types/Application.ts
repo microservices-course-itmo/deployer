@@ -1,10 +1,3 @@
-export enum ApplicationPageTabType {
-  'DEPLOY',
-  'ENVIRONMENT',
-  'PORTS',
-  'VOLUMES',
-}
-
 export interface IApplicationData {
   id: string
   name: string
