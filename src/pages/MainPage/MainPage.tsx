@@ -87,6 +87,8 @@ export const MainPage = () => {
                 <ListItemText primary={item} />
               </ListItemLink>
             ))}
+
+            {!searchItems.length && <span>no search results</span>}
           </List>
         </div>
       </Grid>
