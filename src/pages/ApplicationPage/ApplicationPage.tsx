@@ -5,6 +5,7 @@ import { useQuery } from 'react-query'
 import API from '../../api'
 import { ApplicationPageTabType, IApplicationData } from '../../types/Application'
 import { ApplicationPageTab } from './tabs/ApplicationPageTab'
+import { ApplicationErrorPage } from './ApplicationErrorPage'
 
 interface IApplicationPageRouteParams {
   name: string
@@ -28,7 +29,7 @@ export const ApplicationPage = ({
   }
 
   if (isError) {
-    return <span>ERROR!</span>
+    return <ApplicationErrorPage />
   }
 
   return (
