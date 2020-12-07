@@ -88,7 +88,7 @@ const Lists = ({ type, vars }: IListsProps) => {
   )
 }
 
-export const ApplicationHistoryLog = ({ variant }: IHistoryLogProps) => {
+export const HistoryLog = ({ variant }: IHistoryLogProps) => {
   const classes = useStyles()
 
   const [isHistoryOpenWithData, setIsHistoryOpenWithData] = useState<IHistoryLog | null>(null)

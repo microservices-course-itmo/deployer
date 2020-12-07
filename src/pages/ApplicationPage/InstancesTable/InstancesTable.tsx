@@ -20,22 +20,17 @@ const useStyles = makeStyles({
   row: {
     maxWidth: '20px',
   },
-  paper: {
-    maxwidth: '1000px',
-    overflowX: 'auto',
-    margin: 'auto',
-  },
 })
 
 interface IApplicationInstanceTableProps {
   data: IApplicationInstance[]
 }
 
-export const ApplicationInstanceTable = ({ data }: IApplicationInstanceTableProps) => {
+export const InstancesTable = ({ data }: IApplicationInstanceTableProps) => {
   const classes = useStyles()
 
   return (
-    <Paper className={classes.paper}>
+    <Paper>
       <TableContainer>
         <Table className={classes.table} aria-label='simple table'>
           <TableHead>

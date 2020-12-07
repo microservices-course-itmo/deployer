@@ -1,21 +1,19 @@
 import React from 'react'
 import { List, ListItem, ListItemSecondaryAction, ListItemText, Checkbox } from '@material-ui/core'
-import { createStyles, makeStyles } from '@material-ui/core/styles'
+import { makeStyles } from '@material-ui/styles'
 
 interface IApplicationPageTabVolumesProps {
   volumes: string[]
 }
 
-const useStyles = makeStyles(() =>
-  createStyles({
-    root: {
-      width: '100%',
-      maxWidth: 360,
-      backgroundColor: '#DFDFDF',
-    },
-  })
-)
-export const ApplicationPageTabVolumes = ({ volumes }: IApplicationPageTabVolumesProps) => {
+const useStyles = makeStyles({
+  saveBtn: {
+    marginTop: 10,
+  },
+})
+
+export const VolumesTable = ({ volumes }: IApplicationPageTabVolumesProps) => {
+  const classes = useStyles()
   const [checked, setChecked] = React.useState(volumes)
 
   const handleToggle = (value: string) => () => {
@@ -30,11 +28,10 @@ export const ApplicationPageTabVolumes = ({ volumes }: IApplicationPageTabVolume
 
     setChecked(newChecked)
   }
-  const classes = useStyles()
+
   return (
     <div>
-      <h3>ApplicationPageTabVolumes</h3>
-      <List dense className={classes.root}>
+      <List dense>
         {volumes.map((vol) => {
           const labelId = `checkbox-list-secondary-label-${vol}`
           return (

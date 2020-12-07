@@ -1,3 +1,4 @@
+import { CssBaseline } from '@material-ui/core'
 import React from 'react'
 import { QueryCache, ReactQueryCacheProvider, ReactQueryConfigProvider } from 'react-query'
 import Router from './Router'
@@ -13,6 +14,7 @@ const config = {
 const App = () => (
   <ReactQueryConfigProvider config={config}>
     <ReactQueryCacheProvider queryCache={queryCache}>
+      <CssBaseline />
       <Router />
     </ReactQueryCacheProvider>
   </ReactQueryConfigProvider>

@@ -18,22 +18,17 @@ import { IEnvironmentVariable } from '../../../../types/Application'
 interface IApplicationPageTabEnvironmentProps {
   env: IEnvironmentVariable[]
 }
+
 const useStyles = makeStyles({
-  tableContainer: {
-    marginLeft: '30%',
-    width: '650px',
-  },
   saveBtn: {
-    marginTop: '5px',
-    padding: '10px 60px',
-    backgroundColor: '#dc70e6',
+    marginTop: 10,
   },
 })
 
 const prepareData = (env: IEnvironmentVariable[]) =>
   env.reduce((accum, value) => ({ ...accum, [value.name]: value.value }), {})
 
-export const ApplicationPageTabEnvironment = ({ env }: IApplicationPageTabEnvironmentProps) => {
+export const EnvironmentsTable = ({ env }: IApplicationPageTabEnvironmentProps) => {
   const [envs, setEnv] = React.useState<{ [key: string]: string }>(prepareData(env))
 
   const handleChangeEnv = (event: any) => {
@@ -43,8 +38,7 @@ export const ApplicationPageTabEnvironment = ({ env }: IApplicationPageTabEnviro
 
   const classes = useStyles()
   return (
-    <Grid className={classes.tableContainer} container direction='column' justify='center' alignItems='center'>
-      <h3>ApplicationPageTabEnvironment</h3>
+    <Grid container direction='column' justify='center' alignItems='center'>
       <TableContainer component={Paper}>
         <Table>
           <TableHead>
@@ -67,7 +61,7 @@ export const ApplicationPageTabEnvironment = ({ env }: IApplicationPageTabEnviro
           </TableBody>
         </Table>
       </TableContainer>
-      <Button className={classes.saveBtn} variant='contained'>
+      <Button className={classes.saveBtn} color='primary' variant='contained'>
         Save
       </Button>
     </Grid>
