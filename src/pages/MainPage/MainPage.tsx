@@ -46,7 +46,7 @@ export const MainPage = () => {
   const [searchItems, setSearchItems] = useState<string[]>([])
 
   const { isLoading, isError, data } = useQuery<string[]>('applicationNames', () =>
-    fetch(`${process.env.API}/names`)
+    fetch(`${process.env.API}/application/names`)
       .then((res) => res.json())
       .then((items) => {
         setSearchItems(items)
