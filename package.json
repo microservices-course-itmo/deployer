@@ -44,6 +44,8 @@
     "babel-plugin-inline-dotenv": "^1.6.0",
     "babel-plugin-styled-components": "^1.11.1",
     "css-loader": "^4.3.0",
+    "enzyme": "^3.11.0",
+    "enzyme-adapter-react-16": "^1.15.5",
     "eslint": "^7.9.0",
     "eslint-config-airbnb-typescript": "^10.0.0",
     "eslint-config-prettier": "^6.11.0",

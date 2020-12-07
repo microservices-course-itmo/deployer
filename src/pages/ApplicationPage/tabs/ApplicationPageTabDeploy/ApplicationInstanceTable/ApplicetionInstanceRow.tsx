@@ -59,13 +59,9 @@ export const ApplicationInstanceRow = ({ data }: IApplicationInstanceTableProps)
 
   const handleClickInstance = (action: string) => {
     setLoadingType(action)
-    delay(2000)
-      .then(() => {
-        console.log('asd')
-      })
-      .finally(() => {
-        setLoadingType('')
-      })
+    delay(2000).finally(() => {
+      setLoadingType('')
+    })
   }
 
   const isButtonDisabled = (buttonType: ButtonType) => {
@@ -97,7 +93,7 @@ export const ApplicationInstanceRow = ({ data }: IApplicationInstanceTableProps)
           classes={{ root: classes.rowActions }}
         >
           {ACTIONS.map((action) => (
-            <Grid item>
+            <Grid item key={action}>
               {loadingType === action ? (
                 <CircularProgress size={41} />
               ) : (

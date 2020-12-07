@@ -45,7 +45,6 @@ const useStyles = makeStyles(() =>
 
 export const ApplicationPageTabDeploy = ({
   description,
-  templateVersion,
   instances,
   possibleVersions,
   lastRelease,
@@ -60,7 +59,6 @@ export const ApplicationPageTabDeploy = ({
 
   const [mutate] = useMutation(API.deploymentController.deployInstance, {
     onSuccess: (data) => {
-      console.log(data)
       setInstanceItems((items) => [...items, data])
     },
   })
@@ -78,8 +76,6 @@ export const ApplicationPageTabDeploy = ({
     setVersion('')
     setAlias('')
   }
-
-  console.log(templateVersion)
 
   return (
     <div>
