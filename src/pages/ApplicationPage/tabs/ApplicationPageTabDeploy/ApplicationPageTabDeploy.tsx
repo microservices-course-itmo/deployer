@@ -83,7 +83,7 @@ export const ApplicationPageTabDeploy = ({
         <Grid container direction='row' justify='space-around' alignItems='center'>
           <Grid item>
             <h3 className={classes.h3Style}>Description: {description}</h3>
-            <h3 className={classes.h3Style}>Last release: {lastRelease}</h3>
+            <h3 className={classes.h3Style}>Last release: {new Date(lastRelease).toLocaleDateString()}</h3>
           </Grid>
           <Grid item>
             <InputLabel className={classes.inputLabelStyle}>Version</InputLabel>
