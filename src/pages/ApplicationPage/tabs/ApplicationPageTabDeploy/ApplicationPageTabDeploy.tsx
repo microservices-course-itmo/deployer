@@ -56,8 +56,14 @@ export const ApplicationPageTabDeploy = ({
 
   const [version, setVersion] = React.useState(possibleVersions[possibleVersions.length - 1])
   const [alias, setAlias] = React.useState('')
+  const [instanceItems, setInstanceItems] = React.useState<IApplicationInstance[]>(instances)
 
-  const [mutate] = useMutation(API.deploymentController.deployInstance)
+  const [mutate] = useMutation(API.deploymentController.deployInstance, {
+    onSuccess: (data) => {
+      console.log(data)
+      setInstanceItems((items) => [...items, data])
+    },
+  })
 
   const handleVersionChange = (event: React.ChangeEvent<{ value: unknown }>) => {
     setVersion(event.target.value as string)
@@ -107,7 +113,7 @@ export const ApplicationPageTabDeploy = ({
       <Container>
         <Grid container spacing={5} direction='column' justify='space-around' alignItems='center'>
           <Box m={2}>
-            <ApplicationInstanceTable data={instances} />
+            <ApplicationInstanceTable data={instanceItems} />
           </Box>
           <Box m={2}>
             <ApplicationHistoryLog variant={history} />

@@ -8,7 +8,11 @@ interface IDeployInstance {
 
 export const deployInstance = ({ alias, name, version }: IDeployInstance) =>
   fetch(getRoute('/applicationInstance/deploy'), {
-    method: 'post',
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Accept-Encoding': 'gzip, deflate',
+    },
     body: JSON.stringify({
       alias,
       name,
