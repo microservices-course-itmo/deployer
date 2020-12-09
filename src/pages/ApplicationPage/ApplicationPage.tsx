@@ -1,44 +1,27 @@
-import React, { useEffect, useState } from 'react'
-import { RouteComponentProps } from 'react-router-dom'
-import { AppBar, Tab, Tabs } from '@material-ui/core'
-import { ApplicationPageTabType, IApplicationData } from '../../types/Application'
-import { ApplicationPageTab } from './tabs/ApplicationPageTab'
-import { mockData } from './mock'
+import React from 'react'
+import { useParams } from 'react-router-dom'
+import { CircularProgress } from '@material-ui/core'
+import { useQuery } from 'react-query'
+import API from '../../api'
+import { IApplicationData } from '../../types/Application'
+import { Deploy } from './Deploy'
+import { ApplicationErrorPage } from '../ApplicationErrorPage'
 
-interface IApplicationPageRouteParams {
-  name: string
-}
+export const ApplicationPage = () => {
+  const { name } = useParams<{ name: string }>()
+  const { isLoading, isError, data } = useQuery<IApplicationData>(name, API.deploymentController.getAppByName)
 
-export const ApplicationPage = ({
-  match: {
-    params: { name },
-  },
-}: RouteComponentProps<IApplicationPageRouteParams>) => {
-  const [currentTab, setCurrentTab] = useState(ApplicationPageTabType.DEPLOY)
-  const [applicationData, setApplicationData] = useState<IApplicationData | undefined>()
-
-  useEffect(() => {
-    setTimeout(() => {
-      setApplicationData(mockData as IApplicationData)
-    }, 250)
-  }, [])
-
-  const handleTabChange = (event: React.ChangeEvent<unknown>, newTab: ApplicationPageTabType) => {
-    setCurrentTab(newTab)
+  if (isLoading) {
+    return (
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <CircularProgress />
+      </div>
+    )
   }
 
-  return (
-    <div>
-      <AppBar position='static'>
-        <Tabs value={currentTab} onChange={handleTabChange} centered>
-          <Tab label='deploy' />
-          <Tab label='environment' />
-          <Tab label='ports' />
-          <Tab label='volumes' />
-        </Tabs>
-      </AppBar>
-      {console.log(name)}
-      <ApplicationPageTab tab={currentTab} data={applicationData} />
-    </div>
-  )
+  if (isError) {
+    return <ApplicationErrorPage />
+  }
+
+  return <Deploy data={data!} />
 }

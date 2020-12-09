@@ -30,10 +30,7 @@ const useStyles = makeStyles({
   },
 })
 
-const preparePorts = (ports: IPortMapping[]) =>
-  ports.reduce((accum, value) => ({ ...accum, [value.port]: value.value }), {})
-
-export const ApplicationPageTabPorts = ({ ports }: IApplicationPageTabPortsProps) => {
+export const PortsTable = ({ ports }: IApplicationPageTabPortsProps) => {
   const classes = useStyles()
   const [port, setPorts] = React.useState<{ [key: string]: string }>(preparePorts(ports))
   const [newPort, setNewPort] = React.useState('')
@@ -115,7 +112,7 @@ export const ApplicationPageTabPorts = ({ ports }: IApplicationPageTabPortsProps
         <Button onClick={onChangeAddPors} className={classes.saveBtn} variant='contained'>
           Add
         </Button>
-        <Button className={classes.saveBtn} variant='contained'>
+        <Button className={classes.saveBtn} color='primary' variant='contained'>
           Save
         </Button>
       </Grid>
