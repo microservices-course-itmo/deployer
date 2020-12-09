@@ -13,16 +13,12 @@ import {
   Grid,
   // Checkbox,
 } from '@material-ui/core'
-import { IPortMapping } from '../../../../types/Application'
+import { IPorts } from '../../../../types/Application'
 
 interface IApplicationPageTabPortsProps {
-  ports: IPortMapping[]
+  ports: IPorts
 }
 const useStyles = makeStyles({
-  tableContainer: {
-    marginLeft: '30%',
-    width: '650px',
-  },
   saveBtn: {
     marginTop: '5px',
     padding: '10px 60px',
@@ -32,7 +28,7 @@ const useStyles = makeStyles({
 
 export const PortsTable = ({ ports }: IApplicationPageTabPortsProps) => {
   const classes = useStyles()
-  const [port, setPorts] = React.useState<{ [key: string]: string }>(preparePorts(ports))
+  const [port, setPorts] = React.useState<{ [key: string]: string }>(ports)
   const [newPort, setNewPort] = React.useState('')
   const [newPortValue, setNewPortValue] = React.useState('')
   const handleChangePorts = (event: any) => {
@@ -64,8 +60,7 @@ export const PortsTable = ({ ports }: IApplicationPageTabPortsProps) => {
     }
   }
   return (
-    <Grid className={classes.tableContainer} container direction='column' justify='center' alignItems='center'>
-      <h3>ApplicationPageTabPorts</h3>
+    <Grid container direction='column' justify='center' alignItems='center'>
       <TableContainer component={Paper}>
         <Table>
           <TableHead>

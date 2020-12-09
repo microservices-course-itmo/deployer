@@ -6,6 +6,9 @@ import { IApplicationInstance } from 'types/Application'
 import { ApplicationInstanceRow } from './ApplicetionInstanceRow'
 
 const useStyles = makeStyles({
+  wrapper: {
+    height: 'fit-content',
+  },
   table: {
     maxWidth: '1000px',
     width: '800px',
@@ -30,7 +33,7 @@ export const InstancesTable = ({ data }: IApplicationInstanceTableProps) => {
   const classes = useStyles()
 
   return (
-    <Paper>
+    <Paper className={classes.wrapper}>
       <TableContainer>
         <Table className={classes.table} aria-label='simple table'>
           <TableHead>

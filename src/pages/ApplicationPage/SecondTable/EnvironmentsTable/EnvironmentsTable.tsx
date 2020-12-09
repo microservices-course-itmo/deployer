@@ -20,15 +20,11 @@ interface IApplicationPageTabEnvironmentProps {
 }
 
 const useStyles = makeStyles({
-    tableContainer: {
-        marginLeft: '30%',
-        width: '650px',
-    },
-    saveBtn: {
-        marginTop: '5px',
-        padding: '10px 60px',
-        backgroundColor: '#dc70e6',
-    },
+  saveBtn: {
+    marginTop: '5px',
+    padding: '10px 60px',
+    backgroundColor: '#dc70e6',
+  },
 })
 
 const prepareData = (env: IEnvironmentVariable[]) =>
