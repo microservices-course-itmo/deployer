@@ -10,8 +10,6 @@ const useStyles = makeStyles({
     height: 'fit-content',
   },
   table: {
-    maxWidth: '1000px',
-    width: '800px',
     background: '#F5F5F5',
     border: '0px',
   },
