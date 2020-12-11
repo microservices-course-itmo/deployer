@@ -11,8 +11,10 @@ import {
   Button,
   TextField,
   Grid,
-  // Checkbox,
+  IconButton,
 } from '@material-ui/core'
+import DeleteIcon from '@material-ui/icons/Delete'
+import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline'
 import { IPorts } from '../../../../types/Application'
 
 interface IApplicationPageTabPortsProps {
@@ -59,6 +61,12 @@ export const PortsTable = ({ ports }: IApplicationPageTabPortsProps) => {
       setPorts((prevState) => ({ ...prevState, [newPort]: newPortValue }))
     }
   }
+
+  const onClickDeleteEnv = (k: string) => {
+    const newObj = Object.entries(port).filter((p) => p[0] !== k)
+    setPorts(Object.fromEntries(newObj))
+  }
+
   return (
     <Grid container direction='column' justify='center' alignItems='center'>
       <TableContainer component={Paper}>
@@ -67,6 +75,7 @@ export const PortsTable = ({ ports }: IApplicationPageTabPortsProps) => {
             <TableRow>
               <TableCell>Port</TableCell>
               <TableCell align='right'>Value</TableCell>
+              <TableCell align='right'>{}</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -78,12 +87,17 @@ export const PortsTable = ({ ports }: IApplicationPageTabPortsProps) => {
                 <TableCell align='right'>
                   <TextField id='standard' name={por} variant='filled' value={port[por]} onChange={handleChangePorts} />
                 </TableCell>
+                <TableCell>
+                  <IconButton onClick={() => onClickDeleteEnv(por)} aria-label='delete'>
+                    <DeleteIcon fontSize='small' />
+                  </IconButton>
+                </TableCell>
               </TableRow>
             ))}
             <TableRow>
               <TableCell>
                 <TextField
-                  label='port1'
+                  label='Порт'
                   id='standard'
                   onChange={handleChangeNewPorts}
                   variant='filled'
@@ -92,22 +106,24 @@ export const PortsTable = ({ ports }: IApplicationPageTabPortsProps) => {
               </TableCell>
               <TableCell align='right'>
                 <TextField
-                  label='port2'
+                  label='Значение'
                   onChange={handleChangeNewPortValue}
                   id='standard'
                   variant='filled'
                   value={newPortValue}
                 />
               </TableCell>
+              <TableCell>
+                <IconButton onClick={onChangeAddPors} aria-label='add'>
+                  <AddCircleOutlineIcon fontSize='large' style={{ color: '#3F51B5' }} />
+                </IconButton>
+              </TableCell>
             </TableRow>
           </TableBody>
         </Table>
       </TableContainer>
-      <Grid container direction='row' justify='space-between' alignItems='center'>
-        <Button onClick={onChangeAddPors} className={classes.saveBtn} variant='contained'>
-          Add
-        </Button>
-        <Button className={classes.saveBtn} color='primary' variant='contained'>
+      <Grid container direction='row' justify='flex-end' alignItems='center'>
+        <Button className={classes.saveBtn} variant='contained' size='large' color='primary'>
           Save
         </Button>
       </Grid>

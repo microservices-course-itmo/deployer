@@ -11,8 +11,10 @@ import {
   Button,
   TextField,
   Grid,
-  // Checkbox,
+  IconButton,
 } from '@material-ui/core'
+import DeleteIcon from '@material-ui/icons/Delete'
+import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline'
 import { IEnvironmentVariable } from '../../../../types/Application'
 
 interface IApplicationPageTabEnvironmentProps {
@@ -34,18 +36,23 @@ export const EnvironmentsTable = ({ env }: IApplicationPageTabEnvironmentProps) 
   const [envs, setEnv] = React.useState<{ [key: string]: string }>(prepareData(env))
   const [newEnv, setNewEnv] = React.useState('')
   const [newEnvValue, setNewEnvValue] = React.useState('')
+  const classes = useStyles()
+
   const handleChangeEnv = (event: any) => {
     const { name, value } = event.target
     setEnv((prevState) => ({ ...prevState, [name]: value }))
   }
+
   const handleChangeNewEnv = (event: any) => {
     const { value } = event.target
     setNewEnv(value)
   }
+
   const handleChangeNewEnvValue = (event: any) => {
     const { value } = event.target
     setNewEnvValue(value)
   }
+
   const onChangeAddEnv = () => {
     let isExist = false
     Object.keys(envs).map((name) => {
@@ -62,7 +69,12 @@ export const EnvironmentsTable = ({ env }: IApplicationPageTabEnvironmentProps) 
       setEnv((prevState) => ({ ...prevState, [newEnv]: newEnvValue }))
     }
   }
-  const classes = useStyles()
+
+  const onClickDeleteEnv = (k: string) => {
+    const newObj = Object.entries(envs).filter((en) => en[0] !== k)
+    setEnv(Object.fromEntries(newObj))
+  }
+
   return (
     <Grid container direction='column' justify='center' alignItems='center'>
       <TableContainer component={Paper}>
@@ -71,6 +83,7 @@ export const EnvironmentsTable = ({ env }: IApplicationPageTabEnvironmentProps) 
             <TableRow>
               <TableCell>Name</TableCell>
               <TableCell align='right'>Value</TableCell>
+              <TableCell align='right'>{}</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -82,30 +95,43 @@ export const EnvironmentsTable = ({ env }: IApplicationPageTabEnvironmentProps) 
                 <TableCell align='right'>
                   <TextField id='standard' name={name} variant='filled' value={envs[name]} onChange={handleChangeEnv} />
                 </TableCell>
+                <TableCell>
+                  <IconButton onClick={() => onClickDeleteEnv(name)} aria-label='delete'>
+                    <DeleteIcon fontSize='large' />
+                  </IconButton>
+                </TableCell>
               </TableRow>
             ))}
             <TableRow>
               <TableCell>
-                <TextField label='name' id='standard' onChange={handleChangeNewEnv} variant='filled' value={newEnv} />
+                <TextField
+                  label='Название'
+                  id='standard'
+                  onChange={handleChangeNewEnv}
+                  variant='filled'
+                  value={newEnv}
+                />
               </TableCell>
               <TableCell align='right'>
                 <TextField
-                  label='value'
+                  label='Значение'
                   id='standard'
                   onChange={handleChangeNewEnvValue}
                   variant='filled'
                   value={newEnvValue}
                 />
               </TableCell>
+              <TableCell>
+                <IconButton onClick={onChangeAddEnv} aria-label='add'>
+                  <AddCircleOutlineIcon fontSize='large' style={{ color: '#3F51B5' }} />
+                </IconButton>
+              </TableCell>
             </TableRow>
           </TableBody>
         </Table>
       </TableContainer>
-      <Grid container direction='row' justify='space-between' alignItems='center'>
-        <Button onClick={onChangeAddEnv} className={classes.saveBtn} variant='contained'>
-          Add
-        </Button>
-        <Button className={classes.saveBtn} color='primary' variant='contained'>
+      <Grid container direction='row' justify='flex-end' alignItems='center'>
+        <Button className={classes.saveBtn} variant='contained' size='large' color='primary'>
           Save
         </Button>
       </Grid>
