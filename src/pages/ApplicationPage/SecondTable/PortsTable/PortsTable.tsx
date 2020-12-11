@@ -83,7 +83,7 @@ export const PortsTable = ({ ports }: IApplicationPageTabPortsProps) => {
             <TableRow>
               <TableCell>
                 <TextField
-                  label='Новый порт'
+                  label='port1'
                   id='standard'
                   onChange={handleChangeNewPorts}
                   variant='filled'
@@ -92,7 +92,7 @@ export const PortsTable = ({ ports }: IApplicationPageTabPortsProps) => {
               </TableCell>
               <TableCell align='right'>
                 <TextField
-                  label='Значение порта'
+                  label='port2'
                   onChange={handleChangeNewPortValue}
                   id='standard'
                   variant='filled'

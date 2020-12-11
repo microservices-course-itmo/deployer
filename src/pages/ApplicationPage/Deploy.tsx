@@ -125,18 +125,6 @@ export const Deploy = ({
         </Container>
       </Container>
       <hr className={classes.hrStyle} />
-      {/* <Container> */}
-      {/*  <Grid container spacing={5} direction='column'> */}
-      {/*    <Box m={2} className={classes.tables}> */}
-      {/*      <InstancesTable data={instanceItems} /> */}
-      {/*      <SecondTable className={classes.secondTable} {...props} type={secondTableTab} /> */}
-      {/*    </Box> */}
-      {/*    <Box m={2}> */}
-      {/*      <HistoryLog variant={logs} /> */}
-      {/*    </Box> */}
-      {/*  </Grid> */}
-      {/* </Container> */}
-
       <div style={{ display: 'flex' }}>
         <Container>
           <InstancesTable data={instanceItems} />

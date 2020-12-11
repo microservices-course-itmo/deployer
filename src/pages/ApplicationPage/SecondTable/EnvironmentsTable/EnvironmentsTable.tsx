@@ -86,17 +86,11 @@ export const EnvironmentsTable = ({ env }: IApplicationPageTabEnvironmentProps) 
             ))}
             <TableRow>
               <TableCell>
-                <TextField
-                  label='Название переменной'
-                  id='standard'
-                  onChange={handleChangeNewEnv}
-                  variant='filled'
-                  value={newEnv}
-                />
+                <TextField label='name' id='standard' onChange={handleChangeNewEnv} variant='filled' value={newEnv} />
               </TableCell>
               <TableCell align='right'>
                 <TextField
-                  label='Значение переменной'
+                  label='value'
                   id='standard'
                   onChange={handleChangeNewEnvValue}
                   variant='filled'
