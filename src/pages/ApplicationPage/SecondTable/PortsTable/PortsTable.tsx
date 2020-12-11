@@ -11,37 +11,33 @@ import {
   Button,
   TextField,
   Grid,
-  // Checkbox,
+  IconButton,
 } from '@material-ui/core'
-import { IPortMapping } from '../../../../types/Application'
+import DeleteIcon from '@material-ui/icons/Delete'
+import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline'
+import { IPorts } from '../../../../types/Application'
 
 interface IApplicationPageTabPortsProps {
-  ports: IPortMapping[]
+  ports: IPorts
 }
+
 const useStyles = makeStyles({
-  tableContainer: {
-    marginLeft: '30%',
-    width: '650px',
-  },
   saveBtn: {
-    marginTop: '5px',
-    padding: '10px 60px',
-    backgroundColor: '#dc70e6',
+    marginTop: 10,
   },
 })
 
-const preparePorts = (ports: IPortMapping[]) =>
-  ports.reduce((accum, value) => ({ ...accum, [value.port]: value.value }), {})
-
-export const ApplicationPageTabPorts = ({ ports }: IApplicationPageTabPortsProps) => {
+export const PortsTable = ({ ports }: IApplicationPageTabPortsProps) => {
   const classes = useStyles()
-  const [port, setPorts] = React.useState<{ [key: string]: string }>(preparePorts(ports))
+  const [port, setPorts] = React.useState<{ [key: string]: string }>(ports)
   const [newPort, setNewPort] = React.useState('')
   const [newPortValue, setNewPortValue] = React.useState('')
+
   const handleChangePorts = (event: any) => {
     const { name, value } = event.target
     setPorts((prevState) => ({ ...prevState, [name]: value }))
   }
+
   const handleChangeNewPorts = (event: any) => {
     const { value } = event.target
     setNewPort(value)
@@ -66,15 +62,21 @@ export const ApplicationPageTabPorts = ({ ports }: IApplicationPageTabPortsProps
       setPorts((prevState) => ({ ...prevState, [newPort]: newPortValue }))
     }
   }
+
+  const onClickDeleteEnv = (k: string) => {
+    const newObj = Object.entries(port).filter((p) => p[0] !== k)
+    setPorts(Object.fromEntries(newObj))
+  }
+
   return (
-    <Grid className={classes.tableContainer} container direction='column' justify='center' alignItems='center'>
-      <h3>ApplicationPageTabPorts</h3>
+    <Grid container direction='column' justify='center' alignItems='center'>
       <TableContainer component={Paper}>
         <Table>
           <TableHead>
             <TableRow>
               <TableCell>Port</TableCell>
               <TableCell align='right'>Value</TableCell>
+              <TableCell align='right'>{}</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -86,12 +88,17 @@ export const ApplicationPageTabPorts = ({ ports }: IApplicationPageTabPortsProps
                 <TableCell align='right'>
                   <TextField id='standard' name={por} variant='filled' value={port[por]} onChange={handleChangePorts} />
                 </TableCell>
+                <TableCell>
+                  <IconButton onClick={() => onClickDeleteEnv(por)} aria-label='delete'>
+                    <DeleteIcon fontSize='small' />
+                  </IconButton>
+                </TableCell>
               </TableRow>
             ))}
             <TableRow>
               <TableCell>
                 <TextField
-                  label='Новый порт'
+                  label='Порт'
                   id='standard'
                   onChange={handleChangeNewPorts}
                   variant='filled'
@@ -100,22 +107,24 @@ export const ApplicationPageTabPorts = ({ ports }: IApplicationPageTabPortsProps
               </TableCell>
               <TableCell align='right'>
                 <TextField
-                  label='Значение порта'
+                  label='Значение'
                   onChange={handleChangeNewPortValue}
                   id='standard'
                   variant='filled'
                   value={newPortValue}
                 />
               </TableCell>
+              <TableCell>
+                <IconButton onClick={onChangeAddPors} aria-label='add'>
+                  <AddCircleOutlineIcon fontSize='medium' style={{ color: '#3F51B5' }} />
+                </IconButton>
+              </TableCell>
             </TableRow>
           </TableBody>
         </Table>
       </TableContainer>
-      <Grid container direction='row' justify='space-between' alignItems='center'>
-        <Button onClick={onChangeAddPors} className={classes.saveBtn} variant='contained'>
-          Add
-        </Button>
-        <Button className={classes.saveBtn} variant='contained'>
+      <Grid container direction='row' justify='flex-end' alignItems='center'>
+        <Button className={classes.saveBtn} variant='contained' size='large' color='primary'>
           Save
         </Button>
       </Grid>

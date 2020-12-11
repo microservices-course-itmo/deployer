@@ -11,44 +11,46 @@ import {
   Button,
   TextField,
   Grid,
-  // Checkbox,
+  IconButton,
 } from '@material-ui/core'
+import DeleteIcon from '@material-ui/icons/Delete'
+import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline'
 import { IEnvironmentVariable } from '../../../../types/Application'
 
 interface IApplicationPageTabEnvironmentProps {
   env: IEnvironmentVariable[]
 }
+
 const useStyles = makeStyles({
-  tableContainer: {
-    marginLeft: '30%',
-    width: '650px',
-  },
   saveBtn: {
-    marginTop: '5px',
-    padding: '10px 60px',
-    backgroundColor: '#dc70e6',
+    marginTop: 10,
   },
 })
 
 const prepareData = (env: IEnvironmentVariable[]) =>
   env.reduce((accum, value) => ({ ...accum, [value.name]: value.value }), {})
 
-export const ApplicationPageTabEnvironment = ({ env }: IApplicationPageTabEnvironmentProps) => {
+export const EnvironmentsTable = ({ env }: IApplicationPageTabEnvironmentProps) => {
   const [envs, setEnv] = React.useState<{ [key: string]: string }>(prepareData(env))
   const [newEnv, setNewEnv] = React.useState('')
   const [newEnvValue, setNewEnvValue] = React.useState('')
+  const classes = useStyles()
+
   const handleChangeEnv = (event: any) => {
     const { name, value } = event.target
     setEnv((prevState) => ({ ...prevState, [name]: value }))
   }
+
   const handleChangeNewEnv = (event: any) => {
     const { value } = event.target
     setNewEnv(value)
   }
+
   const handleChangeNewEnvValue = (event: any) => {
     const { value } = event.target
     setNewEnvValue(value)
   }
+
   const onChangeAddEnv = () => {
     let isExist = false
     Object.keys(envs).map((name) => {
@@ -65,16 +67,21 @@ export const ApplicationPageTabEnvironment = ({ env }: IApplicationPageTabEnviro
       setEnv((prevState) => ({ ...prevState, [newEnv]: newEnvValue }))
     }
   }
-  const classes = useStyles()
+
+  const onClickDeleteEnv = (k: string) => {
+    const newObj = Object.entries(envs).filter((en) => en[0] !== k)
+    setEnv(Object.fromEntries(newObj))
+  }
+
   return (
-    <Grid className={classes.tableContainer} container direction='column' justify='center' alignItems='center'>
-      <h3>ApplicationPageTabEnvironment</h3>
+    <Grid container direction='column' justify='center' alignItems='center'>
       <TableContainer component={Paper}>
         <Table>
           <TableHead>
             <TableRow>
               <TableCell>Name</TableCell>
               <TableCell align='right'>Value</TableCell>
+              <TableCell align='right'>{}</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -86,12 +93,17 @@ export const ApplicationPageTabEnvironment = ({ env }: IApplicationPageTabEnviro
                 <TableCell align='right'>
                   <TextField id='standard' name={name} variant='filled' value={envs[name]} onChange={handleChangeEnv} />
                 </TableCell>
+                <TableCell>
+                  <IconButton onClick={() => onClickDeleteEnv(name)} aria-label='delete'>
+                    <DeleteIcon fontSize='small' />
+                  </IconButton>
+                </TableCell>
               </TableRow>
             ))}
             <TableRow>
               <TableCell>
                 <TextField
-                  label='Название переменной'
+                  label='Название'
                   id='standard'
                   onChange={handleChangeNewEnv}
                   variant='filled'
@@ -100,22 +112,24 @@ export const ApplicationPageTabEnvironment = ({ env }: IApplicationPageTabEnviro
               </TableCell>
               <TableCell align='right'>
                 <TextField
-                  label='Значение переменной'
+                  label='Значение'
                   id='standard'
                   onChange={handleChangeNewEnvValue}
                   variant='filled'
                   value={newEnvValue}
                 />
               </TableCell>
+              <TableCell>
+                <IconButton onClick={onChangeAddEnv} aria-label='add'>
+                  <AddCircleOutlineIcon fontSize='medium' style={{ color: '#3F51B5' }} />
+                </IconButton>
+              </TableCell>
             </TableRow>
           </TableBody>
         </Table>
       </TableContainer>
-      <Grid container direction='row' justify='space-between' alignItems='center'>
-        <Button onClick={onChangeAddEnv} className={classes.saveBtn} variant='contained'>
-          Add
-        </Button>
-        <Button className={classes.saveBtn} variant='contained'>
+      <Grid container direction='row' justify='flex-end' alignItems='center'>
+        <Button className={classes.saveBtn} variant='contained' size='large' color='primary'>
           Save
         </Button>
       </Grid>
