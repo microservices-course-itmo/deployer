@@ -120,7 +120,7 @@ export const Deploy = ({
           <Tabs value={secondTableTab} onChange={(e, newTab) => setSecondTableTab(newTab)}>
             <Tab value={SecondTableTypes.ENVIRONMENT} label='ENV' />
             <Tab value={SecondTableTypes.PORTS} label='PORTS' />
-            <Tab value={SecondTableTypes.VOLUMES} label='VOLUMS' />
+            <Tab value={SecondTableTypes.VOLUMES} label='VOLUMES' />
           </Tabs>
         </Container>
       </Container>
