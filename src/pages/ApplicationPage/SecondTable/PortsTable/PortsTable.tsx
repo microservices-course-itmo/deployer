@@ -20,10 +20,11 @@ import { IPorts } from '../../../../types/Application'
 interface IApplicationPageTabPortsProps {
   ports: IPorts
 }
-
 const useStyles = makeStyles({
   saveBtn: {
-    marginTop: 10,
+    marginTop: '5px',
+    padding: '10px 60px',
+    backgroundColor: '#dc70e6',
   },
 })
 
@@ -32,12 +33,10 @@ export const PortsTable = ({ ports }: IApplicationPageTabPortsProps) => {
   const [port, setPorts] = React.useState<{ [key: string]: string }>(ports)
   const [newPort, setNewPort] = React.useState('')
   const [newPortValue, setNewPortValue] = React.useState('')
-
   const handleChangePorts = (event: any) => {
     const { name, value } = event.target
     setPorts((prevState) => ({ ...prevState, [name]: value }))
   }
-
   const handleChangeNewPorts = (event: any) => {
     const { value } = event.target
     setNewPort(value)

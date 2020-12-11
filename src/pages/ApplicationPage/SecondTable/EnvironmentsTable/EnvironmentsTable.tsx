@@ -23,7 +23,9 @@ interface IApplicationPageTabEnvironmentProps {
 
 const useStyles = makeStyles({
   saveBtn: {
-    marginTop: 10,
+    marginTop: '5px',
+    padding: '10px 60px',
+    backgroundColor: '#dc70e6',
   },
 })
 
