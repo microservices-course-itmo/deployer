@@ -95,7 +95,7 @@ export const EnvironmentsTable = ({ env }: IApplicationPageTabEnvironmentProps) 
                 </TableCell>
                 <TableCell>
                   <IconButton onClick={() => onClickDeleteEnv(name)} aria-label='delete'>
-                    <DeleteIcon fontSize='small' />
+                    <DeleteIcon fontSize='large' />
                   </IconButton>
                 </TableCell>
               </TableRow>
@@ -121,7 +121,7 @@ export const EnvironmentsTable = ({ env }: IApplicationPageTabEnvironmentProps) 
               </TableCell>
               <TableCell>
                 <IconButton onClick={onChangeAddEnv} aria-label='add'>
-                  <AddCircleOutlineIcon fontSize='medium' style={{ color: '#3F51B5' }} />
+                  <AddCircleOutlineIcon fontSize='large' style={{ color: '#3F51B5' }} />
                 </IconButton>
               </TableCell>
             </TableRow>

@@ -116,7 +116,7 @@ export const PortsTable = ({ ports }: IApplicationPageTabPortsProps) => {
               </TableCell>
               <TableCell>
                 <IconButton onClick={onChangeAddPors} aria-label='add'>
-                  <AddCircleOutlineIcon fontSize='medium' style={{ color: '#3F51B5' }} />
+                  <AddCircleOutlineIcon fontSize='large' style={{ color: '#3F51B5' }} />
                 </IconButton>
               </TableCell>
             </TableRow>
