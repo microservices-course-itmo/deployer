@@ -18,23 +18,47 @@ import { IPorts } from '../../../../types/Application'
 interface IApplicationPageTabPortsProps {
   ports: IPorts
 }
-
 const useStyles = makeStyles({
   saveBtn: {
-    marginTop: 10,
+    marginTop: '5px',
+    padding: '10px 60px',
+    backgroundColor: '#dc70e6',
   },
 })
 
 export const PortsTable = ({ ports }: IApplicationPageTabPortsProps) => {
   const classes = useStyles()
-
   const [port, setPorts] = React.useState<{ [key: string]: string }>(ports)
-
+  const [newPort, setNewPort] = React.useState('')
+  const [newPortValue, setNewPortValue] = React.useState('')
   const handleChangePorts = (event: any) => {
     const { name, value } = event.target
     setPorts((prevState) => ({ ...prevState, [name]: value }))
   }
-
+  const handleChangeNewPorts = (event: any) => {
+    const { value } = event.target
+    setNewPort(value)
+  }
+  const handleChangeNewPortValue = (event: any) => {
+    const { value } = event.target
+    setNewPortValue(value)
+  }
+  const onChangeAddPors = () => {
+    let isExist = false
+    Object.keys(port).map((por) => {
+      if (por === newPort) {
+        isExist = true
+      }
+      return 0
+    })
+    if (newPort === '' || newPortValue === '') {
+      alert('Поле пустое. Введите значение!')
+    } else if (isExist) {
+      alert('Такой порт уже сущетсвует! Измените существующую')
+    } else {
+      setPorts((prevState) => ({ ...prevState, [newPort]: newPortValue }))
+    }
+  }
   return (
     <Grid container direction='column' justify='center' alignItems='center'>
       <TableContainer component={Paper}>
@@ -56,12 +80,37 @@ export const PortsTable = ({ ports }: IApplicationPageTabPortsProps) => {
                 </TableCell>
               </TableRow>
             ))}
+            <TableRow>
+              <TableCell>
+                <TextField
+                  label='port1'
+                  id='standard'
+                  onChange={handleChangeNewPorts}
+                  variant='filled'
+                  value={newPort}
+                />
+              </TableCell>
+              <TableCell align='right'>
+                <TextField
+                  label='port2'
+                  onChange={handleChangeNewPortValue}
+                  id='standard'
+                  variant='filled'
+                  value={newPortValue}
+                />
+              </TableCell>
+            </TableRow>
           </TableBody>
         </Table>
       </TableContainer>
-      <Button className={classes.saveBtn} color='primary' variant='contained'>
-        Save
-      </Button>
+      <Grid container direction='row' justify='space-between' alignItems='center'>
+        <Button onClick={onChangeAddPors} className={classes.saveBtn} variant='contained'>
+          Add
+        </Button>
+        <Button className={classes.saveBtn} color='primary' variant='contained'>
+          Save
+        </Button>
+      </Grid>
     </Grid>
   )
 }

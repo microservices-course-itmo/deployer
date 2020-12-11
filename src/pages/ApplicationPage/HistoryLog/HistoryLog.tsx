@@ -21,8 +21,6 @@ import { IHistoryLog, IHistoryState } from 'types/Application'
 
 const useStyles = makeStyles({
   table: {
-    maxWidth: '1000px',
-    width: '800px',
     background: '#F5F5F5',
     border: '0px',
   },
@@ -35,9 +33,8 @@ const useStyles = makeStyles({
     maxWidth: '20px',
   },
   paper: {
-    maxWidth: '1000px',
     overflowX: 'auto',
-    margin: 'auto',
+    margin: '20px 0 0 0',
   },
   dialog: {
     padding: 20,
