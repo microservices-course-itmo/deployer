@@ -1,21 +1,22 @@
 import React from 'react'
 
-import { IEnvironmentVariable, IPorts } from '../../../types/Application'
-import { SecondTableTypes } from '../types'
+import { IApplicationData } from '../../../types/Application'
 import { EnvironmentsTable } from './EnvironmentsTable'
 import { PortsTable } from './PortsTable'
 import { VolumesTable } from './VolumesTable'
 
 interface ISecondTable {
-  env: IEnvironmentVariable[]
-  ports: IPorts
-  volumes: string[]
+  data: IApplicationData
   type: number
   className: string
 }
 
-export const SecondTable = ({ className, type, env = [], ports = {}, volumes = [] }: ISecondTable) => {
-  const components = [<EnvironmentsTable env={env} />, <PortsTable ports={ports} />, <VolumesTable volumes={volumes} />]
+export const SecondTable = ({ className, type, data }: ISecondTable) => {
+  const components = [
+    <EnvironmentsTable data={data} />,
+    <PortsTable data={data} />,
+    <VolumesTable volumes={data.volumes} />,
+  ]
 
   return <div className={className}>{components[type]}</div>
 }
