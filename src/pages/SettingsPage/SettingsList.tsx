@@ -34,8 +34,6 @@ export const SettingsList = ({ settings }: ISettingsListProps) => {
   const classes = useStyles()
   const [settingItems, setSettingItems] = useState<{ [key: string]: string }>(settings)
 
-  const onChange = () => {}
-
   return (
     <Container className={classes.main}>
       <Grid container direction='column' justify='space-around' alignItems='center'>
