@@ -15,10 +15,12 @@ import {
 } from '@material-ui/core'
 import DeleteIcon from '@material-ui/icons/Delete'
 import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline'
-import { IPorts } from '../../../../types/Application'
+import { useMutation } from 'react-query'
+import { IApplicationData } from '../../../../types/Application'
+import API from '../../../../api'
 
 interface IApplicationPageTabPortsProps {
-  ports: IPorts
+  data: IApplicationData
 }
 const useStyles = makeStyles({
   saveBtn: {
@@ -28,7 +30,7 @@ const useStyles = makeStyles({
   },
 })
 
-export const PortsTable = ({ ports }: IApplicationPageTabPortsProps) => {
+export const PortsTable = ({ data: { ports = {}, ...fullData } }: IApplicationPageTabPortsProps) => {
   const classes = useStyles()
   const [port, setPorts] = React.useState<{ [key: string]: string }>(ports)
   const [newPort, setNewPort] = React.useState('')
@@ -45,7 +47,7 @@ export const PortsTable = ({ ports }: IApplicationPageTabPortsProps) => {
     const { value } = event.target
     setNewPortValue(value)
   }
-  const onChangeAddPors = () => {
+  const onChangeAddPorts = () => {
     let isExist = false
     Object.keys(port).map((por) => {
       if (por === newPort) {
@@ -65,6 +67,12 @@ export const PortsTable = ({ ports }: IApplicationPageTabPortsProps) => {
   const onClickDeleteEnv = (k: string) => {
     const newObj = Object.entries(port).filter((p) => p[0] !== k)
     setPorts(Object.fromEntries(newObj))
+  }
+
+  const [mutate] = useMutation(API.deploymentController.updateData)
+
+  const onSave = () => {
+    mutate({ ...fullData, ports: port })
   }
 
   return (
@@ -97,7 +105,7 @@ export const PortsTable = ({ ports }: IApplicationPageTabPortsProps) => {
             <TableRow>
               <TableCell>
                 <TextField
-                  label='Порт'
+                  label='port'
                   id='standard'
                   onChange={handleChangeNewPorts}
                   variant='filled'
@@ -106,7 +114,7 @@ export const PortsTable = ({ ports }: IApplicationPageTabPortsProps) => {
               </TableCell>
               <TableCell align='right'>
                 <TextField
-                  label='Значение'
+                  label='value'
                   onChange={handleChangeNewPortValue}
                   id='standard'
                   variant='filled'
@@ -114,7 +122,7 @@ export const PortsTable = ({ ports }: IApplicationPageTabPortsProps) => {
                 />
               </TableCell>
               <TableCell>
-                <IconButton onClick={onChangeAddPors} aria-label='add'>
+                <IconButton onClick={onChangeAddPorts} aria-label='add'>
                   <AddCircleOutlineIcon fontSize='large' style={{ color: '#3F51B5' }} />
                 </IconButton>
               </TableCell>
@@ -123,7 +131,7 @@ export const PortsTable = ({ ports }: IApplicationPageTabPortsProps) => {
         </Table>
       </TableContainer>
       <Grid container direction='row' justify='flex-end' alignItems='center'>
-        <Button className={classes.saveBtn} variant='contained' size='large' color='primary'>
+        <Button className={classes.saveBtn} variant='contained' size='large' color='primary' onClick={onSave}>
           Save
         </Button>
       </Grid>

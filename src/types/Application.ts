@@ -46,7 +46,7 @@ export interface IHistoryLog {
   id: string
   user: string
   date: string
-  log: string
+  message: string
   prevState: IHistoryState
   currentState: IHistoryState
 }
