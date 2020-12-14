@@ -8,7 +8,6 @@ import {
   Button,
   InputLabel,
   TextField,
-  Box,
   Tab,
   Tabs,
   Typography,
@@ -53,11 +52,9 @@ const useStyles = makeStyles(({ spacing }) => ({
   },
 }))
 
-export const Deploy = ({
-  data: { versions = [], description, dateCreated, logs, instances, ...props },
-}: {
-  data: IApplicationData
-}) => {
+export const Deploy = ({ data }: { data: IApplicationData }) => {
+  const { versions = [], instances, dateCreated, description, logs } = data
+
   const classes = useStyles()
   const { name: appName } = useParams<{ name: string }>()
 
@@ -66,8 +63,8 @@ export const Deploy = ({
   const [alias, setAlias] = React.useState('')
 
   const [mutate] = useMutation(API.deploymentController.deployInstance, {
-    onSuccess: (data) => {
-      setInstanceItems((items) => [...items, data])
+    onSuccess: (newItems) => {
+      setInstanceItems((items) => [...items, newItems])
     },
   })
 
@@ -130,7 +127,7 @@ export const Deploy = ({
           <InstancesTable data={instanceItems} />
           <HistoryLog variant={logs} />
         </Container>
-        <SecondTable className={classes.secondTable} {...props} type={secondTableTab} />
+        <SecondTable className={classes.secondTable} data={data} type={secondTableTab} />
       </div>
     </div>
   )

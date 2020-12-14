@@ -1,3 +1,5 @@
+import { IApplicationData } from '../types/Application'
+
 const getRoute = (path: string) => `${process.env.API}${path}`
 
 interface IDeployInstance {
@@ -18,6 +20,16 @@ export const deployInstance = ({ alias, name, version }: IDeployInstance) =>
       name,
       version,
     }),
+  }).then((resp) => resp.json())
+
+export const updateData = (newData: IApplicationData) =>
+  fetch(getRoute('/application/createOrUpdate'), {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Accept-Encoding': 'gzip, deflate',
+    },
+    body: JSON.stringify(newData),
   }).then((resp) => resp.json())
 
 export const getAppByName = (name: string) =>

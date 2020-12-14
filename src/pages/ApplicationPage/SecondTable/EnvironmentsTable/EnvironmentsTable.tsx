@@ -15,10 +15,12 @@ import {
 } from '@material-ui/core'
 import DeleteIcon from '@material-ui/icons/Delete'
 import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline'
-import { IEnvironmentVariable } from '../../../../types/Application'
+import { useMutation } from 'react-query'
+import { IApplicationData, IEnvironmentVariable } from '../../../../types/Application'
+import API from '../../../../api'
 
 interface IApplicationPageTabEnvironmentProps {
-  env: IEnvironmentVariable[]
+  data: IApplicationData
 }
 
 const useStyles = makeStyles({
@@ -32,7 +34,7 @@ const useStyles = makeStyles({
 const prepareData = (env: IEnvironmentVariable[]) =>
   env.reduce((accum, value) => ({ ...accum, [value.name]: value.value }), {})
 
-export const EnvironmentsTable = ({ env }: IApplicationPageTabEnvironmentProps) => {
+export const EnvironmentsTable = ({ data: { env = [], ...fullData } }: IApplicationPageTabEnvironmentProps) => {
   const [envs, setEnv] = React.useState<{ [key: string]: string }>(prepareData(env))
   const [newEnv, setNewEnv] = React.useState('')
   const [newEnvValue, setNewEnvValue] = React.useState('')
@@ -75,6 +77,14 @@ export const EnvironmentsTable = ({ env }: IApplicationPageTabEnvironmentProps) 
     setEnv(Object.fromEntries(newObj))
   }
 
+  const [mutate] = useMutation(API.deploymentController.updateData)
+
+  const onSave = () => {
+    const data = Object.keys(envs)
+
+    mutate({ ...fullData, env: data.map((key) => ({ name: key, value: envs[key] })) })
+  }
+
   return (
     <Grid container direction='column' justify='center' alignItems='center'>
       <TableContainer component={Paper}>
@@ -104,17 +114,11 @@ export const EnvironmentsTable = ({ env }: IApplicationPageTabEnvironmentProps) 
             ))}
             <TableRow>
               <TableCell>
-                <TextField
-                  label='Название'
-                  id='standard'
-                  onChange={handleChangeNewEnv}
-                  variant='filled'
-                  value={newEnv}
-                />
+                <TextField label='name' id='standard' onChange={handleChangeNewEnv} variant='filled' value={newEnv} />
               </TableCell>
               <TableCell align='right'>
                 <TextField
-                  label='Значение'
+                  label='value'
                   id='standard'
                   onChange={handleChangeNewEnvValue}
                   variant='filled'
@@ -131,7 +135,7 @@ export const EnvironmentsTable = ({ env }: IApplicationPageTabEnvironmentProps) 
         </Table>
       </TableContainer>
       <Grid container direction='row' justify='flex-end' alignItems='center'>
-        <Button className={classes.saveBtn} variant='contained' size='large' color='primary'>
+        <Button className={classes.saveBtn} variant='contained' size='large' color='primary' onClick={onSave}>
           Save
         </Button>
       </Grid>

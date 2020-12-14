@@ -12,7 +12,7 @@ const useStyles = makeStyles({
   },
 })
 
-export const VolumesTable = ({ volumes }: IApplicationPageTabVolumesProps) => {
+export const VolumesTable = ({ volumes = [] }: IApplicationPageTabVolumesProps) => {
   const classes = useStyles()
   const [checked, setChecked] = React.useState(volumes)
 
