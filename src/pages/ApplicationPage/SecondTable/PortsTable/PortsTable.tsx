@@ -58,7 +58,7 @@ export const PortsTable = ({ data: { ports = {}, ...fullData } }: IApplicationPa
     if (newPort === '' || newPortValue === '') {
       alert('Поле пустое. Введите значение!')
     } else if (isExist) {
-      alert('Такой порт уже сущетсвует! Измените существующую')
+      alert('Такой порт уже сущетсвует! Измените существующее значение')
     } else {
       setPorts((prevState) => ({ ...prevState, [newPort]: newPortValue }))
     }

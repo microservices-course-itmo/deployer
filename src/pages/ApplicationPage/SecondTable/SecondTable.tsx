@@ -12,11 +12,7 @@ interface ISecondTable {
 }
 
 export const SecondTable = ({ className, type, data }: ISecondTable) => {
-  const components = [
-    <EnvironmentsTable data={data} />,
-    <PortsTable data={data} />,
-    <VolumesTable volumes={data.volumes} />,
-  ]
+  const components = [<EnvironmentsTable data={data} />, <PortsTable data={data} />, <VolumesTable data={data} />]
 
   return <div className={className}>{components[type]}</div>
 }
