@@ -58,7 +58,7 @@ export const VolumesTable = ({ data: { volumes = [], ...fullData } }: IApplicati
       if (newVol === '') {
         alert('Поле пустое. Введите значение!')
       } else if (isExist) {
-        alert('Такой порт уже сущетсвует! Измените существующую')
+        alert('Такой том уже сущетсвует! Измените существующее значение')
       } else {
         setVols((prevState) => [...prevState, volume])
       }
