@@ -46,6 +46,7 @@ const useStyles = makeStyles(({ spacing }) => ({
   },
   secondTable: {
     marginLeft: spacing(2),
+    width: '30%',
   },
   tables: {
     display: 'flex',
@@ -123,7 +124,7 @@ export const Deploy = ({ data }: { data: IApplicationData }) => {
       </Container>
       <hr className={classes.hrStyle} />
       <div style={{ display: 'flex' }}>
-        <Container>
+        <Container style={{ width: '70%' }}>
           <InstancesTable data={instanceItems} />
           <HistoryLog variant={logs} />
         </Container>

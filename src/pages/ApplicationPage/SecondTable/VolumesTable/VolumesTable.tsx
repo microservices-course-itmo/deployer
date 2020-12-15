@@ -12,18 +12,25 @@ import {
 } from '@material-ui/core'
 import DeleteIcon from '@material-ui/icons/Delete'
 import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline'
+import { useMutation } from 'react-query'
+import { IApplicationData } from '../../../../types/Application'
+import API from '../../../../api'
 
 interface IApplicationPageTabVolumesProps {
-  volumes: string[]
+  data: IApplicationData
 }
 
 const useStyles = makeStyles({
   saveBtn: {
-    marginTop: 10,
+    marginTop: '5px',
+    padding: '10px 60px',
+    backgroundColor: '#dc70e6',
   },
   ListContainer: {
-    width: '350px',
+    width: '100%',
     backgroundColor: '#ffffff',
+    boxShadow: '0px 2px 1px -1px rgba(0,0,0,0.2), 0px 1px 1px 0px rgba(0,0,0,0.14), 0px 1px 3px 0px rgba(0,0,0,0.12)',
+    borderRadius: '4px',
   },
   listItemHeader: {
     textAlign: 'center',
@@ -33,7 +40,7 @@ const useStyles = makeStyles({
   },
 })
 
-export const VolumesTable = ({ volumes = [] }: IApplicationPageTabVolumesProps) => {
+export const VolumesTable = ({ data: { volumes = [], ...fullData } }: IApplicationPageTabVolumesProps) => {
   const classes = useStyles()
   const [vols, setVols] = React.useState(volumes)
   const [newVol, setNewVol] = React.useState('')
@@ -69,9 +76,15 @@ export const VolumesTable = ({ volumes = [] }: IApplicationPageTabVolumesProps) 
     setVols(newArr)
   }
 
+  const [mutate] = useMutation(API.deploymentController.updateData)
+
   const handleChangeNewVolume = (event: any) => {
     const { value } = event.target
     setNewVol(value)
+  }
+
+  const onSave = () => {
+    mutate({ ...fullData, volumes: vols })
   }
 
   return (
@@ -106,7 +119,7 @@ export const VolumesTable = ({ volumes = [] }: IApplicationPageTabVolumesProps) 
         </ListItem>
       </List>
       <Grid container direction='row' justify='flex-end' alignItems='center'>
-        <Button className={classes.saveBtn} variant='contained' size='large' color='primary'>
+        <Button className={classes.saveBtn} variant='contained' size='large' color='primary' onClick={onSave}>
           Save
         </Button>
       </Grid>
