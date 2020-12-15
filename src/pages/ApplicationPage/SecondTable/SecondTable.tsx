@@ -8,7 +8,7 @@ import { VolumesTable } from './VolumesTable'
 interface ISecondTable {
   data: IApplicationData
   type: number
-  className: string
+  className?: string
 }
 
 export const SecondTable = ({ className, type, data }: ISecondTable) => {
