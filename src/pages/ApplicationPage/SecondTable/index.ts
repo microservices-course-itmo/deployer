@@ -1,0 +1,1 @@
+export { SecondTable } from './SecondTable'

@@ -1,10 +1,3 @@
-export enum ApplicationPageTabType {
-  'DEPLOY',
-  'ENVIRONMENT',
-  'PORTS',
-  'VOLUMES',
-}
-
 export interface IApplicationData {
   id: string
   name: string
@@ -53,7 +46,7 @@ export interface IHistoryLog {
   id: string
   user: string
   date: string
-  log: string
+  message: string
   prevState: IHistoryState
   currentState: IHistoryState
 }
