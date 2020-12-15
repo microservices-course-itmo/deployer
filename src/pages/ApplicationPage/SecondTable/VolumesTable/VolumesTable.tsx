@@ -33,7 +33,7 @@ const useStyles = makeStyles({
   },
 })
 
-export const VolumesTable = ({ volumes }: IApplicationPageTabVolumesProps) => {
+export const VolumesTable = ({ volumes = [] }: IApplicationPageTabVolumesProps) => {
   const classes = useStyles()
   const [vols, setVols] = React.useState(volumes)
   const [newVol, setNewVol] = React.useState('')

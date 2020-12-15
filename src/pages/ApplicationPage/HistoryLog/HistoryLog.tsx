@@ -78,6 +78,7 @@ const renderList = (vars?: IHistoryState, type?: string) => {
 
 const Lists = ({ type, vars }: IListsProps) => {
   const classes = useStyles()
+
   return (
     <List component='div' subheader={<span>type</span>} className={classes.containerCol}>
       {renderList(vars, type)}
@@ -86,6 +87,7 @@ const Lists = ({ type, vars }: IListsProps) => {
 }
 
 export const HistoryLog = ({ variant }: IHistoryLogProps) => {
+  console.log(variant)
   const classes = useStyles()
 
   const [isHistoryOpenWithData, setIsHistoryOpenWithData] = useState<IHistoryLog | null>(null)
@@ -99,21 +101,29 @@ export const HistoryLog = ({ variant }: IHistoryLogProps) => {
               <TableRow className={classes.row}>
                 <TableCell align='center'>Data</TableCell>
                 <TableCell align='center'>User</TableCell>
-                <TableCell align='center'>Alias</TableCell>
+                <TableCell align='center'>Message</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
-              {variant?.map((Variant) => (
-                <TableRow key={Variant.id}>
-                  <TableCell align='center'>{Variant.date}</TableCell>
-                  <TableCell align='center'>
-                    <Button color='primary' size='small' onClick={() => setIsHistoryOpenWithData(Variant)}>
-                      Changed by: {Variant.user}
-                    </Button>
-                  </TableCell>
-                  <TableCell align='center'>{Variant.log}</TableCell>
-                </TableRow>
-              ))}
+              {variant?.map((Variant) => {
+                const date = (Variant.date ? new Date(Variant.date) : new Date()).toISOString().split('T')[0]
+
+                return (
+                  <TableRow key={Variant.id}>
+                    <TableCell align='center'>{date}</TableCell>
+                    <TableCell align='center'>
+                      <Button
+                        color='primary'
+                        size='small'
+                        onClick={() => Variant.currentState && setIsHistoryOpenWithData(Variant)}
+                      >
+                        Changed by: {Variant.user}
+                      </Button>
+                    </TableCell>
+                    <TableCell align='center'>{Variant.message}</TableCell>
+                  </TableRow>
+                )
+              })}
             </TableBody>
           </Table>
         </TableContainer>
