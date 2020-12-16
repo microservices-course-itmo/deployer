@@ -2,6 +2,7 @@ import React from 'react'
 import { useParams } from 'react-router-dom'
 import { CircularProgress } from '@material-ui/core'
 import { useQuery } from 'react-query'
+import { Appbar } from '../Appbar/Appbar'
 import API from '../../api'
 import { IApplicationData } from '../../types/Application'
 import { Deploy } from './Deploy'
@@ -23,5 +24,9 @@ export const ApplicationPage = () => {
     return <ApplicationErrorPage />
   }
 
-  return <Deploy data={data!} />
+  return (
+    <>
+      <Deploy data={data!} />
+    </>
+  )
 }

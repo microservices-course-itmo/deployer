@@ -1,6 +1,7 @@
 import { CircularProgress } from '@material-ui/core'
 import React from 'react'
 import { useQuery } from 'react-query'
+import { Appbar } from '../Appbar/Appbar'
 import { SettingsList } from './SettingsList'
 
 export const Settings = () => {
@@ -19,5 +20,10 @@ export const Settings = () => {
     return <span>Error</span>
   }
 
-  return <SettingsList settings={data!} />
+  return (
+    <>
+      <Appbar />
+      <SettingsList settings={data!} />
+    </>
+  )
 }
