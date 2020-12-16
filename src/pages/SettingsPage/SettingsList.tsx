@@ -1,10 +1,8 @@
-import { AppBar, Button, Container, Grid, IconButton, Paper, TextField, Theme, Toolbar } from '@material-ui/core'
+import { Button, Container, Grid, Paper, TextField, Theme } from '@material-ui/core'
 import { createStyles, makeStyles } from '@material-ui/core/styles'
 import React, { ChangeEvent, useState } from 'react'
 import { useMutation } from 'react-query'
 import SettingsIcon from '@material-ui/icons/Settings'
-import HomeIcon from '@material-ui/icons/Home'
-import SearchIcon from '@material-ui/icons/Search'
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
