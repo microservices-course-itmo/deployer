@@ -67,15 +67,6 @@ const useStyles = makeStyles((theme: Theme) =>
     iconstyle: {
       fontSize: '50px',
     },
-    bar: {
-      flexGrow: 1,
-    },
-    menuButton: {
-      marginRight: theme.spacing(2),
-    },
-    title: {
-      flexGrow: 1,
-    },
   })
 )
 
@@ -111,33 +102,6 @@ export const SettingsList = ({ settings }: ISettingsListProps) => {
 
   return (
     <Container className={classes.main}>
-      <div className={classes.bar}>
-        <AppBar>
-          <Toolbar>
-            <IconButton
-              edge='start'
-              className={classes.menuButton}
-              color='inherit'
-              aria-label='menu'
-              href='http://localhost:8081/'
-            >
-              <SearchIcon />
-            </IconButton>
-            <IconButton
-              edge='start'
-              className={classes.menuButton}
-              color='inherit'
-              aria-label='menu'
-              href='http://localhost:8081/app/demo-service'
-            >
-              <HomeIcon />
-            </IconButton>
-            <Button color='inherit' href='http://localhost:8081/Login'>
-              Login
-            </Button>
-          </Toolbar>
-        </AppBar>
-      </div>
       <Grid container direction='column' justify='space-around' alignItems='center'>
         <Paper elevation={3}>
           <div className={classes.root}>
