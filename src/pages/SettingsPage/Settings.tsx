@@ -1,3 +1,4 @@
+import { CircularProgress } from '@material-ui/core'
 import React from 'react'
 import { useQuery } from 'react-query'
 import { SettingsList } from './SettingsList'
@@ -7,7 +8,11 @@ export const Settings = () => {
     fetch(`${process.env.API}/settings/get`).then((res) => res.json())
   )
   if (isLoading) {
-    return <span>Loading</span>
+    return (
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <CircularProgress />
+      </div>
+    )
   }
 
   if (isError) {
