@@ -48,6 +48,9 @@ const useStyles = makeStyles(({ spacing }) => ({
     marginLeft: spacing(2),
     width: '30%',
   },
+  deployTab: {
+    marginLeft: '82%',
+  },
   tables: {
     display: 'flex',
   },
@@ -114,7 +117,7 @@ export const Deploy = ({ data }: { data: IApplicationData }) => {
             </Button>
           </Grid>
         </Grid>
-        <Container>
+        <Container className={classes.deployTab}>
           <Tabs value={secondTableTab} onChange={(e, newTab) => setSecondTableTab(newTab)}>
             <Tab value={SecondTableTypes.ENVIRONMENT} label='ENV' />
             <Tab value={SecondTableTypes.PORTS} label='PORTS' />
