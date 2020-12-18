@@ -97,7 +97,7 @@ export const PortsTable = ({ data: { ports = {}, ...fullData } }: IApplicationPa
                 </TableCell>
                 <TableCell>
                   <IconButton onClick={() => onClickDeleteEnv(por)} aria-label='delete'>
-                    <DeleteIcon fontSize='small' />
+                    <DeleteIcon fontSize='large' />
                   </IconButton>
                 </TableCell>
               </TableRow>
