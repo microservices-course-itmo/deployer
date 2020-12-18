@@ -21,10 +21,11 @@ import { HistoryLog } from './HistoryLog/HistoryLog'
 import API from '../../api'
 import { SecondTable } from './SecondTable'
 import { SecondTableTypes } from './types'
+import { Appbar } from '../Appbar/Appbar'
 
 const useStyles = makeStyles(({ spacing }) => ({
   formControl: {
-    marginTop: '1%',
+    marginTop: '5%',
     marginBottom: '1%',
   },
   hrStyle: {
@@ -89,6 +90,7 @@ export const Deploy = ({ data }: { data: IApplicationData }) => {
 
   return (
     <div>
+      <Appbar />
       <Container className={classes.formControl}>
         <Grid container direction='row' justify='space-around' alignItems='center'>
           <Grid item>

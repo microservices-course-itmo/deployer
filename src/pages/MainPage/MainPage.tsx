@@ -7,6 +7,7 @@ import { CircularProgress, Container, Grid, TextField } from '@material-ui/core'
 import { Link } from 'react-router-dom'
 import { useQuery } from 'react-query'
 import Alert from '@material-ui/lab/Alert'
+import { Appbar } from '../Appbar/Appbar'
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -67,6 +68,7 @@ export const MainPage = () => {
 
   return (
     <Container className={classes.main}>
+      <Appbar />
       <Grid container direction='column' justify='space-around' alignItems='center'>
         <div className={classes.root}>
           <TextField
