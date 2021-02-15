@@ -34,3 +34,8 @@ export const updateData = (newData: IApplicationData) =>
 
 export const getAppByName = (name: string) =>
   fetch(getRoute(`/application/get/byName/${name}`)).then((resp) => resp.json())
+
+export const removeInstance = (id: string) =>
+  fetch(getRoute(`/applicationInstance/delete/byId/${id}`), {
+    method: 'DELETE',
+  }).then((resp) => resp.json())
