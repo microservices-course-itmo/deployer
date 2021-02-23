@@ -9,12 +9,6 @@ const devWebpackConfig = merge(baseWebpackConfig, {
         overlay: true,
         historyApiFallback: true,
         contentBase: paths.dist,
-        proxy: {
-            '/api': {
-                target: 'http://localhost:8080',
-                pathRewrite: {"^/api" : ""}
-            }
-        }
     }
 });
 
