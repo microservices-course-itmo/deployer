@@ -5,6 +5,9 @@ import { IApplicationInstance } from 'types/Application'
 import PlayArrowIcon from '@material-ui/icons/PlayArrow'
 import StopIcon from '@material-ui/icons/Stop'
 import ReplayIcon from '@material-ui/icons/Replay'
+import DeleteIcon from '@material-ui/icons/Delete'
+import { useMutation } from 'react-query'
+import API from '../../../api'
 
 const useStyles = makeStyles(({ spacing }) => ({
   rowActions: {
@@ -17,6 +20,9 @@ const useStyles = makeStyles(({ spacing }) => ({
   stopButtonColor: {
     color: '#d50000',
   },
+  removeButtonColor: {
+    color: 'rgba(0, 0, 0, 0.54)',
+  },
 }))
 
 interface IApplicationInstanceTableProps {
@@ -27,6 +33,7 @@ enum ButtonTypesEnum {
   start,
   stop,
   restart,
+  remove,
 }
 
 type ButtonType = keyof typeof ButtonTypesEnum
@@ -36,36 +43,50 @@ function delay(ms: number) {
 }
 
 const AVAILABLE_BUTTONS: Record<string, string[]> = {
-  RUNNING: ['stop', 'restart'],
-  FAILED: ['restart'],
-  STARTING: ['stop'],
-  STOPPED: ['start', 'restart'],
+  RUNNING: ['stop', 'restart', 'remove'],
+  FAILED: ['restart', 'remove'],
+  STARTING: ['stop', 'remove'],
+  STOPPED: ['start', 'restart', 'remove'],
   REMOVED: [],
-  RESTARTING: ['stop'],
+  RESTARTING: ['stop', 'remove'],
 }
 
-const ACTIONS: ButtonType[] = ['start', 'stop', 'restart']
+const ACTIONS: ButtonType[] = ['start', 'stop', 'restart', 'remove']
 
 const ACTIONS_ICONS = {
   start: <PlayArrowIcon fontSize='large' />,
   stop: <StopIcon fontSize='large' />,
   restart: <ReplayIcon fontSize='large' />,
+  remove: <DeleteIcon fontSize='large' />,
 }
 
 export const ApplicationInstanceRow = ({ data }: IApplicationInstanceTableProps) => {
+  const [instanceData, setInstanceData] = useState<IApplicationInstance | null>(data)
+
+  const [mutate] = useMutation(API.deploymentController.removeInstance, {
+    onSettled: () => {
+      setInstanceData(null)
+    },
+  })
+
   const classes = useStyles()
 
   const [loadingType, setLoadingType] = useState('')
 
   const handleClickInstance = (action: string) => {
     setLoadingType(action)
+
+    if (action === 'remove') {
+      mutate(instanceData!.id)
+    }
+
     delay(2000).finally(() => {
       setLoadingType('')
     })
   }
 
   const isButtonDisabled = (buttonType: ButtonType) => {
-    return !AVAILABLE_BUTTONS[data.status].includes(buttonType) || Boolean(loadingType)
+    return !AVAILABLE_BUTTONS[instanceData!.status].includes(buttonType) || Boolean(loadingType)
   }
 
   const getClasses = (buttonType: ButtonType) => {
@@ -75,14 +96,19 @@ export const ApplicationInstanceRow = ({ data }: IApplicationInstanceTableProps)
     if (buttonType === 'stop') {
       return classes.stopButtonColor
     }
+    if (buttonType === 'remove') {
+      return classes.removeButtonColor
+    }
   }
 
+  if (!instanceData) return null
+
   return (
-    <TableRow key={data.id}>
-      <TableCell align='center'>{data.appId}</TableCell>
-      <TableCell align='center'>{data.version}</TableCell>
-      <TableCell align='center'>{data.userCreated}</TableCell>
-      <TableCell align='center'>{data.status}</TableCell>
+    <TableRow key={instanceData.id}>
+      <TableCell align='center'>{instanceData.appId}</TableCell>
+      <TableCell align='center'>{instanceData.version}</TableCell>
+      <TableCell align='center'>{instanceData.userCreated}</TableCell>
+      <TableCell align='center'>{instanceData.status}</TableCell>
       <TableCell align='center'>
         <Grid
           container
@@ -114,7 +140,7 @@ export const ApplicationInstanceRow = ({ data }: IApplicationInstanceTableProps)
           ))}
         </Grid>
       </TableCell>
-      <TableCell align='center'>{data.alias}</TableCell>
+      <TableCell align='center'>{instanceData.alias}</TableCell>
     </TableRow>
   )
 }
