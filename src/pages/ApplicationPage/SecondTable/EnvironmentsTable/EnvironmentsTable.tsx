@@ -35,9 +35,11 @@ const useStyles = makeStyles({
 const prepareData = (env: IEnvironmentVariable[]) =>
   env.reduce((accum, value) => ({ ...accum, [value.name]: value.value }), {})
 
-export const EnvironmentsTable = ({ data: { env = [], ...fullData } }: IApplicationPageTabEnvironmentProps) => {
+export const EnvironmentsTable = ({
+  data: { environmentVariables = [], ...fullData },
+}: IApplicationPageTabEnvironmentProps) => {
   const { enqueueSnackbar } = useSnackbar()
-  const [envs, setEnv] = React.useState<{ [key: string]: string }>(prepareData(env))
+  const [envs, setEnv] = React.useState<{ [key: string]: string }>(prepareData(environmentVariables))
   const [newEnv, setNewEnv] = React.useState('')
   const [newEnvValue, setNewEnvValue] = React.useState('')
   const classes = useStyles()
@@ -88,7 +90,7 @@ export const EnvironmentsTable = ({ data: { env = [], ...fullData } }: IApplicat
   const onSave = () => {
     const data = Object.keys(envs)
 
-    mutate({ ...fullData, env: data.map((key) => ({ name: key, value: envs[key] })) })
+    mutate({ ...fullData, environmentVariables: data.map((key) => ({ name: key, value: envs[key] })) })
   }
 
   return (

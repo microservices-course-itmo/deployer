@@ -3,14 +3,14 @@ export interface IApplicationData {
   name: string
   description: string
   templateVersion: string
-  env: IEnvironmentVariable[]
+  environmentVariables: IEnvironmentVariable[]
   volumes: string[]
   ports: IPorts
   versions: string[]
   instances: IApplicationInstance[]
   createdBy: string
   dateCreated: string
-  baseBrunch: string
+  baseBranch: string
   logs: IHistoryLog[]
 }
 
