@@ -22,10 +22,16 @@ const useStyles = makeStyles(() =>
     input: {
       width: '100%',
     },
-    listRow: {
-      display: 'flex',
-      flexDirection: 'row',
-      justifyContent: 'space-between',
+    rowName: {
+      width: '50%',
+    },
+    rowId: {
+      width: '25%',
+      textAlign: 'center',
+    },
+    rowVersion: {
+      width: '25%',
+      textAlign: 'center',
     },
   })
 )
@@ -97,18 +103,18 @@ export const MainPage = () => {
               <List component='nav' aria-label='main mailbox folders'>
                 {!!searchItems.length && (
                   <div>
-                    <ListItem className={classes.listRow}>
-                      <div>APP NAME:</div>
-                      <div>ID:</div>
-                      <div>VERSION:</div>
+                    <ListItem>
+                      <div className={classes.rowName}>APP NAME:</div>
+                      <div className={classes.rowId}>ID:</div>
+                      <div className={classes.rowVersion}>VERSION:</div>
                     </ListItem>
                     {searchItems.map((item) => {
                       const { id, name, templateVersion } = item
                       return (
-                        <ListItemLink to={`/app/${name}`} key={id} className={classes.listRow}>
-                          <div>{name}</div>
-                          <div>{id}</div>
-                          <div>{templateVersion}</div>
+                        <ListItemLink to={`/app/${name}`} key={id}>
+                          <div className={classes.rowName}>{name}</div>
+                          <div className={classes.rowId}>{id}</div>
+                          <div className={classes.rowVersion}>{templateVersion}</div>
                         </ListItemLink>
                       )
                     })}
