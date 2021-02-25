@@ -3,6 +3,7 @@ import { createStyles, makeStyles } from '@material-ui/core/styles'
 import React, { ChangeEvent, useState } from 'react'
 import { useMutation } from 'react-query'
 import SettingsIcon from '@material-ui/icons/Settings'
+import { useSnackbar } from 'notistack'
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -75,6 +76,7 @@ interface ISettingsListProps {
 export const SettingsList = ({ settings }: ISettingsListProps) => {
   const classes = useStyles()
   const [settingItems, setSettingItems] = useState<{ [key: string]: string }>(settings)
+  const { enqueueSnackbar } = useSnackbar()
 
   const onChange = (event: ChangeEvent<HTMLInputElement>) => {
     const {
@@ -83,16 +85,23 @@ export const SettingsList = ({ settings }: ISettingsListProps) => {
     setSettingItems((prevState) => ({ ...prevState, [name]: value }))
   }
 
-  const [mutate] = useMutation((newSettings: { [key: string]: string }) => {
-    return fetch(`${process.env.API}/settings/set`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Accept-Encoding': 'gzip, deflate',
+  const [mutate] = useMutation(
+    (newSettings: { [key: string]: string }) => {
+      return fetch(`${process.env.API}/settings/set`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept-Encoding': 'gzip, deflate',
+        },
+        body: JSON.stringify(newSettings),
+      }).then((resp) => resp.json())
+    },
+    {
+      onError: () => {
+        enqueueSnackbar('Error', { variant: 'error' })
       },
-      body: JSON.stringify(newSettings),
-    }).then((resp) => resp.json())
-  })
+    }
+  )
 
   const onSave = () => {
     mutate(settingItems)

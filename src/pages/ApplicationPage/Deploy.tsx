@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import {
   FormControl,
   Container,
@@ -15,6 +15,7 @@ import {
 import { makeStyles } from '@material-ui/core/styles'
 import { useMutation } from 'react-query'
 import { useParams } from 'react-router-dom'
+import { useSnackbar } from 'notistack'
 import { IApplicationInstance, IApplicationData } from '../../types/Application'
 import { InstancesTable } from './InstancesTable/InstancesTable'
 import { HistoryLog } from './HistoryLog/HistoryLog'
@@ -59,6 +60,7 @@ export const Deploy = ({ data }: { data: IApplicationData }) => {
 
   const classes = useStyles()
   const { name: appName } = useParams<{ name: string }>()
+  const { enqueueSnackbar } = useSnackbar()
 
   const [version, setVersion] = React.useState(versions[versions.length - 1])
   const [instanceItems, setInstanceItems] = React.useState<IApplicationInstance[]>(instances)
@@ -66,7 +68,11 @@ export const Deploy = ({ data }: { data: IApplicationData }) => {
 
   const [mutate] = useMutation(API.deploymentController.deployInstance, {
     onSuccess: (newItems) => {
-      setInstanceItems((items) => [...items, newItems])
+      if (newItems.status !== 500) {
+        setInstanceItems((items) => [...items, newItems])
+      } else {
+        enqueueSnackbar(newItems.status, { variant: 'error' })
+      }
     },
   })
 

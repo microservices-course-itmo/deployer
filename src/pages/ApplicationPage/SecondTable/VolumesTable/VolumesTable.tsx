@@ -13,6 +13,7 @@ import {
 import DeleteIcon from '@material-ui/icons/Delete'
 import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline'
 import { useMutation } from 'react-query'
+import { useSnackbar } from 'notistack'
 import { IApplicationData } from '../../../../types/Application'
 import API from '../../../../api'
 
@@ -42,6 +43,7 @@ const useStyles = makeStyles({
 
 export const VolumesTable = ({ data: { volumes = [], ...fullData } }: IApplicationPageTabVolumesProps) => {
   const classes = useStyles()
+  const { enqueueSnackbar } = useSnackbar()
   const [vols, setVols] = React.useState(volumes)
   const [newVol, setNewVol] = React.useState('')
 
@@ -76,7 +78,11 @@ export const VolumesTable = ({ data: { volumes = [], ...fullData } }: IApplicati
     setVols(newArr)
   }
 
-  const [mutate] = useMutation(API.deploymentController.updateData)
+  const [mutate] = useMutation(API.deploymentController.updateData, {
+    onError: () => {
+      enqueueSnackbar('Error', { variant: 'error' })
+    },
+  })
 
   const handleChangeNewVolume = (event: any) => {
     const { value } = event.target

@@ -16,6 +16,7 @@ import {
 import DeleteIcon from '@material-ui/icons/Delete'
 import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline'
 import { useMutation } from 'react-query'
+import { useSnackbar } from 'notistack'
 import { IApplicationData } from '../../../../types/Application'
 import API from '../../../../api'
 
@@ -32,6 +33,7 @@ const useStyles = makeStyles({
 
 export const PortsTable = ({ data: { ports = {}, ...fullData } }: IApplicationPageTabPortsProps) => {
   const classes = useStyles()
+  const { enqueueSnackbar } = useSnackbar()
   const [port, setPorts] = React.useState<{ [key: string]: string }>(ports)
   const [newPort, setNewPort] = React.useState('')
   const [newPortValue, setNewPortValue] = React.useState('')
@@ -69,7 +71,11 @@ export const PortsTable = ({ data: { ports = {}, ...fullData } }: IApplicationPa
     setPorts(Object.fromEntries(newObj))
   }
 
-  const [mutate] = useMutation(API.deploymentController.updateData)
+  const [mutate] = useMutation(API.deploymentController.updateData, {
+    onError: () => {
+      enqueueSnackbar('Error', { variant: 'error' })
+    },
+  })
 
   const onSave = () => {
     mutate({ ...fullData, ports: port })
