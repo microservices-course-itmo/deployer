@@ -22,13 +22,7 @@ const useStyles = makeStyles(() =>
     input: {
       width: '100%',
     },
-    application: {
-      display: 'flex',
-      flexDirection: 'row',
-      justifyContent: 'space-between',
-      textAlign: 'start',
-    },
-    listHeader: {
+    listRow: {
       display: 'flex',
       flexDirection: 'row',
       justifyContent: 'space-between',
@@ -101,7 +95,7 @@ export const MainPage = () => {
               <CircularProgress />
             ) : (
               <List component='nav' aria-label='main mailbox folders'>
-                <ListItem className={classes.listHeader}>
+                <ListItem className={classes.listRow}>
                   <div>APP NAME:</div>
                   <div>ID:</div>
                   <div>VERSION:</div>
@@ -109,7 +103,7 @@ export const MainPage = () => {
                 {searchItems.map((item) => {
                   const { id, name, templateVersion } = item
                   return (
-                    <ListItemLink to={`/app/${name}`} key={id} className={classes.application}>
+                    <ListItemLink to={`/app/${name}`} key={id} className={classes.listRow}>
                       <div>{name}</div>
                       <div>{id}</div>
                       <div>{templateVersion}</div>
