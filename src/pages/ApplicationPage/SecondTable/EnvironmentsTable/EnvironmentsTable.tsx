@@ -82,7 +82,7 @@ export const EnvironmentsTable = ({
   }
 
   const [mutate] = useMutation(API.deploymentController.updateData, {
-    onError: () => {
+    onError: (err) => {
       enqueueSnackbar('Error', { variant: 'error' })
     },
   })
