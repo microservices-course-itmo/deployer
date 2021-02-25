@@ -16,6 +16,7 @@ import {
 import DeleteIcon from '@material-ui/icons/Delete'
 import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline'
 import { useMutation } from 'react-query'
+import { useSnackbar } from 'notistack'
 import { IApplicationData, IEnvironmentVariable } from '../../../../types/Application'
 import API from '../../../../api'
 
@@ -35,6 +36,7 @@ const prepareData = (env: IEnvironmentVariable[]) =>
   env.reduce((accum, value) => ({ ...accum, [value.name]: value.value }), {})
 
 export const EnvironmentsTable = ({ data: { env = [], ...fullData } }: IApplicationPageTabEnvironmentProps) => {
+  const { enqueueSnackbar } = useSnackbar()
   const [envs, setEnv] = React.useState<{ [key: string]: string }>(prepareData(env))
   const [newEnv, setNewEnv] = React.useState('')
   const [newEnvValue, setNewEnvValue] = React.useState('')
@@ -77,7 +79,11 @@ export const EnvironmentsTable = ({ data: { env = [], ...fullData } }: IApplicat
     setEnv(Object.fromEntries(newObj))
   }
 
-  const [mutate] = useMutation(API.deploymentController.updateData)
+  const [mutate] = useMutation(API.deploymentController.updateData, {
+    onError: () => {
+      enqueueSnackbar('Error', { variant: 'error' })
+    },
+  })
 
   const onSave = () => {
     const data = Object.keys(envs)
