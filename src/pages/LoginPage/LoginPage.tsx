@@ -1,5 +1,7 @@
-import React from 'react'
-import ReactDOM from 'react-dom'
+import React, { useState } from 'react'
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
+import firebase from 'firebase'
 import { useFormik } from 'formik'
 import * as yup from 'yup'
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined'
@@ -12,15 +14,10 @@ import { Appbar } from '../Appbar/Appbar'
 const useStyles = makeStyles((theme) => ({
   paper: {
     textAlign: 'center',
-    width: '600px',
-    height: '600px',
-    position: 'absolute',
-    top: '35%',
-    left: '45%',
-    margin: '-200px 0 0 -200px',
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
+    marginTop: '88px',
   },
   avatar: {
     margin: theme.spacing(1),
@@ -35,22 +32,73 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-const validationSchema = yup.object({
-  email: yup.string().email('Enter a valid email').required('Email is required'),
-  password: yup.string().min(8, 'Password should be of minimum 8 characters length').required('Password is required'),
+const validationSchemaFirst = yup.object({
+  phone: yup.string().min(11, 'Phone should be of minimum 8 characters length').required('Phone is required'),
+})
+
+const validationSchemaSecond = yup.object({
+  code: yup.string().required('Code is required'),
 })
 
 export const SignIn = () => {
   const classes = useStyles()
 
-  const formik = useFormik({
+  const [secondForm, setSecondForm] = useState(false)
+  const [sendCode, setSendCode] = useState<string | null>(null)
+  const [userData, setUserData] = useState<null | { user: { name: string; birthdate: string; id: string } }>(null)
+
+  const formState1 = useFormik({
     initialValues: {
-      email: '',
-      password: '',
+      phone: '',
     },
-    validationSchema,
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    validationSchemaFirst,
     onSubmit: (values) => {
-      alert(JSON.stringify(values, null, 2))
+      const applicationVerifier = new firebase.auth.RecaptchaVerifier('recaptcha', { size: 'invisible' })
+
+      firebase
+        .auth()
+        .signInWithPhoneNumber(values.phone, applicationVerifier)
+        .then((code: string) => {
+          setSendCode(code)
+          setSecondForm(true)
+        })
+    },
+  })
+
+  const formState2 = useFormik({
+    initialValues: {
+      code: '',
+    },
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    validationSchemaSecond,
+    onSubmit: (values) => {
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      sendCode.confirm(values.code).then(({ user: { za: token } }) => {
+        const data = {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json;charset=utf-8',
+            Authorization: '123',
+          },
+          body: JSON.stringify({
+            fireBaseToken: token,
+          }),
+        }
+
+        fetch('http://77.234.215.138:18080/user-service/login', data as RequestInit).then((resp) => {
+          if (resp.status === 200) {
+            resp.json().then((json) => {
+              setUserData(json)
+            })
+          } else {
+            console.error('Ошибка при попытке авторизации')
+          }
+        })
+      })
     },
   })
 
@@ -60,48 +108,69 @@ export const SignIn = () => {
       <Container component='main' maxWidth='xs'>
         <CssBaseline />
         <div className={classes.paper}>
-          <Avatar className={classes.avatar}>
-            <LockOutlinedIcon />
-          </Avatar>
-          <Typography component='h1' variant='h5'>
-            Sign in
-          </Typography>
-          <div>
-            <form onSubmit={formik.handleSubmit} className={classes.form}>
-              <TextField
-                variant='outlined'
-                margin='normal'
-                fullWidth
-                id='email'
-                name='email'
-                label='Email'
-                value={formik.values.email}
-                onChange={formik.handleChange}
-                error={formik.touched.email && Boolean(formik.errors.email)}
-                helperText={formik.touched.email && formik.errors.email}
-              />
-              <TextField
-                variant='outlined'
-                margin='normal'
-                fullWidth
-                id='password'
-                name='password'
-                label='Password'
-                type='password'
-                value={formik.values.password}
-                onChange={formik.handleChange}
-                error={formik.touched.password && Boolean(formik.errors.password)}
-                helperText={formik.touched.password && formik.errors.password}
-              />
-              <Button color='primary' variant='contained' fullWidth type='submit' className={classes.submit}>
-                Submit
-              </Button>
-            </form>
-          </div>
+          {userData ? (
+            <div>
+              <h3>ID</h3>
+              <h4>{userData.user.id}</h4>
+              <br />
+              <h3>Имя</h3>
+              <h4>{userData.user.name}</h4>
+              <br />
+              <h3>Дата рождения</h3>
+              <h4>{userData.user.birthdate}</h4>
+            </div>
+          ) : (
+            <>
+              <Avatar className={classes.avatar}>
+                <LockOutlinedIcon />
+              </Avatar>
+              <Typography component='h1' variant='h5'>
+                Sign in
+              </Typography>
+              <div>
+                {secondForm ? (
+                  <form onSubmit={formState2.handleSubmit} className={classes.form}>
+                    <TextField
+                      variant='outlined'
+                      margin='normal'
+                      fullWidth
+                      id='code'
+                      name='code'
+                      label='Code'
+                      value={formState2.values.code}
+                      onChange={formState2.handleChange}
+                      error={formState2.touched.code && Boolean(formState2.errors.code)}
+                      helperText={formState2.touched.code && formState2.errors.code}
+                    />
+                    <Button color='primary' variant='contained' fullWidth type='submit' className={classes.submit}>
+                      Submit
+                    </Button>
+                  </form>
+                ) : (
+                  <form onSubmit={formState1.handleSubmit} className={classes.form}>
+                    <TextField
+                      variant='outlined'
+                      margin='normal'
+                      fullWidth
+                      id='phone'
+                      name='phone'
+                      label='Phone'
+                      value={formState1.values.phone}
+                      onChange={formState1.handleChange}
+                      error={formState1.touched.phone && Boolean(formState1.errors.phone)}
+                      helperText={formState1.touched.phone && formState1.errors.phone}
+                    />
+                    <Button color='primary' variant='contained' fullWidth type='submit' className={classes.submit}>
+                      Submit
+                    </Button>
+                  </form>
+                )}
+              </div>
+            </>
+          )}
+          <div id='recaptcha' />
         </div>
       </Container>
     </>
   )
 }
-
-ReactDOM.render(<SignIn />, document.getElementById('root'))
