@@ -8,6 +8,7 @@ import { Link } from 'react-router-dom'
 import { useQuery } from 'react-query'
 import Alert from '@material-ui/lab/Alert'
 import { Appbar } from '../Appbar/Appbar'
+import { IApplicationData } from '../../types/Application'
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -21,11 +22,22 @@ const useStyles = makeStyles(() =>
     input: {
       width: '100%',
     },
+    application: {
+      display: 'flex',
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      textAlign: 'start',
+    },
+    listHeader: {
+      display: 'flex',
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+    },
   })
 )
 
-const filterList = (value: string, list: string[]) =>
-  list.filter((item) => item.toLowerCase().includes(value.replaceAll(' ', '').toLowerCase()))
+const filterList = (value: string, list: IApplicationData[]) =>
+  list.filter((item) => item.name.toLowerCase().includes(value.replaceAll(' ', '').toLowerCase()))
 
 const ListItemLink = (props: ListItemProps<Link, { button?: true }>) => {
   return <ListItem button component={Link} {...props} />
@@ -36,17 +48,27 @@ export const MainPage = () => {
 
   const [inputValue, setInputValue] = useState('')
 
-  const [searchItems, setSearchItems] = useState<string[]>([])
+  const [searchItems, setSearchItems] = useState<IApplicationData[]>([])
 
-  const { isLoading, isError, data } = useQuery<string[]>('applicationNames', () =>
+  const { isLoading, isError, data } = useQuery<IApplicationData[]>('applicationNames', () =>
     fetch(`${process.env.API}/application/names`)
       .then((res) => res.json())
       .then((items) => {
-        if (items.length) {
-          setSearchItems(items)
-        } else {
+        console.log(items)
+        if (!items.length) {
           throw new Error('Not Found')
         }
+        return items
+      })
+      .then((items) => {
+        return Promise.all(
+          items.map((application: string) => {
+            return fetch(`${process.env.API}/application/get/byName/${application}`).then((res) => res.json())
+          })
+        )
+      })
+      .then((items: any[]) => {
+        setSearchItems(items)
         return items
       })
   )
@@ -79,12 +101,21 @@ export const MainPage = () => {
               <CircularProgress />
             ) : (
               <List component='nav' aria-label='main mailbox folders'>
-                {searchItems.map((item) => (
-                  <ListItemLink to={`/app/${item}`} key={item}>
-                    <ListItemText primary={item} />
-                  </ListItemLink>
-                ))}
-
+                <ListItem className={classes.listHeader}>
+                  <div>APP NAME:</div>
+                  <div>ID:</div>
+                  <div>VERSION:</div>
+                </ListItem>
+                {searchItems.map((item) => {
+                  const { id, name, templateVersion } = item
+                  return (
+                    <ListItemLink to={`/app/${name}`} key={id} className={classes.application}>
+                      <div>{name}</div>
+                      <div>{id}</div>
+                      <div>{templateVersion}</div>
+                    </ListItemLink>
+                  )
+                })}
                 {!searchItems.length && <span>no search results</span>}
               </List>
             )}
