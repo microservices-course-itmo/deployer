@@ -94,26 +94,28 @@ export const MainPage = () => {
             ) : isLoading ? (
               <CircularProgress />
             ) : (
-              searchItems.length && (
-                <List component='nav' aria-label='main mailbox folders'>
-                  <ListItem className={classes.listRow}>
-                    <div>APP NAME:</div>
-                    <div>ID:</div>
-                    <div>VERSION:</div>
-                  </ListItem>
-                  {searchItems.map((item) => {
-                    const { id, name, templateVersion } = item
-                    return (
-                      <ListItemLink to={`/app/${name}`} key={id} className={classes.listRow}>
-                        <div>{name}</div>
-                        <div>{id}</div>
-                        <div>{templateVersion}</div>
-                      </ListItemLink>
-                    )
-                  })}
-                  {!searchItems.length && <span>no search results</span>}
-                </List>
-              )
+              <List component='nav' aria-label='main mailbox folders'>
+                {!!searchItems.length && (
+                  <div>
+                    <ListItem className={classes.listRow}>
+                      <div>APP NAME:</div>
+                      <div>ID:</div>
+                      <div>VERSION:</div>
+                    </ListItem>
+                    {searchItems.map((item) => {
+                      const { id, name, templateVersion } = item
+                      return (
+                        <ListItemLink to={`/app/${name}`} key={id} className={classes.listRow}>
+                          <div>{name}</div>
+                          <div>{id}</div>
+                          <div>{templateVersion}</div>
+                        </ListItemLink>
+                      )
+                    })}
+                  </div>
+                )}
+                {!searchItems.length && <span>no search results</span>}
+              </List>
             )}
           </div>
           <div style={{ padding: '23px 0 0 20px' }}>
