@@ -1,7 +1,11 @@
 import { CssBaseline } from '@material-ui/core'
+import { SnackbarProvider } from 'notistack'
 import React from 'react'
 import { QueryCache, ReactQueryCacheProvider, ReactQueryConfigProvider } from 'react-query'
 import Router from './Router'
+import { initFirebase } from './firebase'
+
+initFirebase()
 
 const queryCache = new QueryCache()
 
@@ -14,8 +18,10 @@ const config = {
 const App = () => (
   <ReactQueryConfigProvider config={config}>
     <ReactQueryCacheProvider queryCache={queryCache}>
-      <CssBaseline />
-      <Router />
+      <SnackbarProvider>
+        <CssBaseline />
+        <Router />
+      </SnackbarProvider>
     </ReactQueryCacheProvider>
   </ReactQueryConfigProvider>
 )

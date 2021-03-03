@@ -7,6 +7,7 @@ import StopIcon from '@material-ui/icons/Stop'
 import ReplayIcon from '@material-ui/icons/Replay'
 import DeleteIcon from '@material-ui/icons/Delete'
 import { useMutation } from 'react-query'
+import { useSnackbar } from 'notistack'
 import API from '../../../api'
 
 const useStyles = makeStyles(({ spacing }) => ({
@@ -61,11 +62,15 @@ const ACTIONS_ICONS = {
 }
 
 export const ApplicationInstanceRow = ({ data }: IApplicationInstanceTableProps) => {
+  const { enqueueSnackbar } = useSnackbar()
   const [instanceData, setInstanceData] = useState<IApplicationInstance | null>(data)
 
   const [mutate] = useMutation(API.deploymentController.removeInstance, {
     onSettled: () => {
       setInstanceData(null)
+    },
+    onError: () => {
+      enqueueSnackbar('Error', { variant: 'error' })
     },
   })
 

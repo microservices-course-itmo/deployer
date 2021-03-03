@@ -7,6 +7,7 @@ import TextField from '@material-ui/core/TextField'
 import { Avatar, Container, CssBaseline, Typography } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
 import { useHistory } from 'react-router-dom'
+import { useSnackbar } from 'notistack'
 import { Appbar } from '../Appbar/Appbar'
 import { updateData } from '../../api/deploymentController'
 import { IApplicationData } from '../../types/Application'
@@ -62,6 +63,7 @@ const validationSchema = yup.object({
 
 export const NewAppPage = () => {
   const classes = useStyles()
+  const { enqueueSnackbar } = useSnackbar()
 
   const history = useHistory()
 
@@ -74,11 +76,15 @@ export const NewAppPage = () => {
     },
     validationSchema,
     onSubmit: (values) => {
-      updateData(prepareData(values)).then(({ name }) => {
-        if (name) {
-          history.push(`/app/${name}`)
-        }
-      })
+      updateData(prepareData(values))
+        .then(({ name }) => {
+          if (name) {
+            history.push(`/app/${name}`)
+          }
+        })
+        .catch((err) => {
+          enqueueSnackbar(err.message, { variant: 'error' })
+        })
     },
   })
 
