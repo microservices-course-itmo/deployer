@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { createStyles, makeStyles } from '@material-ui/core/styles'
+import { useSnackbar } from 'notistack'
 import CheckIcon from '@material-ui/icons/Check'
 import CloseIcon from '@material-ui/icons/Close'
 import CalendarTodayIcon from '@material-ui/icons/CalendarToday'
@@ -8,10 +9,11 @@ import ListItem, { ListItemProps } from '@material-ui/core/ListItem'
 import ListItemText from '@material-ui/core/ListItemText'
 import { Button, CircularProgress, Container, Grid, TextField } from '@material-ui/core'
 import { Link } from 'react-router-dom'
-import { useQuery } from 'react-query'
+import { useMutation, useQuery } from 'react-query'
 import Alert from '@material-ui/lab/Alert'
 import { Appbar } from '../Appbar/Appbar'
 import { IApplicationData } from '../../types/Application'
+import API from '../../api'
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -25,22 +27,30 @@ const useStyles = makeStyles(() =>
     input: {
       width: '100%',
     },
-    rowName: {
+    columnName: {
       width: '30%',
       overflow: 'hidden',
       // fontWeight: 'bold',
     },
-    rowDate: {
+    columnDate: {
       width: '40%',
       // fontWeight: 'bold',
     },
-    rowRunning: {
-      width: '15%',
+    columnRunning: {
+      width: '10%',
       textAlign: 'center',
     },
-    rowStopped: {
-      width: '15%',
+    columnStopped: {
+      width: '10%',
       textAlign: 'center',
+    },
+    columnDeploy: {
+      width: '10%',
+      textAlign: 'center',
+    },
+    deployBtn: {
+      backgroundColor: 'green',
+      color: 'white',
     },
   })
 )
@@ -58,6 +68,20 @@ export const MainPage = () => {
   const [inputValue, setInputValue] = useState('')
 
   const [searchItems, setSearchItems] = useState<IApplicationData[]>([])
+  const { enqueueSnackbar } = useSnackbar()
+
+  const [mutate] = useMutation(API.deploymentController.deployInstance, {
+    onSuccess: (data) => {
+      if (data.status === 500) {
+        enqueueSnackbar(`${data.status} - ${data.error}`, { variant: 'error' })
+        return
+      }
+      enqueueSnackbar(`Successfuly deployed`, { variant: 'success' })
+    },
+    onError: (error: Error) => {
+      enqueueSnackbar(`${error.name} - ${error.message}`, { variant: 'error' })
+    },
+  })
 
   const { isLoading, isError, data } = useQuery<IApplicationData[]>('applicationNames', () =>
     fetch(`${process.env.API}/application/names`)
@@ -114,12 +138,13 @@ export const MainPage = () => {
                 {!!searchItems.length && (
                   <div>
                     <ListItem>
-                      <div className={classes.rowName}>NAME:</div>
-                      <div className={classes.rowDate}>DATE:</div>
-                      <div className={classes.rowRunning}>
+                      <div className={classes.columnName}>NAME:</div>
+                      <div className={classes.columnDate}>DATE:</div>
+                      <div className={classes.columnDeploy} />
+                      <div className={classes.columnRunning}>
                         <CheckIcon style={{ color: 'green' }} />
                       </div>
-                      <div className={classes.rowStopped}>
+                      <div className={classes.columnStopped}>
                         <CloseIcon color='error' />
                       </div>
                     </ListItem>
@@ -128,10 +153,12 @@ export const MainPage = () => {
                       .sort((a, b) => +b.dateCreated - +a.dateCreated)
                       .map((item) => {
                         const { dateCreated, name, id, instances } = item
+                        const deployInstance = instances.find((instance) => instance.version === 'latest')
+
                         return (
                           <ListItemLink to={`/app/${name}`} key={id}>
-                            <div className={classes.rowName}>{name}</div>
-                            <div className={classes.rowDate}>
+                            <div className={classes.columnName}>{name}</div>
+                            <div className={classes.columnDate}>
                               {new Date(dateCreated).toLocaleDateString('ru', {
                                 year: 'numeric',
                                 month: 'numeric',
@@ -141,11 +168,28 @@ export const MainPage = () => {
                                 second: 'numeric',
                               })}
                             </div>
-                            <div className={classes.rowRunning}>
+                            <div className={classes.columnDeploy}>
+                              {deployInstance && (
+                                <Button
+                                  className={classes.deployBtn}
+                                  disabled={!deployInstance}
+                                  onClick={(e) => {
+                                    e.preventDefault()
+                                    e.stopPropagation()
+                                    if (deployInstance) {
+                                      mutate({ alias: deployInstance.alias, version: deployInstance.version, name })
+                                    }
+                                    // TODO: remove button after success))
+                                  }}
+                                >
+                                  Deploy
+                                </Button>
+                              )}
+                            </div>
+                            <div className={classes.columnRunning}>
                               {instances.reduce((count, curr) => (curr.status === 'RUNNING' ? count + 1 : count), 0)}
                             </div>
-
-                            <div className={classes.rowStopped}>
+                            <div className={classes.columnStopped}>
                               {instances.reduce((count, curr) => (curr.status === 'STOPPED' ? count + 1 : count), 0)}
                             </div>
                           </ListItemLink>
