@@ -1,5 +1,8 @@
 import React, { useState } from 'react'
 import { createStyles, makeStyles } from '@material-ui/core/styles'
+import CheckIcon from '@material-ui/icons/Check'
+import CloseIcon from '@material-ui/icons/Close'
+import CalendarTodayIcon from '@material-ui/icons/CalendarToday'
 import List from '@material-ui/core/List'
 import ListItem, { ListItemProps } from '@material-ui/core/ListItem'
 import ListItemText from '@material-ui/core/ListItemText'
@@ -16,21 +19,27 @@ const useStyles = makeStyles(() =>
       marginTop: '64px',
     },
     main: {
-      width: '50%',
+      width: '100%',
       display: 'flex',
     },
     input: {
       width: '100%',
     },
     rowName: {
-      width: '50%',
+      width: '30%',
+      overflow: 'hidden',
+      // fontWeight: 'bold',
     },
-    rowId: {
-      width: '25%',
+    rowDate: {
+      width: '40%',
+      // fontWeight: 'bold',
+    },
+    rowRunning: {
+      width: '15%',
       textAlign: 'center',
     },
-    rowVersion: {
-      width: '25%',
+    rowStopped: {
+      width: '15%',
       textAlign: 'center',
     },
   })
@@ -68,6 +77,7 @@ export const MainPage = () => {
         )
       })
       .then((items: any[]) => {
+        console.log(items)
         setSearchItems(items)
         return items
       })
@@ -104,20 +114,43 @@ export const MainPage = () => {
                 {!!searchItems.length && (
                   <div>
                     <ListItem>
-                      <div className={classes.rowName}>APP NAME:</div>
-                      <div className={classes.rowId}>ID:</div>
-                      <div className={classes.rowVersion}>VERSION:</div>
+                      <div className={classes.rowName}>NAME:</div>
+                      <div className={classes.rowDate}>DATE:</div>
+                      <div className={classes.rowRunning}>
+                        <CheckIcon style={{ color: 'green' }} />
+                      </div>
+                      <div className={classes.rowStopped}>
+                        <CloseIcon color='error' />
+                      </div>
                     </ListItem>
-                    {searchItems.map((item) => {
-                      const { id, name, templateVersion } = item
-                      return (
-                        <ListItemLink to={`/app/${name}`} key={id}>
-                          <div className={classes.rowName}>{name}</div>
-                          <div className={classes.rowId}>{id}</div>
-                          <div className={classes.rowVersion}>{templateVersion}</div>
-                        </ListItemLink>
-                      )
-                    })}
+                    {searchItems
+                      // last created will be first
+                      .sort((a, b) => +b.dateCreated - +a.dateCreated)
+                      .map((item) => {
+                        const { dateCreated, name, id, instances } = item
+                        return (
+                          <ListItemLink to={`/app/${name}`} key={id}>
+                            <div className={classes.rowName}>{name}</div>
+                            <div className={classes.rowDate}>
+                              {new Date(dateCreated).toLocaleDateString('ru', {
+                                year: 'numeric',
+                                month: 'numeric',
+                                day: 'numeric',
+                                hour: 'numeric',
+                                minute: 'numeric',
+                                second: 'numeric',
+                              })}
+                            </div>
+                            <div className={classes.rowRunning}>
+                              {instances.reduce((count, curr) => (curr.status === 'RUNNING' ? count + 1 : count), 0)}
+                            </div>
+
+                            <div className={classes.rowStopped}>
+                              {instances.reduce((count, curr) => (curr.status === 'STOPPED' ? count + 1 : count), 0)}
+                            </div>
+                          </ListItemLink>
+                        )
+                      })}
                   </div>
                 )}
                 {!searchItems.length && <span>no search results</span>}
