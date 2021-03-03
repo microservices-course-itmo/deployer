@@ -66,7 +66,7 @@ export const ApplicationInstanceRow = ({ data }: IApplicationInstanceTableProps)
   const [instanceData, setInstanceData] = useState<IApplicationInstance | null>(data)
 
   const [mutate] = useMutation(API.deploymentController.removeInstance, {
-    onSettled: () => {
+    onSuccess: () => {
       setInstanceData(null)
     },
     onError: (error: Error) => {
