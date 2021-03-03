@@ -97,8 +97,8 @@ export const SettingsList = ({ settings }: ISettingsListProps) => {
       }).then((resp) => resp.json())
     },
     {
-      onError: () => {
-        enqueueSnackbar('Error', { variant: 'error' })
+      onError: (error: Error) => {
+        enqueueSnackbar(`${error.name} - ${error.message}`, { variant: 'error' })
       },
     }
   )

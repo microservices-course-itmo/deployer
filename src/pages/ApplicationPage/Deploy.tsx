@@ -71,8 +71,11 @@ export const Deploy = ({ data }: { data: IApplicationData }) => {
       if (newItems.status !== 500) {
         setInstanceItems((items) => [...items, newItems])
       } else {
-        enqueueSnackbar(newItems.status, { variant: 'error' })
+        enqueueSnackbar(`${newItems.status} - ${newItems.error}`, { variant: 'error' })
       }
+    },
+    onError: (error: Error) => {
+      enqueueSnackbar(`${error.name} - ${error.message}`, { variant: 'error' })
     },
   })
 

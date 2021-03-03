@@ -69,8 +69,8 @@ export const ApplicationInstanceRow = ({ data }: IApplicationInstanceTableProps)
     onSettled: () => {
       setInstanceData(null)
     },
-    onError: () => {
-      enqueueSnackbar('Error', { variant: 'error' })
+    onError: (error: Error) => {
+      enqueueSnackbar(`${error.name} - ${error.message}`, { variant: 'error' })
     },
   })
 
