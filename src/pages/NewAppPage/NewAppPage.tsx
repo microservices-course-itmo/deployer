@@ -82,8 +82,8 @@ export const NewAppPage = () => {
             history.push(`/app/${name}`)
           }
         })
-        .catch((err) => {
-          enqueueSnackbar(err.message, { variant: 'error' })
+        .catch((error: Error) => {
+          enqueueSnackbar(`${error.name} - ${error.message}`, { variant: 'error' })
         })
     },
   })
