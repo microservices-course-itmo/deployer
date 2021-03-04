@@ -72,8 +72,8 @@ export const PortsTable = ({ data: { ports = {}, ...fullData } }: IApplicationPa
   }
 
   const [mutate] = useMutation(API.deploymentController.updateData, {
-    onError: () => {
-      enqueueSnackbar('Error', { variant: 'error' })
+    onError: (error: Error) => {
+      enqueueSnackbar(`${error.name} - ${error.message}`, { variant: 'error' })
     },
   })
 
