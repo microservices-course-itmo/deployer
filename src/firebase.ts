@@ -3,7 +3,7 @@
 import firebase from 'firebase'
 
 const firebaseConfig = {
-  apiKey: 'AIzaSyCExaLzKWdhhr_1IRPe1NIFdR7Uor12LTI',
+  apiKey: process.env.FIREBASE_API,
   authDomain: 'testfire-1bc2f.firebaseapp.com',
   databaseURL: 'https://testfire-1bc2f.firebaseio.com',
   projectId: 'testfire-1bc2f',
