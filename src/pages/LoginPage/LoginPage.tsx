@@ -48,7 +48,7 @@ export const SignIn = () => {
   const history = useHistory()
 
   const [secondForm, setSecondForm] = useState(false)
-  const [sendCode, setSendCode] = useState<string | null>(null)
+  const [sendCode, setSendCode] = useState<any | null>(null)
   const [userData, setUserData] = useState<null | { user: { name: string; birthdate: string; id: string } }>(null)
 
   const formState1 = useFormik({
@@ -86,6 +86,8 @@ export const SignIn = () => {
       // @ts-ignore
       sendCode
         .confirm(values.code)
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
         .then(({ user: { za: token } }) => {
           const data = {
             method: 'POST',
