@@ -9,6 +9,8 @@ import Button from '@material-ui/core/Button'
 import TextField from '@material-ui/core/TextField'
 import { Avatar, Container, CssBaseline, Typography } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
+import { useSnackbar } from 'notistack'
+import { useHistory } from 'react-router-dom'
 import { Appbar } from '../Appbar/Appbar'
 
 const useStyles = makeStyles((theme) => ({
@@ -42,6 +44,8 @@ const validationSchemaSecond = yup.object({
 
 export const SignIn = () => {
   const classes = useStyles()
+  const { enqueueSnackbar } = useSnackbar()
+  const history = useHistory()
 
   const [secondForm, setSecondForm] = useState(false)
   const [sendCode, setSendCode] = useState<string | null>(null)
@@ -64,6 +68,9 @@ export const SignIn = () => {
           setSendCode(code)
           setSecondForm(true)
         })
+        .catch((err: any) => {
+          enqueueSnackbar(err.message, { variant: 'error' })
+        })
     },
   })
 
@@ -77,28 +84,39 @@ export const SignIn = () => {
     onSubmit: (values) => {
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
-      sendCode.confirm(values.code).then(({ user: { za: token } }) => {
-        const data = {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json;charset=utf-8',
-            Authorization: '123',
-          },
-          body: JSON.stringify({
-            fireBaseToken: token,
-          }),
-        }
-
-        fetch('http://77.234.215.138:18080/user-service/login', data as RequestInit).then((resp) => {
-          if (resp.status === 200) {
-            resp.json().then((json) => {
-              setUserData(json)
-            })
-          } else {
-            console.error('Ошибка при попытке авторизации')
+      sendCode
+        .confirm(values.code)
+        .then(({ user: { za: token } }) => {
+          const data = {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json;charset=utf-8',
+              Authorization: '123',
+            },
+            body: JSON.stringify({
+              fireBaseToken: token,
+            }),
           }
+
+          fetch('http://77.234.215.138:18080/user-service/login', data as RequestInit)
+            .then((resp) => {
+              if (resp.status === 200) {
+                history.replace('/')
+                resp.json().then((json) => {
+                  setUserData(json)
+                })
+              } else {
+                enqueueSnackbar(`Ошибка при попытке авторизации`, { variant: 'error' })
+                console.error('Ошибка при попытке авторизации')
+              }
+            })
+            .catch((err) => {
+              enqueueSnackbar(err.message, { variant: 'error' })
+            })
         })
-      })
+        .catch((err: any) => {
+          enqueueSnackbar(err.message, { variant: 'error' })
+        })
     },
   })
 
