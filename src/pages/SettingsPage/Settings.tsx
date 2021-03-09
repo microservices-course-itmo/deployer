@@ -1,4 +1,5 @@
 import { CircularProgress } from '@material-ui/core'
+import { Autocomplete } from '@material-ui/lab'
 import React from 'react'
 import { useQuery } from 'react-query'
 import { Appbar } from '../Appbar/Appbar'
@@ -10,7 +11,18 @@ export const Settings = () => {
   )
   if (isLoading) {
     return (
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+      <div
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          position: 'absolute',
+          top: '50%',
+          left: '50%',
+          transform: 'translate(-50%, -50%)',
+          margin: '0 auto',
+        }}
+      >
         <CircularProgress />
       </div>
     )
