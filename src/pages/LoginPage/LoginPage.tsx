@@ -17,7 +17,7 @@ const useStyles = makeStyles((theme) => ({
     position: 'absolute',
     top: '35%',
     left: '45%',
-    margin: '-200px 0 0 -200px',
+    margin: '-150px 0 0 -200px',
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
