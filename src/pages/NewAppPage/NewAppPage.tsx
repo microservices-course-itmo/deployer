@@ -15,7 +15,6 @@ import { IApplicationData } from '../../types/Application'
 const prepareData = (values: {
   name: string
   description: string
-  baseBranch: string
   alias: string
 }): IApplicationData => {
   return {
@@ -57,7 +56,6 @@ const useStyles = makeStyles((theme) => ({
 const validationSchema = yup.object({
   name: yup.string().required('Name is required'),
   description: yup.string().required('Description is required'),
-  baseBranch: yup.string().required('Base branch is required'),
   alias: yup.string().required('Alias is required'),
 })
 
@@ -71,7 +69,6 @@ export const NewAppPage = () => {
     initialValues: {
       name: '',
       description: '',
-      baseBranch: '',
       alias: '',
     },
     validationSchema,
@@ -125,18 +122,6 @@ export const NewAppPage = () => {
                 onChange={formik.handleChange}
                 error={formik.touched.description && Boolean(formik.errors.description)}
                 helperText={formik.touched.description && formik.errors.description}
-              />
-              <TextField
-                variant='outlined'
-                margin='normal'
-                fullWidth
-                id='baseBranch'
-                name='baseBranch'
-                label='Base branch'
-                value={formik.values.baseBranch}
-                onChange={formik.handleChange}
-                error={formik.touched.baseBranch && Boolean(formik.errors.baseBranch)}
-                helperText={formik.touched.baseBranch && formik.errors.baseBranch}
               />
               <TextField
                 variant='outlined'
