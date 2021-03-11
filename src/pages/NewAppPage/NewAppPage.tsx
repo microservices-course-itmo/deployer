@@ -12,11 +12,7 @@ import { Appbar } from '../Appbar/Appbar'
 import { updateData } from '../../api/deploymentController'
 import { IApplicationData } from '../../types/Application'
 
-const prepareData = (values: {
-  name: string
-  description: string
-  alias: string
-}): IApplicationData => {
+const prepareData = (values: { name: string; description: string; alias: string }): IApplicationData => {
   return {
     ...values,
     createdBy: 'User',
