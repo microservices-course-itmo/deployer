@@ -29,6 +29,7 @@ const prepareData = (values: {
     templateVersion: '0',
     versions: [],
     volumes: [],
+    baseBranch: '',
   }
 }
 
