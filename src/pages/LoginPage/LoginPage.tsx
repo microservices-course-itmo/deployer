@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import firebase from 'firebase'
@@ -103,9 +103,10 @@ export const SignIn = () => {
           fetch('http://77.234.215.138:18080/user-service/login', data as RequestInit)
             .then((resp) => {
               if (resp.status === 200) {
-                history.replace('/')
                 resp.json().then((json) => {
-                  setUserData(json)
+                  window.localStorage.setItem('accessToken', json.accessToken)
+                  window.localStorage.setItem('refreshToken', json.refreshToken)
+                  window.location.replace('/')
                 })
               } else {
                 enqueueSnackbar(`Ошибка при попытке авторизации`, { variant: 'error' })
