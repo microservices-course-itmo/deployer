@@ -31,6 +31,9 @@ export const Appbar = () => {
           <Button color='inherit' href='/login'>
             Login
           </Button>
+          <Button color='inherit' href='/profile'>
+            Profile
+          </Button>
         </Toolbar>
       </AppBar>
     </div>
