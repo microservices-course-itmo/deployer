@@ -69,17 +69,16 @@ export const MainPage = () => {
   const [searchItems, setSearchItems] = useState<IApplicationData[]>([])
   const { enqueueSnackbar } = useSnackbar()
 
-  const [mutate] = useMutation(API.deploymentController.removeInstance, {
+  const [mutate] = useMutation(API.applicationController.removeInstance, {
     onSuccess: (data) => {
       if (data.status === 500) {
-        enqueueSnackbar(`${data.status} - ${data.error}`, { variant: 'error' })
-        return Promise.reject()
+        return Promise.reject(new Error(`${data.error} - ${data.message}`))
       }
       enqueueSnackbar(`Successfuly removed`, { variant: 'success' })
       return Promise.resolve()
     },
     onError: (error: Error) => {
-      enqueueSnackbar(`${error.name} - ${error.message}`, { variant: 'error' })
+      enqueueSnackbar(`${error?.name} - ${error?.message}`, { variant: 'error' })
       return Promise.reject()
     },
   })
@@ -174,7 +173,7 @@ export const MainPage = () => {
                                   e.preventDefault()
                                   e.stopPropagation()
                                   console.log('ASDS')
-                                  mutate(id).then((dat) => {
+                                  mutate(id).then(() => {
                                     setSearchItems(searchItems.filter((app) => app.id !== id))
                                   })
                                 }}
