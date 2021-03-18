@@ -28,6 +28,11 @@ export const ProfilePage = () => {
     role: string
   }>(null)
 
+  const exitProfile = () => {
+    window.localStorage.clear()
+    history.replace('/login')
+  }
+
   useEffect(() => {
     const accessToken = window.localStorage.getItem('accessToken')
 
@@ -70,7 +75,7 @@ export const ProfilePage = () => {
             <h4>{userData?.birthdate || ''}</h4>
           </div>
           {userData && (
-            <Button color='primary' variant='contained' fullWidth type='submit'>
+            <Button onClick={exitProfile} color='primary' variant='contained' fullWidth type='submit'>
               exit
             </Button>
           )}
