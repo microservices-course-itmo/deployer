@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { Container, CssBaseline } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
 import { useHistory } from 'react-router-dom'
+import Button from '@material-ui/core/Button'
 import { Appbar } from '../Appbar/Appbar'
 
 const useStyles = makeStyles(() => ({
@@ -68,6 +69,11 @@ export const ProfilePage = () => {
             <h3>Birth date</h3>
             <h4>{userData?.birthdate || ''}</h4>
           </div>
+          {userData && (
+            <Button color='primary' variant='contained' fullWidth type='submit'>
+              exit
+            </Button>
+          )}
         </div>
       </Container>
     </>
