@@ -6,8 +6,8 @@ export const removeInstance = (id: string) =>
     headers: {
         'Content-Type': 'application/json',
         'Accept-Encoding': 'gzip, deflate',
-      },
-      body: JSON.stringify({
+    },
+    body: JSON.stringify({
         id
-      }),
+    }),
   }).then((resp) => resp.json())
