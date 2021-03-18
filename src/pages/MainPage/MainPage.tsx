@@ -44,12 +44,12 @@ const useStyles = makeStyles(() =>
       width: '10%',
       textAlign: 'center',
     },
-    columnDeploy: {
+    columnRemove: {
       width: '10%',
       textAlign: 'center',
     },
-    deployBtn: {
-      backgroundColor: 'green',
+    removeBtn: {
+      backgroundColor: 'red',
       color: 'white',
     },
   })
@@ -66,20 +66,21 @@ export const MainPage = () => {
   const classes = useStyles()
 
   const [inputValue, setInputValue] = useState('')
-
   const [searchItems, setSearchItems] = useState<IApplicationData[]>([])
   const { enqueueSnackbar } = useSnackbar()
 
-  const [mutate] = useMutation(API.deploymentController.deployInstance, {
+  const [mutate] = useMutation(API.deploymentController.removeInstance, {
     onSuccess: (data) => {
       if (data.status === 500) {
         enqueueSnackbar(`${data.status} - ${data.error}`, { variant: 'error' })
-        return
+        return Promise.reject()
       }
-      enqueueSnackbar(`Successfuly deployed`, { variant: 'success' })
+      enqueueSnackbar(`Successfuly removed`, { variant: 'success' })
+      return Promise.resolve()
     },
     onError: (error: Error) => {
       enqueueSnackbar(`${error.name} - ${error.message}`, { variant: 'error' })
+      return Promise.reject()
     },
   })
 
@@ -101,7 +102,6 @@ export const MainPage = () => {
         )
       })
       .then((items: any[]) => {
-        console.log(items)
         setSearchItems(items)
         return items
       })
@@ -140,7 +140,7 @@ export const MainPage = () => {
                     <ListItem>
                       <div className={classes.columnName}>NAME:</div>
                       <div className={classes.columnDate}>DATE:</div>
-                      <div className={classes.columnDeploy} />
+                      <div className={classes.columnRemove} />
                       <div className={classes.columnRunning}>
                         <CheckIcon style={{ color: 'green' }} />
                       </div>
@@ -153,7 +153,6 @@ export const MainPage = () => {
                       .sort((a, b) => +b.dateCreated - +a.dateCreated)
                       .map((item) => {
                         const { dateCreated, name, id, instances } = item
-                        const deployInstance = instances.find((instance) => instance.version === 'latest')
 
                         return (
                           <ListItemLink to={`/app/${name}`} key={id}>
@@ -168,23 +167,20 @@ export const MainPage = () => {
                                 second: 'numeric',
                               })}
                             </div>
-                            <div className={classes.columnDeploy}>
-                              {deployInstance && (
-                                <Button
-                                  className={classes.deployBtn}
-                                  disabled={!deployInstance}
-                                  onClick={(e) => {
-                                    e.preventDefault()
-                                    e.stopPropagation()
-                                    if (deployInstance) {
-                                      mutate({ alias: deployInstance.alias, version: deployInstance.version, name })
-                                    }
-                                    // TODO: remove button after success))
-                                  }}
-                                >
-                                  Deploy
-                                </Button>
-                              )}
+                            <div className={classes.columnRemove}>
+                              <Button
+                                className={classes.removeBtn}
+                                onClick={(e) => {
+                                  e.preventDefault()
+                                  e.stopPropagation()
+                                  console.log('ASDS')
+                                  mutate(id).then((dat) => {
+                                    setSearchItems(searchItems.filter((app) => app.id !== id))
+                                  })
+                                }}
+                              >
+                                DELETE
+                              </Button>
                             </div>
                             <div className={classes.columnRunning}>
                               {instances.reduce((count, curr) => (curr.status === 'RUNNING' ? count + 1 : count), 0)}
