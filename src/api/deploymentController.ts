@@ -39,3 +39,4 @@ export const removeInstance = (id: string) =>
   fetch(getRoute(`/applicationInstance/delete/byId/${id}`), {
     method: 'DELETE',
   }).then((resp) => resp.json())
+  
