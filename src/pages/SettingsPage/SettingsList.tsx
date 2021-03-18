@@ -87,11 +87,14 @@ export const SettingsList = ({ settings }: ISettingsListProps) => {
 
   const [mutate] = useMutation(
     (newSettings: { [key: string]: string }) => {
+      const accessToken = window.localStorage.getItem('accessToken')
+
       return fetch(`${process.env.API}/settings/set`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           'Accept-Encoding': 'gzip, deflate',
+          Authorization: `Bearer ${accessToken}`,
         },
         body: JSON.stringify(newSettings),
       }).then((resp) => resp.json())

@@ -83,8 +83,13 @@ export const MainPage = () => {
     },
   })
 
-  const { isLoading, isError, data } = useQuery<IApplicationData[]>('applicationNames', () =>
-    fetch(`${process.env.API}/application/names`)
+  const { isLoading, isError, data } = useQuery<IApplicationData[]>('applicationNames', () => {
+    const accessToken = window.localStorage.getItem('accessToken')
+    return fetch(`${process.env.API}/application/names`, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    })
       .then((res) => res.json())
       .then((items) => {
         console.log(items)
@@ -96,7 +101,11 @@ export const MainPage = () => {
       .then((items) => {
         return Promise.all(
           items.map((application: string) => {
-            return fetch(`${process.env.API}/application/get/byName/${application}`).then((res) => res.json())
+            return fetch(`${process.env.API}/application/get/byName/${application}`, {
+              headers: {
+                Authorization: `Bearer ${accessToken}`,
+              },
+            }).then((res) => res.json())
           })
         )
       })
@@ -105,7 +114,7 @@ export const MainPage = () => {
         setSearchItems(items)
         return items
       })
-  )
+  })
 
   const handleValueChange = (event: React.ChangeEvent<{ value: unknown }>) => {
     const { value } = event.target

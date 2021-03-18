@@ -8,12 +8,15 @@ interface IDeployInstance {
   version: string
 }
 
-export const deployInstance = ({ alias, name, version }: IDeployInstance) =>
-  fetch(getRoute('/applicationInstance/deploy'), {
+export const deployInstance = ({ alias, name, version }: IDeployInstance) => {
+  const accessToken = window.localStorage.getItem('accessToken')
+
+  return fetch(getRoute('/applicationInstance/deploy'), {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
       'Accept-Encoding': 'gzip, deflate',
+      Authorization: `Bearer ${accessToken}`,
     },
     body: JSON.stringify({
       alias,
@@ -21,21 +24,38 @@ export const deployInstance = ({ alias, name, version }: IDeployInstance) =>
       version,
     }),
   }).then((resp) => resp.json())
+}
 
-export const updateData = (newData: IApplicationData) =>
-  fetch(getRoute('/application/createOrUpdate'), {
+export const updateData = (newData: IApplicationData) => {
+  const accessToken = window.localStorage.getItem('accessToken')
+
+  return fetch(getRoute('/application/createOrUpdate'), {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
       'Accept-Encoding': 'gzip, deflate',
+      Authorization: `Bearer ${accessToken}`,
     },
     body: JSON.stringify(newData),
   }).then((resp) => resp.json())
+}
 
-export const getAppByName = (name: string) =>
-  fetch(getRoute(`/application/get/byName/${name}`)).then((resp) => resp.json())
-
-export const removeInstance = (id: string) =>
-  fetch(getRoute(`/applicationInstance/delete/byId/${id}`), {
-    method: 'DELETE',
+export const getAppByName = (name: string) => {
+  const accessToken = window.localStorage.getItem('accessToken')
+  return fetch(getRoute(`/application/get/byName/${name}`), {
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+    },
   }).then((resp) => resp.json())
+}
+
+export const removeInstance = (id: string) => {
+  const accessToken = window.localStorage.getItem('accessToken')
+
+  return fetch(getRoute(`/applicationInstance/delete/byId/${id}`), {
+    method: 'DELETE',
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+    },
+  }).then((resp) => resp.json())
+}
