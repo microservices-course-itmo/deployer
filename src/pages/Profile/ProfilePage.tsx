@@ -46,6 +46,7 @@ export const ProfilePage = () => {
         .then((res) => res.json())
         .then((data) => {
           setUserData(data)
+          console.log(data)
         })
         .catch(() => {
           history.replace('/login')
