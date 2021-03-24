@@ -3,10 +3,8 @@ import { createStyles, makeStyles } from '@material-ui/core/styles'
 import { useSnackbar } from 'notistack'
 import CheckIcon from '@material-ui/icons/Check'
 import CloseIcon from '@material-ui/icons/Close'
-import CalendarTodayIcon from '@material-ui/icons/CalendarToday'
 import List from '@material-ui/core/List'
 import ListItem, { ListItemProps } from '@material-ui/core/ListItem'
-import ListItemText from '@material-ui/core/ListItemText'
 import { Button, CircularProgress, Container, Grid, TextField } from '@material-ui/core'
 import { Link } from 'react-router-dom'
 import { useMutation, useQuery } from 'react-query'
@@ -69,12 +67,12 @@ export const MainPage = () => {
   const [searchItems, setSearchItems] = useState<IApplicationData[]>([])
   const { enqueueSnackbar } = useSnackbar()
 
-  const [mutate] = useMutation(API.applicationController.removeInstance, {
+  const [mutate] = useMutation(API.applicationController.removeAppByName, {
     onSuccess: (data) => {
       if (data.status === 500) {
-        return Promise.reject(new Error(`${data.error} - ${data.message}`))
+        return Promise.reject(new Error(`Server error during deleting app`))
       }
-      enqueueSnackbar(`Successfuly removed`, { variant: 'success' })
+      enqueueSnackbar(`Successfully removed`, { variant: 'success' })
       return Promise.resolve()
     },
     onError: (error: Error) => {
@@ -83,7 +81,7 @@ export const MainPage = () => {
     },
   })
 
-  const { isLoading, isError, data } = useQuery<IApplicationData[]>('applicationNames', () => {
+  const { isLoading, isError, data, refetch } = useQuery<IApplicationData[]>('applicationNames', () => {
     const accessToken = window.localStorage.getItem('accessToken')
     return fetch(`${process.env.API}/application/names`, {
       headers: {
@@ -182,8 +180,9 @@ export const MainPage = () => {
                                   e.preventDefault()
                                   e.stopPropagation()
                                   console.log('ASDS')
-                                  mutate(id).then(() => {
-                                    setSearchItems(searchItems.filter((app) => app.id !== id))
+                                  mutate(name).then(() => {
+                                    refetch()
+                                    // setSearchItems(searchItems.filter((app) => app.id !== id))
                                   })
                                 }}
                               >

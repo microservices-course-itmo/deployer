@@ -52,10 +52,12 @@ export const getAppByName = (name: string) => {
 export const removeInstance = (id: string) => {
   const accessToken = window.localStorage.getItem('accessToken')
 
-  return fetch(getRoute(`/applicationInstance/delete/byId/${id}`), {
+  return fetch(getRoute(`/applicationInstance/${id}`), {
     method: 'DELETE',
     headers: {
       Authorization: `Bearer ${accessToken}`,
+      'Content-Type': 'application/json',
+      'Accept-Encoding': 'gzip, deflate',
     },
   }).then((resp) => resp.json())
 }

@@ -57,7 +57,7 @@ const useStyles = makeStyles((theme) => ({
 const validationSchema = yup.object({
   name: yup.string().required('Name is required'),
   description: yup.string().required('Description is required'),
-  baseBranch: yup.string().required('Base branch is required'),
+  baseBranch: yup.string(),
   alias: yup.string().required('Alias is required'),
 })
 

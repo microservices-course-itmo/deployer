@@ -142,8 +142,8 @@ export const SettingsList = ({ settings }: ISettingsListProps) => {
                     <TextField
                       id='outlined-basic'
                       variant='outlined'
-                      value={settingItems['registry']}
-                      name='registry'
+                      value={settingItems['versionRegistry']}
+                      name='versionRegistry'
                       onChange={onChange}
                     />
                   </div>

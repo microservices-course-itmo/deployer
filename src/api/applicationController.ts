@@ -1,13 +1,14 @@
 const getRoute = (path: string) => `${process.env.API}${path}`
 
-export const removeInstance = (id: string) =>
-  fetch(getRoute(`/application/delete/byId/${id}`), {
+export const removeAppByName = (name: string) => {
+  const accessToken = window.localStorage.getItem('accessToken')
+
+  return fetch(getRoute(`/application/delete/byName/${name}`), {
     method: 'DELETE',
     headers: {
+      Authorization: `Bearer ${accessToken}`,
       'Content-Type': 'application/json',
       'Accept-Encoding': 'gzip, deflate',
     },
-    body: JSON.stringify({
-      id,
-    }),
-  }).then((resp) => resp.json())
+  })
+}
