@@ -1,3 +1,5 @@
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-nocheck
 import React, { useEffect, useState } from 'react'
 import {
   FormControl,
@@ -14,15 +16,23 @@ import {
 } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
 import { useMutation } from 'react-query'
-import { useParams } from 'react-router-dom'
+import { useLocation, useParams, useHistory } from 'react-router-dom'
 import { useSnackbar } from 'notistack'
 import { IApplicationInstance, IApplicationData } from '../../types/Application'
 import { InstancesTable } from './InstancesTable/InstancesTable'
 import { HistoryLog } from './HistoryLog/HistoryLog'
 import API from '../../api'
-import { SecondTable } from './SecondTable'
-import { SecondTableTypes } from './types'
 import { Appbar } from '../Appbar/Appbar'
+import { PortsTable } from './SecondTable/PortsTable'
+import { EnvironmentsTable } from './SecondTable/EnvironmentsTable'
+import { VolumesTable } from './SecondTable/VolumesTable'
+
+const TabTypes = {
+  app: 'app',
+  env: 'env',
+  ports: 'ports',
+  volumes: 'volumes',
+}
 
 const useStyles = makeStyles(({ spacing }) => ({
   formControl: {
@@ -58,13 +68,29 @@ const useStyles = makeStyles(({ spacing }) => ({
 export const Deploy = ({ data }: { data: IApplicationData }) => {
   const { versions = [], instances, dateCreated, description, logs } = data
 
+  const history = useHistory()
   const classes = useStyles()
   const { name: appName } = useParams<{ name: string }>()
   const { enqueueSnackbar } = useSnackbar()
+  const { hash } = useLocation()
 
-  const [version, setVersion] = React.useState(versions[versions.length - 1])
-  const [instanceItems, setInstanceItems] = React.useState<IApplicationInstance[]>(instances)
-  const [alias, setAlias] = React.useState('')
+  const [tab, setTab] = useState()
+
+  const [version, setVersion] = useState(versions[versions.length - 1])
+  const [instanceItems, setInstanceItems] = useState<IApplicationInstance[]>(instances)
+  const [alias, setAlias] = useState('')
+
+  useEffect(() => {
+    const hashValue = hash?.slice(1)
+    if (tab !== hashValue) {
+      history.push({ hash: `#${tab}` })
+    }
+  }, [tab])
+
+  useEffect(() => {
+    const hashValue = hash?.slice(1)
+    setTab(hashValue || TabTypes.app)
+  }, [])
 
   const [mutate] = useMutation(API.deploymentController.deployInstance, {
     onSuccess: (newItems) => {
@@ -92,8 +118,6 @@ export const Deploy = ({ data }: { data: IApplicationData }) => {
     setVersion('')
     setAlias('')
   }
-
-  const [secondTableTab, setSecondTableTab] = useState(SecondTableTypes.ENVIRONMENT)
 
   const createdAt = (dateCreated ? new Date(dateCreated) : new Date()).toISOString().split('T')[0]
 
@@ -126,20 +150,37 @@ export const Deploy = ({ data }: { data: IApplicationData }) => {
           </Grid>
         </Grid>
         <Container>
-          <Tabs value={secondTableTab} onChange={(e, newTab) => setSecondTableTab(newTab)}>
-            <Tab value={SecondTableTypes.ENVIRONMENT} label='ENV' />
-            <Tab value={SecondTableTypes.PORTS} label='PORTS' />
-            <Tab value={SecondTableTypes.VOLUMES} label='VOLUMES' />
+          <Tabs value={tab} onChange={(e, newTab) => setTab(newTab)}>
+            <Tab value={TabTypes.app} label='APP' />
+            <Tab value={TabTypes.env} label='ENV' />
+            <Tab value={TabTypes.ports} label='PORTS' />
+            <Tab value={TabTypes.volumes} label='VOLUMES' />
           </Tabs>
         </Container>
       </Container>
       <hr className={classes.hrStyle} />
       <div style={{ display: 'flex' }}>
-        <Container style={{ width: '70%' }}>
-          <InstancesTable data={instanceItems} />
-          <HistoryLog variant={logs} />
-        </Container>
-        <SecondTable className={classes.secondTable} data={data} type={secondTableTab} />
+        {tab === TabTypes.app && (
+          <Container>
+            <InstancesTable data={instanceItems} />
+            <HistoryLog variant={logs} />
+          </Container>
+        )}
+        {tab === TabTypes.env && (
+          <Container>
+            <EnvironmentsTable data={instanceItems} />
+          </Container>
+        )}
+        {tab === TabTypes.ports && (
+          <Container>
+            <PortsTable data={instanceItems} />
+          </Container>
+        )}
+        {tab === TabTypes.volumes && (
+          <Container>
+            <VolumesTable data={instanceItems} />
+          </Container>
+        )}
       </div>
     </div>
   )
