@@ -83,7 +83,6 @@ export const Deploy = ({ data }: { data: IApplicationData }) => {
   useEffect(() => {
     const hashValue = hash?.slice(1)
     if (tab !== hashValue) {
-      // setTab(hashValue)
       history.push({ hash: `#${tab}` })
     }
   }, [tab])
@@ -186,5 +185,3 @@ export const Deploy = ({ data }: { data: IApplicationData }) => {
     </div>
   )
 }
-
-// <EnvironmentsTable data={data} />, <PortsTable data={data} />, <VolumesTable data={data} />
