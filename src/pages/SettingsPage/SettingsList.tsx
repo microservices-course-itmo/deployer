@@ -158,11 +158,7 @@ export const SettingsList = ({ settings }: ISettingsListProps) => {
                   </div>
                 </div>
               </div>
-              <Button
-                className={classes.buttonControl}
-                onClick={onSave}
-                variant='outlined'
-              >
+              <Button className={classes.buttonControl} onClick={onSave} variant='outlined'>
                 Save
               </Button>
             </Grid>
