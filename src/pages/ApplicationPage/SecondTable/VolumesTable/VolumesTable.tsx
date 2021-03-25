@@ -9,6 +9,12 @@ import {
   TextField,
   Grid,
   IconButton,
+  Table,
+  TableHead,
+  TableRow,
+  TableCell,
+  TableContainer,
+  Paper,
 } from '@material-ui/core'
 import DeleteIcon from '@material-ui/icons/Delete'
 import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline'
@@ -95,12 +101,16 @@ export const VolumesTable = ({ data: { volumes = [], ...fullData } }: IApplicati
 
   return (
     <Grid container direction='column' justify='center' alignItems='center'>
+      <TableContainer component={Paper}>
+        <Table>
+          <TableHead>
+            <TableRow>
+              <TableCell>Name</TableCell>
+            </TableRow>
+          </TableHead>
+        </Table>
+      </TableContainer>
       <List className={classes.ListContainer}>
-        <ListItem>
-          <ListItemText className={classes.listItemHeader}>
-            <h2 className={classes.listItemH2}>Volumes</h2>
-          </ListItemText>
-        </ListItem>
         {vols.map((vol, index) => (
           <ListItem>
             <TextField id='standard' variant='filled' value={vol} onChange={handleChangeVolume(index)} />
