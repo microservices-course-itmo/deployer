@@ -179,17 +179,17 @@ export const Deploy = ({ data }: { data: IApplicationData }) => {
         )}
         {tab === TabTypes.env && (
           <Container>
-            <EnvironmentsTable data={instanceItems} />
+            <EnvironmentsTable data={data} />
           </Container>
         )}
         {tab === TabTypes.ports && (
           <Container>
-            <PortsTable data={instanceItems} />
+            <PortsTable data={data} />
           </Container>
         )}
         {tab === TabTypes.volumes && (
           <Container>
-            <VolumesTable data={instanceItems} />
+            <VolumesTable data={data} />
           </Container>
         )}
       </div>
