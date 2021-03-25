@@ -1,5 +1,5 @@
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore
+//  @ts-nocheck
 import React, { useEffect, useState } from 'react'
 import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom'
 import { useSnackbar } from 'notistack'
