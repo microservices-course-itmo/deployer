@@ -16,11 +16,11 @@ export const Settings = () => {
   )
   if (isLoading) {
     return (
-      <div 
+      <div
         style={{
           alignItems: 'center',
           display: 'flex',
-          justifyContent: 'center'
+          justifyContent: 'center',
         }}
       >
         <CircularProgress />
