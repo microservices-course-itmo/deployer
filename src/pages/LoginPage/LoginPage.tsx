@@ -160,13 +160,7 @@ export const SignIn = () => {
                       error={formState2.touched.code && Boolean(formState2.errors.code)}
                       helperText={formState2.touched.code && formState2.errors.code}
                     />
-                    <Button 
-                      color='primary'
-                      variant='contained'
-                      fullWidth
-                      type='submit'
-                      className={classes.submit}
-                    >
+                    <Button color='primary' variant='contained' fullWidth type='submit' className={classes.submit}>
                       Submit
                     </Button>
                   </form>
@@ -184,13 +178,7 @@ export const SignIn = () => {
                       error={formState1.touched.phone && Boolean(formState1.errors.phone)}
                       helperText={formState1.touched.phone && formState1.errors.phone}
                     />
-                    <Button
-                      color='primary'
-                      variant='contained'
-                      fullWidth
-                      type='submit'
-                      className={classes.submit}
-                    >
+                    <Button color='primary' variant='contained' fullWidth type='submit' className={classes.submit}>
                       Submit
                     </Button>
                   </form>
