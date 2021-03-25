@@ -13,15 +13,14 @@ import { updateData } from '../../api/deploymentController'
 import { IApplicationData } from '../../types/Application'
 
 const prepareData = (values: {
-  name: string
-  description: string
-  baseBranch: string
   alias: string
+  baseBranch: string
+  description: string
+  name: string
 }): IApplicationData => {
   return {
-    ...values,
     createdBy: 'User',
-    dateCreated: `${new Date().getTime()}`,
+    dateCreated: `${new Date().getTime().toFixed()}`,
     environmentVariables: [],
     id: `${Math.floor(Math.random() * 10000)}`,
     instances: [],
@@ -30,24 +29,25 @@ const prepareData = (values: {
     templateVersion: '0',
     versions: [],
     volumes: [],
+    ...values,
   }
 }
 
 const useStyles = makeStyles((theme) => ({
   paper: {
-    textAlign: 'center',
+    alignItems: 'center',
     display: 'flex',
     flexDirection: 'column',
-    alignItems: 'center',
-    marginTop: '88px',
+    marginTop: '108px',
+    textAlign: 'center',
   },
   avatar: {
-    margin: theme.spacing(1),
     backgroundColor: theme.palette.secondary.main,
+    margin: theme.spacing(1),
   },
   form: {
-    width: '100%',
     marginTop: theme.spacing(1),
+    width: '100%',
   },
   create: {
     margin: theme.spacing(3, 0, 2),
@@ -55,10 +55,10 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 const validationSchema = yup.object({
-  name: yup.string().required('Name is required'),
-  description: yup.string().required('Description is required'),
-  baseBranch: yup.string(),
   alias: yup.string().required('Alias is required'),
+  baseBranch: yup.string().notRequired(),
+  description: yup.string().required('Description is required'),
+  name: yup.string().required('Name is required'),
 })
 
 export const NewAppPage = () => {
@@ -69,10 +69,10 @@ export const NewAppPage = () => {
 
   const formik = useFormik({
     initialValues: {
-      name: '',
-      description: '',
-      baseBranch: '',
       alias: '',
+      baseBranch: '',
+      description: '',
+      name: '',
     },
     validationSchema,
     onSubmit: (values) => {

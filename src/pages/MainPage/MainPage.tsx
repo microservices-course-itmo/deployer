@@ -13,38 +13,38 @@ import { Appbar } from '../Appbar/Appbar'
 import { IApplicationData } from '../../types/Application'
 import API from '../../api'
 
+const ERROR_ALERT = 'This is an error alert — check it out!'
+
 const useStyles = makeStyles(() =>
   createStyles({
     wrapper: {
       marginTop: '64px',
     },
     main: {
-      width: '100%',
       display: 'flex',
+      width: '100%',
     },
     input: {
       width: '100%',
     },
     columnName: {
-      width: '30%',
       overflow: 'hidden',
-      // fontWeight: 'bold',
+      width: '30%',
     },
     columnDate: {
       width: '40%',
-      // fontWeight: 'bold',
     },
     columnRunning: {
-      width: '10%',
       textAlign: 'center',
+      width: '10%',
     },
     columnStopped: {
-      width: '10%',
       textAlign: 'center',
+      width: '10%',
     },
     columnRemove: {
-      width: '10%',
       textAlign: 'center',
+      width: '10%',
     },
     removeBtn: {
       backgroundColor: 'red',
@@ -90,7 +90,6 @@ export const MainPage = () => {
     })
       .then((res) => res.json())
       .then((items) => {
-        console.log(items)
         if (!items.length) {
           throw new Error('Not Found')
         }
@@ -99,7 +98,7 @@ export const MainPage = () => {
       .then((items) => {
         return Promise.all(
           items.map((application: string) => {
-            return fetch(`${process.env.API}/application/get/byName/${application}`, {
+            return fetch(`${process.env.API}/application/get/byName/${application.trim()}`, {
               headers: {
                 Authorization: `Bearer ${accessToken}`,
               },
@@ -122,21 +121,26 @@ export const MainPage = () => {
   return (
     <Container>
       <Appbar />
-      <Grid className={classes.wrapper} container direction='row' justify='space-around' alignItems='center'>
+      <Grid className={classes.wrapper}
+            container
+            direction='row'
+            justify='space-around'
+            alignItems='center'
+      >
         <div className={classes.main}>
           <div style={{ width: '100%' }}>
             <TextField
-              disabled={isError || isLoading}
+              InputProps={{ type: 'search' }}
               className={classes.input}
+              disabled={isError || isLoading}
               label='Search input'
               margin='normal'
-              variant='outlined'
-              InputProps={{ type: 'search' }}
-              value={inputValue}
               onChange={handleValueChange}
+              variant='outlined'
+              value={inputValue}
             />
             {isError ? (
-              <Alert severity='error'>This is an error alert — check it out!</Alert>
+              <Alert severity='error'>{ ERROR_ALERT }</Alert>
             ) : isLoading ? (
               <CircularProgress />
             ) : (
@@ -159,7 +163,6 @@ export const MainPage = () => {
                       .sort((a, b) => +b.dateCreated - +a.dateCreated)
                       .map((item) => {
                         const { dateCreated, name, id, instances } = item
-
                         return (
                           <ListItemLink to={`/app/${name}`} key={id}>
                             <div className={classes.columnName}>{name}</div>
@@ -179,10 +182,8 @@ export const MainPage = () => {
                                 onClick={(e) => {
                                   e.preventDefault()
                                   e.stopPropagation()
-                                  console.log('ASDS')
                                   mutate(name).then(() => {
                                     refetch()
-                                    // setSearchItems(searchItems.filter((app) => app.id !== id))
                                   })
                                 }}
                               >
@@ -205,7 +206,12 @@ export const MainPage = () => {
             )}
           </div>
           <div style={{ padding: '23px 0 0 20px' }}>
-            <Button style={{ width: '120px' }} variant='contained' size='large' color='primary' href='/new-app'>
+            <Button color='primary'
+                    href='/new-app'
+                    variant='contained'
+                    size='large'
+                    style={{ width: '120px' }}
+            >
               New app
             </Button>
           </div>

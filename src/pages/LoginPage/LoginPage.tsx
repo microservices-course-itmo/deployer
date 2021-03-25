@@ -1,16 +1,15 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import firebase from 'firebase'
-import { useFormik } from 'formik'
 import * as yup from 'yup'
-import LockOutlinedIcon from '@material-ui/icons/LockOutlined'
-import Button from '@material-ui/core/Button'
-import TextField from '@material-ui/core/TextField'
-import { Avatar, Container, CssBaseline, Typography } from '@material-ui/core'
-import { makeStyles } from '@material-ui/core/styles'
 import { useSnackbar } from 'notistack'
+import { useFormik } from 'formik'
+import LockOutlinedIcon from '@material-ui/icons/LockOutlined'
+import { Avatar, Button, Container, CssBaseline, TextField, Typography } from '@material-ui/core'
+import { makeStyles } from '@material-ui/core/styles'
 import { useHistory } from 'react-router-dom'
+
 import { Appbar } from '../Appbar/Appbar'
 
 const useStyles = makeStyles((theme) => ({
@@ -45,7 +44,6 @@ const validationSchemaSecond = yup.object({
 export const SignIn = () => {
   const classes = useStyles()
   const { enqueueSnackbar } = useSnackbar()
-  const history = useHistory()
 
   const [secondForm, setSecondForm] = useState(false)
   const [sendCode, setSendCode] = useState<any | null>(null)
@@ -100,7 +98,7 @@ export const SignIn = () => {
             }),
           }
 
-          fetch('http://77.234.215.138:18080/user-service/login', data as RequestInit)
+          fetch(`${process.env.API}/user-service/login`, data as RequestInit)
             .then((resp) => {
               if (resp.status === 200) {
                 resp.json().then((json) => {
@@ -110,7 +108,6 @@ export const SignIn = () => {
                 })
               } else {
                 enqueueSnackbar(`Ошибка при попытке авторизации`, { variant: 'error' })
-                console.error('Ошибка при попытке авторизации')
               }
             })
             .catch((err) => {
@@ -181,7 +178,12 @@ export const SignIn = () => {
                       error={formState1.touched.phone && Boolean(formState1.errors.phone)}
                       helperText={formState1.touched.phone && formState1.errors.phone}
                     />
-                    <Button color='primary' variant='contained' fullWidth type='submit' className={classes.submit}>
+                    <Button color='primary'
+                            variant='contained'
+                            fullWidth
+                            type='submit'
+                            className={classes.submit}
+                    >
                       Submit
                     </Button>
                   </form>

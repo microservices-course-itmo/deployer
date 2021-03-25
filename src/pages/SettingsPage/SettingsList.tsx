@@ -8,39 +8,39 @@ import { useSnackbar } from 'notistack'
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     main: {
+      backgroundColor: '#FFFFFF',
+      height: '100%',
       margin: 0,
       padding: 0,
       width: '100%',
-      height: '100%',
-      backgroundColor: '#FFFFFF',
     },
     root: {
-      textAlign: 'center',
-      width: '600px',
       height: '600px',
-      position: 'absolute',
-      top: '35%',
       left: '45%',
       margin: '-200px 0 0 -200px',
+      position: 'absolute',
+      textAlign: 'center',
+      top: '35%',
+      width: '600px',
     },
     control: {
-      width: '250px',
-      height: '250px',
-      position: 'absolute',
-      top: '185px',
-      left: '45px',
-      right: '5px',
       bottom: '185px',
+      height: '250px',
+      left: '45px',
+      position: 'absolute',
+      right: '5px',
+      top: '185px',
+      width: '250px',
     },
     left: {
       float: 'left',
-      width: '300px',
       height: '600px',
+      width: '300px',
     },
     right: {
       float: 'right',
-      width: '300px',
       height: '600px',
+      width: '300px',
     },
     textfields: {
       padding: theme.spacing(1),
@@ -49,19 +49,19 @@ const useStyles = makeStyles((theme: Theme) =>
       padding: theme.spacing(1),
     },
     control2: {
-      width: '250px',
-      height: '250px',
-      position: 'absolute',
-      top: '200px',
       bottom: '180px',
+      height: '250px',
       left: '285px',
+      position: 'absolute',
       right: '615px',
+      top: '200px',
+      width: '250px',
     },
     buttonControl: {
-      top: '-200px',
       bottom: '200px',
       left: '270px',
       right: '270px',
+      top: '-200px',
     },
     iconstyle: {
       fontSize: '50px',
@@ -158,7 +158,10 @@ export const SettingsList = ({ settings }: ISettingsListProps) => {
                   </div>
                 </div>
               </div>
-              <Button className={classes.buttonControl} onClick={onSave} variant='outlined'>
+              <Button className={classes.buttonControl}
+                      onClick={onSave}
+                      variant='outlined'
+              >
                 Save
               </Button>
             </Grid>
