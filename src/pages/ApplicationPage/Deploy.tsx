@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import {
   FormControl,
   Container,
@@ -53,6 +53,9 @@ const useStyles = makeStyles(({ spacing }) => ({
   tables: {
     display: 'flex',
   },
+  formPanel: {
+    marginTop: '85px',
+  },
 }))
 
 export const Deploy = ({ data }: { data: IApplicationData }) => {
@@ -65,6 +68,7 @@ export const Deploy = ({ data }: { data: IApplicationData }) => {
   const [version, setVersion] = React.useState(versions[versions.length - 1])
   const [instanceItems, setInstanceItems] = React.useState<IApplicationInstance[]>(instances)
   const [alias, setAlias] = React.useState('')
+  const [memoryLimit, setMemoryLimit] = React.useState('')
 
   const [mutate] = useMutation(API.deploymentController.deployInstance, {
     onSuccess: (newItems) => {
@@ -87,10 +91,16 @@ export const Deploy = ({ data }: { data: IApplicationData }) => {
     setAlias(event.target.value)
   }
 
+  const handleMemoryLimitChange = (event: React.ChangeEvent<{ value: string }>) => {
+    setMemoryLimit(event.target.value)
+  }
+
   const onClickDeploy = () => {
-    mutate({ alias, version, name: appName })
-    setVersion('')
+    const bytes = parseInt(memoryLimit, 10) || 0
+    mutate({ alias, version, name: appName, memoryBytesLimit: bytes })
+    setVersion(versions[versions.length - 1])
     setAlias('')
+    setMemoryLimit('')
   }
 
   const [secondTableTab, setSecondTableTab] = useState(SecondTableTypes.ENVIRONMENT)
@@ -101,13 +111,13 @@ export const Deploy = ({ data }: { data: IApplicationData }) => {
     <div>
       <Appbar />
       <Container className={classes.formControl}>
-        <Grid container direction='row' justify='space-around' alignItems='center'>
+        <Grid container direction='row' justify='space-around' alignItems='center' className={classes.formPanel}>
           <Grid item>
             <Typography variant='h5'>Description: {description}</Typography>
             <Typography variant='h6'>Last release: {createdAt}</Typography>
           </Grid>
           <Grid item>
-            <InputLabel className={classes.inputLabelStyle}>Version</InputLabel>
+            <InputLabel placeholder='Version' className={classes.inputLabelStyle} />
             <FormControl variant='filled'>
               <Select value={version} onChange={handleVersionChange}>
                 {versions.map((vers) => (
@@ -117,6 +127,7 @@ export const Deploy = ({ data }: { data: IApplicationData }) => {
                 ))}
               </Select>
               <TextField label='Alias' variant='filled' value={alias} onChange={handleAliasChange} />
+              <TextField label='Memory limit' variant='filled' value={memoryLimit} onChange={handleMemoryLimitChange} />
             </FormControl>
           </Grid>
           <Grid item className={classes.buttonContainerStyle}>
