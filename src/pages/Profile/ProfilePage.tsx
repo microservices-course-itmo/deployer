@@ -82,7 +82,6 @@ export const ProfilePage = () => {
 
   useEffect(() => {
     const accessToken = window.localStorage.getItem('accessToken')
-
     if (accessToken) {
       fetch('http://77.234.215.138:18080/user-service/users/me', {
         method: 'GET',
@@ -92,12 +91,11 @@ export const ProfilePage = () => {
       })
         .then((res) => res.json())
         .then((data) => {
-          fetch(`http://77.234.215.138:18080/user-service/users/${data.id}/full`)
-            .then((result) => result.json())
-            .then((info) => {
-              setUserData(info)
-              console.log(info)
-            })
+          return fetch(`http://77.234.215.138:18080/user-service/users/${data.id}/full`)
+        })
+        .then((result) => result.json())
+        .then((info) => {
+          setUserData(info)
         })
         .catch(() => {
           history.replace('/login')
@@ -128,25 +126,25 @@ export const ProfilePage = () => {
               </div>
               <div>
                 <div className={classes.userDetails}>
-                  <span>Phone Number: </span>{' '}
+                  <span>Phone Number: </span>
                   <span>
                     <b>{userData?.phoneNumber || ''}</b>
                   </span>
                 </div>
                 <div className={classes.userDetails}>
-                  <span>Birth date: </span>{' '}
+                  <span>Birth date: </span>
                   <span>
                     <b>{userData?.birthdate || ''}</b>
                   </span>
                 </div>
                 <div className={classes.userDetails}>
-                  <span>City: </span>{' '}
+                  <span>City: </span>
                   <span>
                     <b>{userData?.city.name || ''}</b>
                   </span>
                 </div>
                 <div className={classes.userDetails}>
-                  <span>Role: </span>{' '}
+                  <span>Role: </span>
                   <span>
                     <b>{userData?.role.name || ''}</b>
                   </span>
