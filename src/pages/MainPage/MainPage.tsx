@@ -121,11 +121,12 @@ export const MainPage = () => {
   return (
     <Container>
       <Appbar />
-      <Grid className={classes.wrapper}
-            container
-            direction='row'
-            justify='space-around'
-            alignItems='center'
+      <Grid
+        className={classes.wrapper}
+        container
+        direction='row'
+        justify='space-around'
+        alignItems='center'
       >
         <div className={classes.main}>
           <div style={{ width: '100%' }}>
@@ -140,7 +141,7 @@ export const MainPage = () => {
               value={inputValue}
             />
             {isError ? (
-              <Alert severity='error'>{ ERROR_ALERT }</Alert>
+              <Alert severity='error'>{ERROR_ALERT}</Alert>
             ) : isLoading ? (
               <CircularProgress />
             ) : (
@@ -206,11 +207,12 @@ export const MainPage = () => {
             )}
           </div>
           <div style={{ padding: '23px 0 0 20px' }}>
-            <Button color='primary'
-                    href='/new-app'
-                    variant='contained'
-                    size='large'
-                    style={{ width: '120px' }}
+            <Button
+              color='primary'
+              href='/new-app'
+              variant='contained'
+              size='large'
+              style={{ width: '120px' }}
             >
               New app
             </Button>
