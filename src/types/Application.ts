@@ -25,6 +25,7 @@ export interface IApplicationInstance {
   status: string
   url: string
   alias: string
+  resources?: { [key: string]: string }
 }
 
 export interface IPorts {

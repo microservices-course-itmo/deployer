@@ -63,6 +63,9 @@ const useStyles = makeStyles(({ spacing }) => ({
   tables: {
     display: 'flex',
   },
+  formPanel: {
+    marginTop: '85px',
+  },
 }))
 
 export const Deploy = ({ data }: { data: IApplicationData }) => {
@@ -79,6 +82,7 @@ export const Deploy = ({ data }: { data: IApplicationData }) => {
   const [version, setVersion] = useState(versions[versions.length - 1])
   const [instanceItems, setInstanceItems] = useState<IApplicationInstance[]>(instances)
   const [alias, setAlias] = useState('')
+  const [memoryLimit, setMemoryLimit] = React.useState('')
 
   useEffect(() => {
     const hashValue = hash?.slice(1)
@@ -113,10 +117,16 @@ export const Deploy = ({ data }: { data: IApplicationData }) => {
     setAlias(event.target.value)
   }
 
+  const handleMemoryLimitChange = (event: React.ChangeEvent<{ value: string }>) => {
+    setMemoryLimit(event.target.value)
+  }
+
   const onClickDeploy = () => {
-    mutate({ alias, version, name: appName })
-    setVersion('')
+    const bytes = parseInt(memoryLimit, 10) || 0
+    mutate({ alias, version, name: appName, memoryBytesLimit: bytes })
+    setVersion(versions[versions.length - 1])
     setAlias('')
+    setMemoryLimit('')
   }
 
   const createdAt = (dateCreated ? new Date(dateCreated) : new Date()).toISOString().split('T')[0]
@@ -125,13 +135,13 @@ export const Deploy = ({ data }: { data: IApplicationData }) => {
     <div>
       <Appbar />
       <Container className={classes.formControl}>
-        <Grid container direction='row' justify='space-around' alignItems='center'>
+        <Grid container direction='row' justify='space-around' alignItems='center' className={classes.formPanel}>
           <Grid item>
             <Typography variant='h5'>Description: {description}</Typography>
             <Typography variant='h6'>Last release: {createdAt}</Typography>
           </Grid>
           <Grid item>
-            <InputLabel className={classes.inputLabelStyle}>Version</InputLabel>
+            <InputLabel placeholder='Version' className={classes.inputLabelStyle} />
             <FormControl variant='filled'>
               <Select value={version} onChange={handleVersionChange}>
                 {versions.map((vers) => (
@@ -141,6 +151,7 @@ export const Deploy = ({ data }: { data: IApplicationData }) => {
                 ))}
               </Select>
               <TextField label='Alias' variant='filled' value={alias} onChange={handleAliasChange} />
+              <TextField label='Memory limit' variant='filled' value={memoryLimit} onChange={handleMemoryLimitChange} />
             </FormControl>
           </Grid>
           <Grid item className={classes.buttonContainerStyle}>
@@ -168,17 +179,17 @@ export const Deploy = ({ data }: { data: IApplicationData }) => {
         )}
         {tab === TabTypes.env && (
           <Container>
-            <EnvironmentsTable data={instanceItems} />
+            <EnvironmentsTable data={data} />
           </Container>
         )}
         {tab === TabTypes.ports && (
           <Container>
-            <PortsTable data={instanceItems} />
+            <PortsTable data={data} />
           </Container>
         )}
         {tab === TabTypes.volumes && (
           <Container>
-            <VolumesTable data={instanceItems} />
+            <VolumesTable data={data} />
           </Container>
         )}
       </div>
