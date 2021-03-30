@@ -6,6 +6,7 @@ import {
   Container,
   Grid,
   MenuItem,
+  Modal,
   Select,
   Button,
   InputLabel,
@@ -82,7 +83,8 @@ export const Deploy = ({ data }: { data: IApplicationData }) => {
   const [version, setVersion] = useState(versions[versions.length - 1])
   const [instanceItems, setInstanceItems] = useState<IApplicationInstance[]>(instances)
   const [alias, setAlias] = useState('')
-  const [memoryLimit, setMemoryLimit] = React.useState('')
+  const [memoryLimit, setMemoryLimit] = useState('')
+  const [modalState, setModalState] = useState(false)
 
   useEffect(() => {
     const hashValue = hash?.slice(1)
@@ -140,24 +142,36 @@ export const Deploy = ({ data }: { data: IApplicationData }) => {
             <Typography variant='h5'>Description: {description}</Typography>
             <Typography variant='h6'>Last release: {createdAt}</Typography>
           </Grid>
-          <Grid item>
-            <InputLabel placeholder='Version' className={classes.inputLabelStyle} />
-            <FormControl variant='filled'>
-              <Select value={version} onChange={handleVersionChange}>
-                {versions.map((vers) => (
-                  <MenuItem key={vers} value={vers}>
-                    {vers}
-                  </MenuItem>
-                ))}
-              </Select>
-              <TextField label='Alias' variant='filled' value={alias} onChange={handleAliasChange} />
-              <TextField label='Memory limit' variant='filled' value={memoryLimit} onChange={handleMemoryLimitChange} />
-            </FormControl>
-          </Grid>
           <Grid item className={classes.buttonContainerStyle}>
-            <Button variant='contained' disabled={!version} onClick={onClickDeploy}>
+            <Button variant='contained' disabled={!version} onClick={setModalState(true)}>
               Deploy
             </Button>
+            <Modal open={modalState} onClose={setModalState(false)}>
+              <Grid item>
+                <InputLabel placeholder='Version' className={classes.inputLabelStyle} />
+                <FormControl variant='filled'>
+                  <Select value={version} onChange={handleVersionChange}>
+                    {versions.map((vers) => (
+                      <MenuItem key={vers} value={vers}>
+                        {vers}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                  <TextField label='Alias' variant='filled' value={alias} onChange={handleAliasChange} />
+                  <TextField
+                    label='Memory limit'
+                    variant='filled'
+                    value={memoryLimit}
+                    onChange={handleMemoryLimitChange}
+                  />
+                </FormControl>
+              </Grid>
+              <Grid>
+                <Button variant='contained' disabled={!version} onClick={onClickDeploy}>
+                  Deploy
+                </Button>
+              </Grid>
+            </Modal>
           </Grid>
         </Grid>
         <Container>
