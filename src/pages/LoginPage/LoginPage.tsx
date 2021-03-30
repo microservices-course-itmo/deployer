@@ -98,7 +98,7 @@ export const SignIn = () => {
             }),
           }
 
-          fetch(`${process.env.API}/user-service/login`, data as RequestInit)
+          fetch(`${process.env.API_USER_SERVICE}/user-service/login`, data as RequestInit)
             .then((resp) => {
               if (resp.status === 200) {
                 resp.json().then((json) => {
