@@ -139,10 +139,10 @@ export const Deploy = ({ data }: { data: IApplicationData }) => {
       <Container className={classes.formControl}>
         <Grid container direction='row' justify='space-around' alignItems='center' className={classes.formPanel}>
           <Grid item className={classes.buttonContainerStyle}>
-            <Button variant='contained' disabled={!version} onClick={setModalState(true)}>
+            <Button variant='contained' disabled={!version} onClick={() => setModalState(true)}>
               Deploy
             </Button>
-            <Modal open={modalState} onClose={setModalState(false)}>
+            <Modal open={modalState} onClose={() => setModalState(false)}>
               <Grid item>
                 <Typography variant='h5'>Description: {description}</Typography>
                 <Typography variant='h6'>Last release: {createdAt}</Typography>
