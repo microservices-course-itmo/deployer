@@ -96,6 +96,7 @@ export const MainPage = () => {
         }
         return items
       })
+      .then((names) => names.filter(Boolean))
       .then((items) => {
         return Promise.all(
           items.map((application: string) => {
