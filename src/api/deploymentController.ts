@@ -7,9 +7,10 @@ interface IDeployInstance {
   name: string
   version: string
   memoryBytesLimit: number
+  attributes: { testInstance: boolean; stopTraffic: boolean }
 }
 
-export const deployInstance = ({ alias, name, version, memoryBytesLimit }: IDeployInstance) => {
+export const deployInstance = ({ alias, name, version, memoryBytesLimit, attributes }: IDeployInstance) => {
   const accessToken = window.localStorage.getItem('accessToken')
 
   return fetch(getRoute('/applicationInstance/deploy'), {
@@ -26,6 +27,7 @@ export const deployInstance = ({ alias, name, version, memoryBytesLimit }: IDepl
       resources: {
         memoryBytesLimit,
       },
+      attributes,
     }),
   }).then((resp) => resp.json())
 }

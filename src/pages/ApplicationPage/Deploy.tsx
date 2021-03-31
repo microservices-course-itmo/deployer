@@ -2,7 +2,6 @@
 // @ts-nocheck
 import React, { useEffect, useState } from 'react'
 import {
-  FormControl,
   Container,
   Grid,
   MenuItem,
@@ -19,7 +18,6 @@ import {
   TableRow,
   TableBody,
   TableCell,
-  FormControlLabel,
   Checkbox,
 } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
@@ -172,10 +170,17 @@ export const Deploy = ({ data }: { data: IApplicationData }) => {
 
   const onClickDeploy = () => {
     const bytes = parseInt(memoryLimit, 10) || 0
-    mutate({ alias, version, name: appName, memoryBytesLimit: bytes })
-    setVersion(versions[versions.length - 1])
-    setAlias('')
-    setMemoryLimit('')
+    mutate({ alias, version, name: appName, memoryBytesLimit: bytes, attributes: attributesState }).then(() => {
+      setVersion(versions[versions.length - 1])
+      setAlias('')
+      setMemoryLimit('')
+      setAttributeState({
+        testInstance: false,
+        stopTraffic: false,
+      })
+
+      setModalState(false)
+    })
   }
 
   const createdAt = (dateCreated ? new Date(dateCreated) : new Date()).toISOString().split('T')[0]
@@ -267,7 +272,6 @@ export const Deploy = ({ data }: { data: IApplicationData }) => {
                       onChange={handleChangeAttributes}
                       name='stopTraffic'
                     />
-                    {console.log(attributesState.stopTraffic)}
                   </TableCell>
                 </TableRow>
               </TableBody>
@@ -277,7 +281,7 @@ export const Deploy = ({ data }: { data: IApplicationData }) => {
               <TextField label='Alias' variant='outlined' value={alias} onChange={handleAliasChange} />
             </div>
             <br />
-            <Button variant='contained' color='primary' className={classes.deployBtn}>
+            <Button onClick={onClickDeploy} variant='contained' color='primary' className={classes.deployBtn}>
               Deploy
             </Button>
           </div>
