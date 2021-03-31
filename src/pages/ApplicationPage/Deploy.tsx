@@ -140,11 +140,11 @@ export const Deploy = ({ data }: { data: IApplicationData }) => {
   }, [])
 
   const [mutate] = useMutation(API.deploymentController.deployInstance, {
-    onSuccess: (newItems) => {
-      if (newItems.status !== 500) {
-        setInstanceItems((items) => [...items, newItems])
+    onSuccess: (newItem) => {
+      if (newItem.status !== 500) {
+        setInstanceItems((items) => [...items.filter((item) => item.alias !== newItem.alias), newItem])
       } else {
-        enqueueSnackbar(`${newItems.status} - ${newItems.error}`, { variant: 'error' })
+        enqueueSnackbar(`${newItem.status} - ${newItem.error}`, { variant: 'error' })
       }
     },
     onError: (error: Error) => {
