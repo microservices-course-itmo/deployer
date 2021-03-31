@@ -18,8 +18,12 @@ const Router = () => {
       fetch(`http://77.234.215.138:18080/user-service/validate?token=${accessToken}`, {
         method: 'POST',
       })
-        .then(() => {
-          setIsAuthenticated(true)
+        .then((res) => {
+          if (res.ok) {
+            setIsAuthenticated(true)
+          } else {
+            window.localStorage.clear()
+          }
         })
         .finally(() => {
           setIsAuthenticationChecked(true)
@@ -31,6 +35,7 @@ const Router = () => {
 
   return isAuthenticationChecked ? (
     <BrowserRouter>
+      {console.log(isAuthenticated)}
       <Switch>
         <Route exact path='/new-app' render={() => (isAuthenticated ? <NewAppPage /> : <Redirect to='/login' />)} />
         <Route exact path='/settings' render={() => (isAuthenticated ? <Settings /> : <Redirect to='/login' />)} />
