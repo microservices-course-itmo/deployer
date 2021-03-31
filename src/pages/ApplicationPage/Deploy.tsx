@@ -2,10 +2,10 @@
 // @ts-nocheck
 import React, { useEffect, useState } from 'react'
 import {
-  FormControl,
   Container,
   Grid,
   MenuItem,
+  Modal,
   Select,
   Button,
   InputLabel,
@@ -13,6 +13,12 @@ import {
   Tab,
   Tabs,
   Typography,
+  Table,
+  TableHead,
+  TableRow,
+  TableBody,
+  TableCell,
+  Checkbox,
 } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
 import { useMutation } from 'react-query'
@@ -36,8 +42,12 @@ const TabTypes = {
 
 const useStyles = makeStyles(({ spacing }) => ({
   formControl: {
+    display: 'flex',
+    flexDirection: 'row',
     marginTop: '5%',
     marginBottom: '1%',
+    justifyContent: 'space-between',
+    alignItems: 'center',
   },
   hrStyle: {
     marginBottom: '1%',
@@ -66,6 +76,32 @@ const useStyles = makeStyles(({ spacing }) => ({
   formPanel: {
     marginTop: '85px',
   },
+  deployBtn: {
+    width: '150px',
+  },
+  modalContainer: {
+    position: 'absolute',
+    float: 'left',
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'space-around',
+    alignItems: 'center',
+    left: '50%',
+    top: '50%',
+    transform: 'translate(-50%, -50%)',
+    width: '550px',
+    backgroundColor: '#f5f5f5',
+    outline: 'none',
+    borderRadius: '12px',
+    padding: '25px 70px',
+    boxShadow: '5px 3px 15px 3px rgba(63,81,181,0.50)',
+  },
+  attributes: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
 }))
 
 export const Deploy = ({ data }: { data: IApplicationData }) => {
@@ -82,7 +118,14 @@ export const Deploy = ({ data }: { data: IApplicationData }) => {
   const [version, setVersion] = useState(versions[versions.length - 1])
   const [instanceItems, setInstanceItems] = useState<IApplicationInstance[]>(instances)
   const [alias, setAlias] = useState('')
-  const [memoryLimit, setMemoryLimit] = React.useState('')
+  const [memoryLimit, setMemoryLimit] = useState('')
+  const [modalState, setModalState] = useState(false)
+  const attributes = ['Test instance', 'Stop traffic']
+  const [attributesState, setAttributeState] = useState({
+    testInstance: false,
+    stopTraffic: false,
+  })
+  const resources = ['Memory limit']
 
   useEffect(() => {
     const hashValue = hash?.slice(1)
@@ -121,12 +164,23 @@ export const Deploy = ({ data }: { data: IApplicationData }) => {
     setMemoryLimit(event.target.value)
   }
 
+  const handleChangeAttributes = (event) => {
+    setAttributeState({ ...attributesState, [event.target.name]: event.target.checked })
+  }
+
   const onClickDeploy = () => {
     const bytes = parseInt(memoryLimit, 10) || 0
-    mutate({ alias, version, name: appName, memoryBytesLimit: bytes })
-    setVersion(versions[versions.length - 1])
-    setAlias('')
-    setMemoryLimit('')
+    mutate({ alias, version, name: appName, memoryBytesLimit: bytes, attributes: attributesState }).then(() => {
+      setVersion(versions[versions.length - 1])
+      setAlias('')
+      setMemoryLimit('')
+      setAttributeState({
+        testInstance: false,
+        stopTraffic: false,
+      })
+
+      setModalState(false)
+    })
   }
 
   const createdAt = (dateCreated ? new Date(dateCreated) : new Date()).toISOString().split('T')[0]
@@ -135,39 +189,103 @@ export const Deploy = ({ data }: { data: IApplicationData }) => {
     <div>
       <Appbar />
       <Container className={classes.formControl}>
-        <Grid container direction='row' justify='space-around' alignItems='center' className={classes.formPanel}>
-          <Grid item>
-            <Typography variant='h5'>Description: {description}</Typography>
-            <Typography variant='h6'>Last release: {createdAt}</Typography>
-          </Grid>
-          <Grid item>
-            <InputLabel placeholder='Version' className={classes.inputLabelStyle} />
-            <FormControl variant='filled'>
-              <Select value={version} onChange={handleVersionChange}>
-                {versions.map((vers) => (
-                  <MenuItem key={vers} value={vers}>
-                    {vers}
-                  </MenuItem>
+        <Tabs value={tab} onChange={(e, newTab) => setTab(newTab)}>
+          <Tab value={TabTypes.app} label='APP' />
+          <Tab value={TabTypes.env} label='ENV' />
+          <Tab value={TabTypes.ports} label='PORTS' />
+          <Tab value={TabTypes.volumes} label='VOLUMES' />
+        </Tabs>
+        <div>
+          <Typography variant='h7'>Description:</Typography>
+          <br />
+          <Typography variant='h6'>{description}</Typography>
+        </div>
+        <div>
+          <Typography variant='h7'>Last release:</Typography>
+          <br />
+          <Typography variant='h6'>{createdAt}</Typography>
+        </div>
+
+        <Button
+          className={classes.deployBtn}
+          variant='contained'
+          disabled={!version}
+          onClick={() => setModalState(true)}
+        >
+          Deploy
+        </Button>
+        <Modal open={modalState} onClose={() => setModalState(false)}>
+          <div className={classes.modalContainer}>
+            <Grid container direction='row' justify='space-between' alignItems='center'>
+              <TextField disabled label='Name' variant='outlined' value={appName} />
+              <div>
+                <InputLabel htmlFor='app_version' className={classes.inputLabelStyle}>
+                  Version
+                </InputLabel>
+                <Select inputProps={{ id: 'app_version' }} value={version} onChange={handleVersionChange}>
+                  {versions.map((vers) => (
+                    <MenuItem key={vers} value={vers}>
+                      {vers}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </div>
+            </Grid>
+            <Table>
+              <TableHead>
+                <TableCell>Resources</TableCell>
+                <TableCell align='right'>Quantity</TableCell>
+              </TableHead>
+              <TableBody>
+                {resources.map((resource) => (
+                  <TableRow key={resource}>
+                    <TableCell>{resource}</TableCell>
+                    <TableCell align='right'>
+                      <TextField variant='outlined' value={memoryLimit} onChange={handleMemoryLimitChange} />
+                    </TableCell>
+                  </TableRow>
                 ))}
-              </Select>
-              <TextField label='Alias' variant='filled' value={alias} onChange={handleAliasChange} />
-              <TextField label='Memory limit' variant='filled' value={memoryLimit} onChange={handleMemoryLimitChange} />
-            </FormControl>
-          </Grid>
-          <Grid item className={classes.buttonContainerStyle}>
-            <Button variant='contained' disabled={!version} onClick={onClickDeploy}>
+              </TableBody>
+            </Table>
+            <br />
+            <Table>
+              <TableHead>
+                <TableCell>Attributes</TableCell>
+                <TableCell align='right'>Select</TableCell>
+              </TableHead>
+              <TableBody>
+                <TableRow>
+                  <TableCell>Test instance</TableCell>
+                  <TableCell align='right'>
+                    <Checkbox
+                      checked={attributesState.testInstance}
+                      onChange={handleChangeAttributes}
+                      name='testInstance'
+                    />
+                  </TableCell>
+                </TableRow>
+                <TableRow>
+                  <TableCell>Stop traffic</TableCell>
+                  <TableCell align='right'>
+                    <Checkbox
+                      checked={attributesState.stopTraffic}
+                      onChange={handleChangeAttributes}
+                      name='stopTraffic'
+                    />
+                  </TableCell>
+                </TableRow>
+              </TableBody>
+            </Table>
+            <br />
+            <div>
+              <TextField label='Alias' variant='outlined' value={alias} onChange={handleAliasChange} />
+            </div>
+            <br />
+            <Button onClick={onClickDeploy} variant='contained' color='primary' className={classes.deployBtn}>
               Deploy
             </Button>
-          </Grid>
-        </Grid>
-        <Container>
-          <Tabs value={tab} onChange={(e, newTab) => setTab(newTab)}>
-            <Tab value={TabTypes.app} label='APP' />
-            <Tab value={TabTypes.env} label='ENV' />
-            <Tab value={TabTypes.ports} label='PORTS' />
-            <Tab value={TabTypes.volumes} label='VOLUMES' />
-          </Tabs>
-        </Container>
+          </div>
+        </Modal>
       </Container>
       <hr className={classes.hrStyle} />
       <div style={{ display: 'flex' }}>
