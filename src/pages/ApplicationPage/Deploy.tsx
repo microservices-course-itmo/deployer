@@ -99,7 +99,7 @@ export const Deploy = ({ data }: { data: IApplicationData }) => {
   const [mutate] = useMutation(API.deploymentController.deployInstance, {
     onSuccess: (newItem) => {
       if (newItem.status !== 500) {
-        setInstanceItems((items) => [...items].filter((item) => item.alias !== newItem.alias).concat([newItem]))
+        setInstanceItems((items) => [...items.filter((item) => item.alias !== newItem.alias), newItem])
       } else {
         enqueueSnackbar(`${newItem.status} - ${newItem.error}`, { variant: 'error' })
       }
