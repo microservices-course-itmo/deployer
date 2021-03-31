@@ -5,7 +5,7 @@ import { Appbar } from '../Appbar/Appbar'
 import { SettingsList } from './SettingsList'
 
 export const Settings = () => {
-  const accessToken = window.localStorage.getItem('accessToken') || '0'
+  const accessToken = window.localStorage.getItem('accessToken')
 
   const { isLoading, isError, data } = useQuery<{ [key: string]: string }>('applicationSettings', () =>
     fetch(`${process.env.API}/settings/get`, {

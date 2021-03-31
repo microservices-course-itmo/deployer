@@ -19,6 +19,7 @@ const prepareData = (values: {
   name: string
 }): IApplicationData => {
   return {
+    ...values,
     createdBy: 'User',
     dateCreated: `${new Date().getTime().toFixed()}`,
     environmentVariables: [],
@@ -29,7 +30,6 @@ const prepareData = (values: {
     templateVersion: '0',
     versions: [],
     volumes: [],
-    ...values,
   }
 }
 
