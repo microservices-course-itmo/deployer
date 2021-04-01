@@ -44,7 +44,7 @@ const useStyles = makeStyles(({ spacing }) => ({
   formControl: {
     display: 'flex',
     flexDirection: 'row',
-    marginTop: '5%',
+    marginTop: '64px',
     marginBottom: '1%',
     justifyContent: 'space-between',
     alignItems: 'center',

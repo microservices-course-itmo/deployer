@@ -185,7 +185,7 @@ export const MainPage = () => {
                         const { dateCreated, name, id, instances } = item
                         return (
                           <ListItem key={id}>
-                            <Link className={classes.columnName} to={`/app/${name}`}>
+                            <Link style={{ textDecoration: 'none' }} className={classes.columnName} to={`/app/${name}`}>
                               {name}
                             </Link>
                             <div className={classes.columnDate}>
@@ -237,11 +237,9 @@ export const MainPage = () => {
               onClick={(e) => {
                 e.preventDefault()
                 e.stopPropagation()
-                console.log('ASDS')
                 mutate(modalState.app).then(() => {
                   refetch()
                   setModalState({ visible: false })
-                  // setSearchItems(searchItems.filter((app) => app.id !== id))
                 })
               }}
             >
