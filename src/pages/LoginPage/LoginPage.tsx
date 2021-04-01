@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import firebase from 'firebase'
@@ -8,7 +8,6 @@ import { useFormik } from 'formik'
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined'
 import { Avatar, Button, Container, CssBaseline, TextField, Typography } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
-import { useHistory } from 'react-router-dom'
 
 import { Appbar } from '../Appbar/Appbar'
 
