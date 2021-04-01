@@ -35,7 +35,6 @@ const Router = () => {
 
   return isAuthenticationChecked ? (
     <BrowserRouter>
-      {console.log(isAuthenticated)}
       <Switch>
         <Route exact path='/new-app' render={() => (isAuthenticated ? <NewAppPage /> : <Redirect to='/login' />)} />
         <Route exact path='/settings' render={() => (isAuthenticated ? <Settings /> : <Redirect to='/login' />)} />
