@@ -76,6 +76,10 @@ export const ApplicationInstanceRow = ({ data }: IApplicationInstanceTableProps)
         })
           .then((res) => res.json())
           .then((newData) => setInstanceData(newData))
+          .catch(() => {
+            clearInterval(interval)
+            setInstanceData(null)
+          })
       }
     }, 3500)
     return () => {
