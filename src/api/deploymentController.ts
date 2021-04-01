@@ -69,6 +69,19 @@ export const removeInstance = (id: string) => {
   }).then((resp) => resp.json())
 }
 
+export const changeInstanceStatus = ({ id, status }: { id: string; status: string }) => {
+  const accessToken = window.localStorage.getItem('accessToken')
+
+  return fetch(getRoute(`/applicationInstance/${status}/${id}`), {
+    method: 'POST',
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+      'Content-Type': 'application/json',
+      'Accept-Encoding': 'gzip, deflate',
+    },
+  }).then((resp) => resp.json())
+}
+
 export const getApplicationNames = () => {
   const accessToken = window.localStorage.getItem('accessToken')
 

@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { makeStyles } from '@material-ui/core/styles'
 import { TableCell, TableRow, IconButton, Tooltip, CircularProgress, Grid } from '@material-ui/core'
 import { IApplicationInstance } from 'types/Application'
@@ -48,7 +48,7 @@ const AVAILABLE_BUTTONS: Record<string, string[]> = {
   FAILED: ['restart', 'remove'],
   STARTING: ['stop', 'remove'],
   STOPPED: ['start', 'restart', 'remove'],
-  REMOVED: [],
+  REMOVED: ['remove'],
   RESTARTING: ['stop', 'remove'],
 }
 
@@ -65,7 +65,29 @@ export const ApplicationInstanceRow = ({ data }: IApplicationInstanceTableProps)
   const { enqueueSnackbar } = useSnackbar()
   const [instanceData, setInstanceData] = useState<IApplicationInstance | null>(data)
 
-  const [mutate] = useMutation(API.deploymentController.removeInstance, {
+  useEffect(() => {
+    const accessToken = window.localStorage.getItem('accessToken')
+    const interval = setInterval(() => {
+      if (instanceData) {
+        fetch(`${process.env.API}/applicationInstances/getSingleInstance/${instanceData.id}`, {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        })
+          .then((res) => res.json())
+          .then((newData) => setInstanceData(newData))
+          .catch(() => {
+            clearInterval(interval)
+            setInstanceData(null)
+          })
+      }
+    }, 3500)
+    return () => {
+      clearInterval(interval)
+    }
+  }, [])
+
+  const [removeInstance] = useMutation(API.deploymentController.removeInstance, {
     onSuccess: () => {
       setInstanceData(null)
     },
@@ -74,19 +96,31 @@ export const ApplicationInstanceRow = ({ data }: IApplicationInstanceTableProps)
     },
   })
 
-  const classes = useStyles()
-
   const [loadingType, setLoadingType] = useState('')
+
+  const [changeInstanceStatus] = useMutation(API.deploymentController.changeInstanceStatus, {
+    onSuccess: (newInstanceData) => {
+      setInstanceData(newInstanceData)
+      setLoadingType('')
+    },
+    onError: (error: Error) => {
+      enqueueSnackbar(`${error.name} - ${error.message}`, { variant: 'error' })
+    },
+  })
+
+  const classes = useStyles()
 
   const handleClickInstance = (action: string) => {
     setLoadingType(action)
 
     if (action === 'remove') {
-      mutate(instanceData!.id)
+      removeInstance(instanceData!.id)
+      return
     }
 
-    delay(2000).finally(() => {
-      setLoadingType('')
+    changeInstanceStatus({
+      id: instanceData!.id,
+      status: action,
     })
   }
 
