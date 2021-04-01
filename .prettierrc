@@ -1,4 +1,5 @@
 {
+  "endOfLine": "auto",
   "tabWidth": 2,
   "useTabs": false,
   "semi": false,
@@ -6,5 +7,6 @@
   "arrowParens": "always",
   "bracketSpacing": true,
   "jsxSingleQuote": true,
-  "jsxBracketSameLine": false
+  "jsxBracketSameLine": false,
+  "printWidth": 120
 }
