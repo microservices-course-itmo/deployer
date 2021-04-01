@@ -115,9 +115,13 @@ export const MainPage = () => {
         return items
       })
       .then((names) => names.filter(Boolean))
+
+      // Request all apps.
       .then((items) => Promise.allSettled(items.map((application: string) => getAppByName(application))))
+      // Remove apps with error statuses.
+      .then((items) => items.filter((i) => i.status === 'fulfilled').map(i => i.value)))
+
       .then((items) => {
-        console.log(items)
         setSearchItems(items)
         return items
       })
