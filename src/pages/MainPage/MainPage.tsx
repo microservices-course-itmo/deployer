@@ -1,14 +1,18 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
+// @ts-nocheck
+
 import React, { useState } from 'react'
 import { createStyles, makeStyles } from '@material-ui/core/styles'
 import { useSnackbar } from 'notistack'
 import CheckIcon from '@material-ui/icons/Check'
 import CloseIcon from '@material-ui/icons/Close'
 import List from '@material-ui/core/List'
-import ListItem, { ListItemProps } from '@material-ui/core/ListItem'
+import ListItem from '@material-ui/core/ListItem'
 import { Button, CircularProgress, Container, Grid, TextField, Modal } from '@material-ui/core'
 import { Link } from 'react-router-dom'
 import { useMutation, useQuery } from 'react-query'
 import Alert from '@material-ui/lab/Alert'
+import { getAppByName, getApplicationNames } from '../../api/deploymentController'
 import { Appbar } from '../Appbar/Appbar'
 import { IApplicationData } from '../../types/Application'
 import API from '../../api'
@@ -77,19 +81,15 @@ const useStyles = makeStyles(() =>
 const filterList = (value: string, list: IApplicationData[]) =>
   list.filter((item) => item.name.toLowerCase().includes(value.replaceAll(' ', '').toLowerCase()))
 
-const ListItemLink = (props: ListItemProps<Link, { button?: true }>) => {
-  return <ListItem button component={Link} {...props} />
-}
-
 export const MainPage = () => {
   const classes = useStyles()
+  const { enqueueSnackbar } = useSnackbar()
 
   const [inputValue, setInputValue] = useState('')
   const [searchItems, setSearchItems] = useState<IApplicationData[]>([])
   const [modalState, setModalState] = useState<{ visible: boolean; app?: string }>({
     visible: false,
   })
-  const { enqueueSnackbar } = useSnackbar()
 
   const [mutate] = useMutation(API.applicationController.removeAppByName, {
     onSuccess: (data) => {
@@ -105,37 +105,27 @@ export const MainPage = () => {
     },
   })
 
-  const { isLoading, isError, data, refetch } = useQuery<IApplicationData[]>('applicationNames', () => {
-    const accessToken = window.localStorage.getItem('accessToken')
-    return fetch(`${process.env.API}/application/names`, {
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-      },
-    })
-      .then((res) => res.json())
+  const { isLoading, isError, data, refetch } = useQuery<IApplicationData[]>('applicationNames', () =>
+    getApplicationNames()
       .then((items) => {
         if (!items.length) {
           throw new Error('Not Found')
         }
+
         return items
       })
       .then((names) => names.filter(Boolean))
+
+      // Request all apps.
+      .then((items) => Promise.allSettled(items.map((application: string) => getAppByName(application))))
+      // Remove apps with error statuses.
+      .then((items) => items.filter((i) => i.status === 'fulfilled').map((i) => i.value))
+
       .then((items) => {
-        return Promise.all(
-          items.map((application: string) => {
-            return fetch(`${process.env.API}/application/get/byName/${application}`, {
-              headers: {
-                Authorization: `Bearer ${accessToken}`,
-              },
-            }).then((res) => res.json())
-          })
-        )
-      })
-      .then((items: any[]) => {
         setSearchItems(items)
         return items
       })
-  })
+  )
 
   const handleValueChange = (event: React.ChangeEvent<{ value: unknown }>) => {
     const { value } = event.target

@@ -48,6 +48,7 @@ export const updateData = (newData: IApplicationData) => {
 
 export const getAppByName = (name: string) => {
   const accessToken = window.localStorage.getItem('accessToken')
+
   return fetch(getRoute(`/application/get/byName/${name}`), {
     headers: {
       Authorization: `Bearer ${accessToken}`,
@@ -77,6 +78,16 @@ export const changeInstanceStatus = ({ id, status }: { id: string; status: strin
       Authorization: `Bearer ${accessToken}`,
       'Content-Type': 'application/json',
       'Accept-Encoding': 'gzip, deflate',
+    },
+  }).then((resp) => resp.json())
+}
+
+export const getApplicationNames = () => {
+  const accessToken = window.localStorage.getItem('accessToken')
+
+  return fetch(getRoute(`/application/names`), {
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
     },
   }).then((resp) => resp.json())
 }
