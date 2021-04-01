@@ -5,7 +5,7 @@ import CheckIcon from '@material-ui/icons/Check'
 import CloseIcon from '@material-ui/icons/Close'
 import List from '@material-ui/core/List'
 import ListItem, { ListItemProps } from '@material-ui/core/ListItem'
-import { Button, CircularProgress, Container, Grid, TextField } from '@material-ui/core'
+import { Button, CircularProgress, Container, Grid, TextField, Modal } from '@material-ui/core'
 import { Link } from 'react-router-dom'
 import { useMutation, useQuery } from 'react-query'
 import Alert from '@material-ui/lab/Alert'
@@ -50,6 +50,27 @@ const useStyles = makeStyles(() =>
       backgroundColor: 'red',
       color: 'white',
     },
+    cancelBtn: {
+      backgroundColor: 'green',
+      color: 'white',
+    },
+    modalContainer: {
+      position: 'absolute',
+      float: 'left',
+      display: 'flex',
+      flexDirection: 'column',
+      justifyContent: 'space-around',
+      alignItems: 'center',
+      left: '50%',
+      top: '50%',
+      transform: 'translate(-50%, -50%)',
+      width: '550px',
+      backgroundColor: '#f5f5f5',
+      outline: 'none',
+      borderRadius: '12px',
+      padding: '25px 70px',
+      boxShadow: '5px 3px 15px 3px rgba(63,81,181,0.50)',
+    },
   })
 )
 
@@ -65,6 +86,9 @@ export const MainPage = () => {
 
   const [inputValue, setInputValue] = useState('')
   const [searchItems, setSearchItems] = useState<IApplicationData[]>([])
+  const [modalState, setModalState] = useState<{ visible: boolean; app?: string }>({
+    visible: false,
+  })
   const { enqueueSnackbar } = useSnackbar()
 
   const [mutate] = useMutation(API.applicationController.removeAppByName, {
@@ -162,8 +186,10 @@ export const MainPage = () => {
                         const { dateCreated, name, id, instances } = item
 
                         return (
-                          <ListItemLink to={`/app/${name}`} key={id}>
-                            <div className={classes.columnName}>{name}</div>
+                          <ListItem key={id}>
+                            <Link className={classes.columnName} to={`/app/${name}`}>
+                              {name}
+                            </Link>
                             <div className={classes.columnDate}>
                               {new Date(dateCreated).toLocaleDateString('ru', {
                                 year: 'numeric',
@@ -177,15 +203,7 @@ export const MainPage = () => {
                             <div className={classes.columnRemove}>
                               <Button
                                 className={classes.removeBtn}
-                                onClick={(e) => {
-                                  e.preventDefault()
-                                  e.stopPropagation()
-                                  console.log('ASDS')
-                                  mutate(name).then(() => {
-                                    refetch()
-                                    // setSearchItems(searchItems.filter((app) => app.id !== id))
-                                  })
-                                }}
+                                onClick={(e) => setModalState({ visible: true, app: name })}
                               >
                                 DELETE
                               </Button>
@@ -196,7 +214,7 @@ export const MainPage = () => {
                             <div className={classes.columnStopped}>
                               {instances.reduce((count, curr) => (curr.status === 'STOPPED' ? count + 1 : count), 0)}
                             </div>
-                          </ListItemLink>
+                          </ListItem>
                         )
                       })}
                   </div>
@@ -212,6 +230,32 @@ export const MainPage = () => {
           </div>
         </div>
       </Grid>
+      <Modal open={modalState.visible} onClose={() => setModalState({ visible: false })}>
+        <div className={classes.modalContainer}>
+          <h2>Do you really want to remove app "{modalState.app}"</h2>
+          <Grid container direction='row' justify='center' alignItems='center'>
+            <Button
+              className={classes.removeBtn}
+              onClick={(e) => {
+                e.preventDefault()
+                e.stopPropagation()
+                console.log('ASDS')
+                mutate(modalState.app).then(() => {
+                  refetch()
+                  setModalState({ visible: false })
+                  // setSearchItems(searchItems.filter((app) => app.id !== id))
+                })
+              }}
+            >
+              DELETE
+            </Button>
+            <div style={{ width: 12 }} />
+            <Button className={classes.cancelBtn} onClick={(e) => setModalState({ visible: false })}>
+              CANCEL
+            </Button>
+          </Grid>
+        </div>
+      </Modal>
     </Container>
   )
 }
