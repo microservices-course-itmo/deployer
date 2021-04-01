@@ -1,9 +1,11 @@
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-nocheck
 import React, { useEffect, useState } from 'react'
 import {
-  FormControl,
   Container,
   Grid,
   MenuItem,
+  Modal,
   Select,
   Button,
   InputLabel,
@@ -11,23 +13,41 @@ import {
   Tab,
   Tabs,
   Typography,
+  Table,
+  TableHead,
+  TableRow,
+  TableBody,
+  TableCell,
+  Checkbox,
 } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
 import { useMutation } from 'react-query'
-import { useParams } from 'react-router-dom'
+import { useLocation, useParams, useHistory } from 'react-router-dom'
 import { useSnackbar } from 'notistack'
 import { IApplicationInstance, IApplicationData } from '../../types/Application'
 import { InstancesTable } from './InstancesTable/InstancesTable'
 import { HistoryLog } from './HistoryLog/HistoryLog'
 import API from '../../api'
-import { SecondTable } from './SecondTable'
-import { SecondTableTypes } from './types'
 import { Appbar } from '../Appbar/Appbar'
+import { PortsTable } from './SecondTable/PortsTable'
+import { EnvironmentsTable } from './SecondTable/EnvironmentsTable'
+import { VolumesTable } from './SecondTable/VolumesTable'
+
+const TabTypes = {
+  app: 'app',
+  env: 'env',
+  ports: 'ports',
+  volumes: 'volumes',
+}
 
 const useStyles = makeStyles(({ spacing }) => ({
   formControl: {
+    display: 'flex',
+    flexDirection: 'row',
     marginTop: '5%',
     marginBottom: '1%',
+    justifyContent: 'space-between',
+    alignItems: 'center',
   },
   hrStyle: {
     marginBottom: '1%',
@@ -53,25 +73,78 @@ const useStyles = makeStyles(({ spacing }) => ({
   tables: {
     display: 'flex',
   },
+  formPanel: {
+    marginTop: '85px',
+  },
+  deployBtn: {
+    width: '150px',
+  },
+  modalContainer: {
+    position: 'absolute',
+    float: 'left',
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'space-around',
+    alignItems: 'center',
+    left: '50%',
+    top: '50%',
+    transform: 'translate(-50%, -50%)',
+    width: '550px',
+    backgroundColor: '#f5f5f5',
+    outline: 'none',
+    borderRadius: '12px',
+    padding: '25px 70px',
+    boxShadow: '5px 3px 15px 3px rgba(63,81,181,0.50)',
+  },
+  attributes: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
 }))
 
 export const Deploy = ({ data }: { data: IApplicationData }) => {
   const { versions = [], instances, dateCreated, description, logs } = data
 
+  const history = useHistory()
   const classes = useStyles()
   const { name: appName } = useParams<{ name: string }>()
   const { enqueueSnackbar } = useSnackbar()
+  const { hash } = useLocation()
 
-  const [version, setVersion] = React.useState(versions[versions.length - 1])
-  const [instanceItems, setInstanceItems] = React.useState<IApplicationInstance[]>(instances)
-  const [alias, setAlias] = React.useState('')
+  const [tab, setTab] = useState()
+
+  const [version, setVersion] = useState(versions[versions.length - 1])
+  const [instanceItems, setInstanceItems] = useState<IApplicationInstance[]>(instances)
+  const [alias, setAlias] = useState('')
+  const [memoryLimit, setMemoryLimit] = useState('')
+  const [modalState, setModalState] = useState(false)
+  const attributes = ['Test instance', 'Stop traffic']
+  const [attributesState, setAttributeState] = useState({
+    testInstance: false,
+    stopTraffic: false,
+  })
+  const resources = ['Memory limit']
+
+  useEffect(() => {
+    const hashValue = hash?.slice(1)
+    if (tab !== hashValue) {
+      history.push({ hash: `#${tab}` })
+    }
+  }, [tab])
+
+  useEffect(() => {
+    const hashValue = hash?.slice(1)
+    setTab(hashValue || TabTypes.app)
+  }, [])
 
   const [mutate] = useMutation(API.deploymentController.deployInstance, {
-    onSuccess: (newItems) => {
-      if (newItems.status !== 500) {
-        setInstanceItems((items) => [...items, newItems])
+    onSuccess: (newItem) => {
+      if (newItem.status !== 500) {
+        setInstanceItems((items) => [...items.filter((item) => item.alias !== newItem.alias), newItem])
       } else {
-        enqueueSnackbar(`${newItems.status} - ${newItems.error}`, { variant: 'error' })
+        enqueueSnackbar(`${newItem.status} - ${newItem.error}`, { variant: 'error' })
       }
     },
     onError: (error: Error) => {
@@ -87,13 +160,28 @@ export const Deploy = ({ data }: { data: IApplicationData }) => {
     setAlias(event.target.value)
   }
 
-  const onClickDeploy = () => {
-    mutate({ alias, version, name: appName })
-    setVersion('')
-    setAlias('')
+  const handleMemoryLimitChange = (event: React.ChangeEvent<{ value: string }>) => {
+    setMemoryLimit(event.target.value)
   }
 
-  const [secondTableTab, setSecondTableTab] = useState(SecondTableTypes.ENVIRONMENT)
+  const handleChangeAttributes = (event) => {
+    setAttributeState({ ...attributesState, [event.target.name]: event.target.checked })
+  }
+
+  const onClickDeploy = () => {
+    const bytes = parseInt(memoryLimit, 10) || 0
+    mutate({ alias, version, name: appName, memoryBytesLimit: bytes, attributes: attributesState }).then(() => {
+      setVersion(versions[versions.length - 1])
+      setAlias('')
+      setMemoryLimit('')
+      setAttributeState({
+        testInstance: false,
+        stopTraffic: false,
+      })
+
+      setModalState(false)
+    })
+  }
 
   const createdAt = (dateCreated ? new Date(dateCreated) : new Date()).toISOString().split('T')[0]
 
@@ -101,45 +189,127 @@ export const Deploy = ({ data }: { data: IApplicationData }) => {
     <div>
       <Appbar />
       <Container className={classes.formControl}>
-        <Grid container direction='row' justify='space-around' alignItems='center'>
-          <Grid item>
-            <Typography variant='h5'>Description: {description}</Typography>
-            <Typography variant='h6'>Last release: {createdAt}</Typography>
-          </Grid>
-          <Grid item>
-            <InputLabel className={classes.inputLabelStyle}>Version</InputLabel>
-            <FormControl variant='filled'>
-              <Select value={version} onChange={handleVersionChange}>
-                {versions.map((vers) => (
-                  <MenuItem key={vers} value={vers}>
-                    {vers}
-                  </MenuItem>
+        <Tabs value={tab} onChange={(e, newTab) => setTab(newTab)}>
+          <Tab value={TabTypes.app} label='APP' />
+          <Tab value={TabTypes.env} label='ENV' />
+          <Tab value={TabTypes.ports} label='PORTS' />
+          <Tab value={TabTypes.volumes} label='VOLUMES' />
+        </Tabs>
+        <div>
+          <Typography variant='h7'>Description:</Typography>
+          <br />
+          <Typography variant='h6'>{description}</Typography>
+        </div>
+        <div>
+          <Typography variant='h7'>Last release:</Typography>
+          <br />
+          <Typography variant='h6'>{createdAt}</Typography>
+        </div>
+
+        <Button
+          className={classes.deployBtn}
+          variant='contained'
+          disabled={!version}
+          onClick={() => setModalState(true)}
+        >
+          Deploy
+        </Button>
+        <Modal open={modalState} onClose={() => setModalState(false)}>
+          <div className={classes.modalContainer}>
+            <Grid container direction='row' justify='space-between' alignItems='center'>
+              <TextField disabled label='Name' variant='outlined' value={appName} />
+              <div>
+                <InputLabel htmlFor='app_version' className={classes.inputLabelStyle}>
+                  Version
+                </InputLabel>
+                <Select inputProps={{ id: 'app_version' }} value={version} onChange={handleVersionChange}>
+                  {versions.map((vers) => (
+                    <MenuItem key={vers} value={vers}>
+                      {vers}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </div>
+            </Grid>
+            <Table>
+              <TableHead>
+                <TableCell>Resources</TableCell>
+                <TableCell align='right'>Quantity</TableCell>
+              </TableHead>
+              <TableBody>
+                {resources.map((resource) => (
+                  <TableRow key={resource}>
+                    <TableCell>{resource}</TableCell>
+                    <TableCell align='right'>
+                      <TextField variant='outlined' value={memoryLimit} onChange={handleMemoryLimitChange} />
+                    </TableCell>
+                  </TableRow>
                 ))}
-              </Select>
-              <TextField label='Alias' variant='filled' value={alias} onChange={handleAliasChange} />
-            </FormControl>
-          </Grid>
-          <Grid item className={classes.buttonContainerStyle}>
-            <Button variant='contained' disabled={!version} onClick={onClickDeploy}>
+              </TableBody>
+            </Table>
+            <br />
+            <Table>
+              <TableHead>
+                <TableCell>Attributes</TableCell>
+                <TableCell align='right'>Select</TableCell>
+              </TableHead>
+              <TableBody>
+                <TableRow>
+                  <TableCell>Test instance</TableCell>
+                  <TableCell align='right'>
+                    <Checkbox
+                      checked={attributesState.testInstance}
+                      onChange={handleChangeAttributes}
+                      name='testInstance'
+                    />
+                  </TableCell>
+                </TableRow>
+                <TableRow>
+                  <TableCell>Stop traffic</TableCell>
+                  <TableCell align='right'>
+                    <Checkbox
+                      checked={attributesState.stopTraffic}
+                      onChange={handleChangeAttributes}
+                      name='stopTraffic'
+                    />
+                  </TableCell>
+                </TableRow>
+              </TableBody>
+            </Table>
+            <br />
+            <div>
+              <TextField label='Alias' variant='outlined' value={alias} onChange={handleAliasChange} />
+            </div>
+            <br />
+            <Button onClick={onClickDeploy} variant='contained' color='primary' className={classes.deployBtn}>
               Deploy
             </Button>
-          </Grid>
-        </Grid>
-        <Container>
-          <Tabs value={secondTableTab} onChange={(e, newTab) => setSecondTableTab(newTab)}>
-            <Tab value={SecondTableTypes.ENVIRONMENT} label='ENV' />
-            <Tab value={SecondTableTypes.PORTS} label='PORTS' />
-            <Tab value={SecondTableTypes.VOLUMES} label='VOLUMES' />
-          </Tabs>
-        </Container>
+          </div>
+        </Modal>
       </Container>
       <hr className={classes.hrStyle} />
       <div style={{ display: 'flex' }}>
-        <Container style={{ width: '70%' }}>
-          <InstancesTable data={instanceItems} />
-          <HistoryLog variant={logs} />
-        </Container>
-        <SecondTable className={classes.secondTable} data={data} type={secondTableTab} />
+        {tab === TabTypes.app && (
+          <Container>
+            <InstancesTable data={instanceItems} />
+            <HistoryLog variant={logs} />
+          </Container>
+        )}
+        {tab === TabTypes.env && (
+          <Container>
+            <EnvironmentsTable data={data} />
+          </Container>
+        )}
+        {tab === TabTypes.ports && (
+          <Container>
+            <PortsTable data={data} />
+          </Container>
+        )}
+        {tab === TabTypes.volumes && (
+          <Container>
+            <VolumesTable data={data} />
+          </Container>
+        )}
       </div>
     </div>
   )

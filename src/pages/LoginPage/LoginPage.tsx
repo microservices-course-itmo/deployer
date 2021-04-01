@@ -48,6 +48,11 @@ export const SignIn = () => {
   const [secondForm, setSecondForm] = useState(false)
   const [sendCode, setSendCode] = useState<any | null>(null)
   const [userData, setUserData] = useState<null | { user: { name: string; birthdate: string; id: string } }>(null)
+  const [recaptcha, setRecaptcha] = useState<firebase.auth.RecaptchaVerifier>(null)
+
+  useEffect(() => {
+    setRecaptcha(new firebase.auth.RecaptchaVerifier('recaptcha', { size: 'invisible' }))
+  }, [])
 
   const formState1 = useFormik({
     initialValues: {
@@ -57,11 +62,9 @@ export const SignIn = () => {
     // @ts-ignore
     validationSchemaFirst,
     onSubmit: (values) => {
-      const applicationVerifier = new firebase.auth.RecaptchaVerifier('recaptcha', { size: 'invisible' })
-
       firebase
         .auth()
-        .signInWithPhoneNumber(values.phone, applicationVerifier)
+        .signInWithPhoneNumber(values.phone, recaptcha)
         .then((code: string) => {
           setSendCode(code)
           setSecondForm(true)
