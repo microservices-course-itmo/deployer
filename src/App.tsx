@@ -2,6 +2,7 @@ import { CssBaseline } from '@material-ui/core'
 import { SnackbarProvider } from 'notistack'
 import React from 'react'
 import { QueryCache, ReactQueryCacheProvider, ReactQueryConfigProvider } from 'react-query'
+
 import Router from './Router'
 import { initFirebase } from './firebase'
 
