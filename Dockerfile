@@ -1,6 +1,8 @@
 FROM node:12-alpine as build
 WORKDIR /app
 COPY package.json /app/package.json
+RUN rm -rf node_modules
+RUN rm rm package-lock.json | echo no such file
 RUN npm install --verbose
 ENV API=http://deployment-service:8080
 ENV FIREBASE_API=AIzaSyCExaLzKWdhhr_1IRPe1NIFdR7Uor12LTI
