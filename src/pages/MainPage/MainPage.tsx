@@ -30,11 +30,9 @@ const useStyles = makeStyles(() =>
     columnName: {
       width: '30%',
       overflow: 'hidden',
-      // fontWeight: 'bold',
     },
     columnDate: {
       width: '40%',
-      // fontWeight: 'bold',
     },
     columnRunning: {
       width: '10%',
