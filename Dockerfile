@@ -2,7 +2,7 @@ FROM node:12-alpine as build
 WORKDIR /app
 COPY package.json /app/package.json
 RUN npm install --verbose
-ENV API=http://deployment-service:8080
+ENV API=http://77.234.215.138:18080/deployment-service
 ENV FIREBASE_API=AIzaSyCExaLzKWdhhr_1IRPe1NIFdR7Uor12LTI
 ENV API_USER_SERVICE=http://77.234.215.138:18080
 COPY . /app
