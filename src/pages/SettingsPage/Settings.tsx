@@ -3,6 +3,7 @@ import React from 'react'
 import { useQuery } from 'react-query'
 import { Appbar } from '../Appbar/Appbar'
 import { SettingsList } from './SettingsList'
+import { checkAuthError } from '../../api/checkAuthError'
 
 export const Settings = () => {
   const accessToken = window.localStorage.getItem('accessToken')
@@ -12,7 +13,9 @@ export const Settings = () => {
       headers: {
         Authorization: `Bearer ${accessToken}`,
       },
-    }).then((res) => res.json())
+    })
+      .then(checkAuthError)
+      .then((res) => res.json())
   )
   if (isLoading) {
     return (

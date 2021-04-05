@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom'
+import { HashRouter, Switch, Route, Redirect } from 'react-router-dom'
 import { MainPage } from './pages/MainPage/MainPage'
 import { ApplicationPage } from './pages/ApplicationPage/ApplicationPage'
 import { SignIn } from './pages/LoginPage/LoginPage'
@@ -34,7 +34,7 @@ const Router = () => {
   }, [])
 
   return isAuthenticationChecked ? (
-    <BrowserRouter>
+    <HashRouter>
       <Switch>
         <Route exact path='/new-app' render={() => (isAuthenticated ? <NewAppPage /> : <Redirect to='/login' />)} />
         <Route exact path='/settings' render={() => (isAuthenticated ? <Settings /> : <Redirect to='/login' />)} />
@@ -43,7 +43,7 @@ const Router = () => {
         <Route path='/app/:name' render={() => (isAuthenticated ? <ApplicationPage /> : <Redirect to='/login' />)} />
         <Route path='/' render={() => (isAuthenticated ? <MainPage /> : <Redirect to='/login' />)} />
       </Switch>
-    </BrowserRouter>
+    </HashRouter>
   ) : null
 }
 

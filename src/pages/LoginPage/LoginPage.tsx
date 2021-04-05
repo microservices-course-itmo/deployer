@@ -124,7 +124,7 @@ export const SignIn = () => {
 
   return (
     <>
-      <Appbar />
+      <Appbar isLoginPage />
       <Container component='main' maxWidth='xs'>
         <CssBaseline />
         <div className={classes.paper}>
