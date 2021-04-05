@@ -113,7 +113,7 @@ export const Deploy = ({ data }: { data: IApplicationData }) => {
   const { enqueueSnackbar } = useSnackbar()
   const { hash } = useLocation()
 
-  const [tab, setTab] = useState()
+  const [tab, setTab] = useState('')
 
   const [version, setVersion] = useState(versions[versions.length - 1])
   const [instanceItems, setInstanceItems] = useState<IApplicationInstance[]>(instances)
@@ -196,14 +196,12 @@ export const Deploy = ({ data }: { data: IApplicationData }) => {
           <Tab value={TabTypes.volumes} label='VOLUMES' />
         </Tabs>
         <div>
-          <Typography variant='h7'>Description:</Typography>
-          <br />
-          <Typography variant='h6'>{description}</Typography>
+          <Typography variant='body2'>Description:</Typography>
+          <Typography variant='body1'>{description}</Typography>
         </div>
         <div>
-          <Typography variant='h7'>Last release:</Typography>
-          <br />
-          <Typography variant='h6'>{createdAt}</Typography>
+          <Typography variant='body2'>Last release:</Typography>
+          <Typography variant='body1'>{createdAt}</Typography>
         </div>
 
         <Button

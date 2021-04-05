@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/ban-ts-comment */
+/* eslint-disable @typescript-eslint/ban-ts-comment, react/no-array-index-key */
 // @ts-nocheck
 
 import React, { useState } from 'react'
@@ -122,15 +122,19 @@ export const MainPage = () => {
       .then((items) => items.filter((i) => i.status === 'fulfilled').map((i) => i.value))
 
       .then((items) => {
-        setSearchItems(items)
         return items
       })
   )
 
+  React.useEffect(() => {
+    if (data) {
+      setSearchItems(filterList(inputValue, data))
+    }
+  }, [inputValue, data])
+
   const handleValueChange = (event: React.ChangeEvent<{ value: unknown }>) => {
     const { value } = event.target
     setInputValue(value as string)
-    setSearchItems(filterList(value as string, data!))
   }
 
   return (
@@ -171,10 +175,10 @@ export const MainPage = () => {
                     {searchItems
                       // last created will be first
                       .sort((a, b) => +b.dateCreated - +a.dateCreated)
-                      .map((item) => {
+                      .map((item, index) => {
                         const { dateCreated, name, id, instances } = item
                         return (
-                          <ListItem key={id}>
+                          <ListItem key={`${id}_${index}`}>
                             <Link style={{ textDecoration: 'none' }} className={classes.columnName} to={`/app/${name}`}>
                               {name}
                             </Link>
