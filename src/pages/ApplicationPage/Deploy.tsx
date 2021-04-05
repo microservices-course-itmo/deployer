@@ -122,7 +122,7 @@ export const Deploy = ({ data }: { data: IApplicationData }) => {
 
   const [tab, setTab] = useState('')
 
-  const [warning, setWarning] = useState()
+  const [warning, setWarning] = useState('')
 
   const [version, setVersion] = useState(versions[versions.length - 1])
   const [instanceItems, setInstanceItems] = useState<IApplicationInstance[]>(instances)
@@ -231,7 +231,13 @@ export const Deploy = ({ data }: { data: IApplicationData }) => {
         >
           Deploy
         </Button>
-        <Modal open={modalState} onClose={() => setModalState(false)}>
+        <Modal
+          open={modalState}
+          onClose={() => {
+            setWarning('')
+            setModalState(false)
+          }}
+        >
           {warning ? (
             <div className={classes.modalContainer}>
               <div>{warning}</div>
