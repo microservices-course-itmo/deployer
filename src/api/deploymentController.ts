@@ -1,4 +1,5 @@
 import { IApplicationData } from '../types/Application'
+import { checkAuthError } from './checkAuthError'
 
 const getRoute = (path: string) => `${process.env.API}${path}`
 
@@ -29,7 +30,9 @@ export const deployInstance = ({ alias, name, version, memoryBytesLimit, attribu
       },
       attributes,
     }),
-  }).then((resp) => resp.json())
+  })
+    .then(checkAuthError)
+    .then((resp) => resp.json())
 }
 
 export const updateData = (newData: IApplicationData) => {
@@ -43,16 +46,21 @@ export const updateData = (newData: IApplicationData) => {
       Authorization: `Bearer ${accessToken}`,
     },
     body: JSON.stringify(newData),
-  }).then((resp) => resp.json())
+  })
+    .then(checkAuthError)
+    .then((resp) => resp.json())
 }
 
 export const getAppByName = (name: string) => {
   const accessToken = window.localStorage.getItem('accessToken')
+
   return fetch(getRoute(`/application/get/byName/${name}`), {
     headers: {
       Authorization: `Bearer ${accessToken}`,
     },
-  }).then((resp) => resp.json())
+  })
+    .then(checkAuthError)
+    .then((resp) => resp.json())
 }
 
 export const removeInstance = (id: string) => {
@@ -65,7 +73,9 @@ export const removeInstance = (id: string) => {
       'Content-Type': 'application/json',
       'Accept-Encoding': 'gzip, deflate',
     },
-  }).then((resp) => resp.json())
+  })
+    .then(checkAuthError)
+    .then((resp) => resp.json())
 }
 
 export const changeInstanceStatus = ({ id, status }: { id: string; status: string }) => {
@@ -78,5 +88,19 @@ export const changeInstanceStatus = ({ id, status }: { id: string; status: strin
       'Content-Type': 'application/json',
       'Accept-Encoding': 'gzip, deflate',
     },
-  }).then((resp) => resp.json())
+  })
+    .then(checkAuthError)
+    .then((resp) => resp.json())
+}
+
+export const getApplicationNames = () => {
+  const accessToken = window.localStorage.getItem('accessToken')
+
+  return fetch(getRoute(`/application/names`), {
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+    },
+  })
+    .then(checkAuthError)
+    .then((resp) => resp.json())
 }

@@ -15,25 +15,28 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 )
 
-export const Appbar = () => {
+export const Appbar = ({ isLoginPage }: { isLoginPage?: boolean }) => {
   const classes = useStyles()
 
   return (
     <div className={classes.bar}>
       <AppBar>
         <Toolbar>
-          <IconButton edge='start' className={classes.menuButton} color='inherit' aria-label='menu' href='/'>
+          <IconButton edge='start' className={classes.menuButton} color='inherit' aria-label='menu' href='#'>
             <SearchIcon />
           </IconButton>
-          <IconButton edge='start' className={classes.menuButton} color='inherit' aria-label='menu' href='/settings'>
+          <IconButton edge='start' className={classes.menuButton} color='inherit' aria-label='menu' href='#settings'>
             <SettingsIcon />
           </IconButton>
-          <Button color='inherit' href='/login'>
-            Login
-          </Button>
-          <Button color='inherit' href='/profile'>
-            Profile
-          </Button>
+          {isLoginPage ? (
+            <Button color='inherit' href='#login'>
+              Login
+            </Button>
+          ) : (
+            <Button color='inherit' href='#profile'>
+              Profile
+            </Button>
+          )}
         </Toolbar>
       </AppBar>
     </div>
