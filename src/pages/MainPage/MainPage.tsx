@@ -36,7 +36,7 @@ const useStyles = makeStyles(() =>
       width: '30%',
     },
     columnDate: {
-      width: '40%',
+      width: '30%',
     },
     columnRunning: {
       textAlign: 'center',
@@ -48,7 +48,7 @@ const useStyles = makeStyles(() =>
     },
     columnRemove: {
       textAlign: 'center',
-      width: '10%',
+      width: '20%',
     },
     removeBtn: {
       backgroundColor: 'red',
@@ -74,6 +74,23 @@ const useStyles = makeStyles(() =>
       borderRadius: '12px',
       padding: '25px 70px',
       boxShadow: '5px 3px 15px 3px rgba(63,81,181,0.50)',
+    },
+    listItem: {
+      borderRadius: '4px',
+      padding: '5px 13px',
+      margin: '8px 0',
+      boxShadow: '1px 2px 15px 5px rgba(63,81,181,0.37)',
+      '&:hover': {
+        boxShadow: '1px 2px 15px 5px rgba(63,81,181,0.7)',
+      },
+    },
+    linkItem: {
+      color: 'black',
+      textDecoration: 'none',
+      display: 'flex',
+      flexDirection: 'row',
+      width: '100%',
+      alignItems: 'center',
     },
   })
 )
@@ -162,9 +179,8 @@ export const MainPage = () => {
                 {!!searchItems.length && (
                   <div>
                     <ListItem>
-                      <div className={classes.columnName}>NAME:</div>
-                      <div className={classes.columnDate}>DATE:</div>
-                      <div className={classes.columnRemove} />
+                      <span className={classes.columnName}>NAME:</span>
+                      <span className={classes.columnDate}>DATE:</span>
                       <div className={classes.columnRunning}>
                         <CheckIcon style={{ color: 'green' }} />
                       </div>
@@ -178,34 +194,34 @@ export const MainPage = () => {
                       .map((item, index) => {
                         const { dateCreated, name, id, instances } = item
                         return (
-                          <ListItem key={`${id}_${index}`}>
-                            <Link style={{ textDecoration: 'none' }} className={classes.columnName} to={`/app/${name}`}>
-                              {name}
+                          <ListItem className={classes.listItem} key={`${id}_${index}`}>
+                            <Link className={classes.linkItem} to={`/app/${name}`}>
+                              <span className={classes.columnName} style={{ marginRight: '20px' }}>
+                                {name}
+                              </span>
+                              <div className={classes.columnDate} style={{ marginRight: '20px' }}>
+                                {new Date(dateCreated).toLocaleDateString('ru', {
+                                  year: 'numeric',
+                                  month: 'numeric',
+                                  day: 'numeric',
+                                  hour: 'numeric',
+                                  minute: 'numeric',
+                                  second: 'numeric',
+                                })}
+                              </div>
+                              <div className={classes.columnRunning} style={{ marginRight: '5px' }}>
+                                {instances.reduce((count, curr) => (curr.status === 'RUNNING' ? count + 1 : count), 0)}
+                              </div>
+                              <div className={classes.columnStopped}>
+                                {instances.reduce((count, curr) => (curr.status === 'STOPPED' ? count + 1 : count), 0)}
+                              </div>
                             </Link>
-                            <div className={classes.columnDate}>
-                              {new Date(dateCreated).toLocaleDateString('ru', {
-                                year: 'numeric',
-                                month: 'numeric',
-                                day: 'numeric',
-                                hour: 'numeric',
-                                minute: 'numeric',
-                                second: 'numeric',
-                              })}
-                            </div>
-                            <div className={classes.columnRemove}>
-                              <Button
-                                className={classes.removeBtn}
-                                onClick={(e) => setModalState({ visible: true, app: name })}
-                              >
-                                DELETE
-                              </Button>
-                            </div>
-                            <div className={classes.columnRunning}>
-                              {instances.reduce((count, curr) => (curr.status === 'RUNNING' ? count + 1 : count), 0)}
-                            </div>
-                            <div className={classes.columnStopped}>
-                              {instances.reduce((count, curr) => (curr.status === 'STOPPED' ? count + 1 : count), 0)}
-                            </div>
+                            <Button
+                              className={classes.removeBtn}
+                              onClick={(e) => setModalState({ visible: true, app: name })}
+                            >
+                              DELETE
+                            </Button>
                           </ListItem>
                         )
                       })}
@@ -216,7 +232,7 @@ export const MainPage = () => {
             )}
           </div>
           <div style={{ padding: '23px 0 0 20px' }}>
-            <Button color='primary' href='/new-app' variant='contained' size='large' style={{ width: '120px' }}>
+            <Button color='primary' href='#new-app' variant='contained' size='large' style={{ width: '120px' }}>
               New app
             </Button>
           </div>
@@ -224,7 +240,7 @@ export const MainPage = () => {
       </Grid>
       <Modal open={modalState.visible} onClose={() => setModalState({ visible: false })}>
         <div className={classes.modalContainer}>
-          <h2>Do you really want to remove app "{modalState.app}"</h2>
+          <h2>Do you really want to remove app "{modalState.app}" ?</h2>
           <Grid container direction='row' justify='center' alignItems='center'>
             <Button
               className={classes.removeBtn}
