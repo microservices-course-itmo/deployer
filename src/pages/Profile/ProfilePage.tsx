@@ -77,7 +77,7 @@ export const ProfilePage = () => {
 
   const exitProfile = () => {
     window.localStorage.clear()
-    history.replace('/login')
+    window.location.reload()
   }
 
   useEffect(() => {
