@@ -136,7 +136,7 @@ export const MainPage = () => {
       // Request all apps.
       .then((items) => Promise.allSettled(items.map((application: string) => getAppByName(application))))
       // Remove apps with error statuses.
-      .then((items) => items.filter((i) => i.status === 'fulfilled').map((i) => i.value))
+      .then((items) => items.filter((i) => i.status === 'fulfilled' && !i.value.status).map((i) => i.value))
 
       .then((items) => {
         return items
