@@ -122,7 +122,7 @@ export const Deploy = ({ data }: { data: IApplicationData }) => {
 
   const [tab, setTab] = useState('')
 
-  const [warning, setWarning] = useState('')
+  const [warning, setWarning] = useState(false)
 
   const [version, setVersion] = useState(versions[versions.length - 1])
   const [instanceItems, setInstanceItems] = useState<IApplicationInstance[]>(instances)
@@ -187,16 +187,14 @@ export const Deploy = ({ data }: { data: IApplicationData }) => {
         testInstance: false,
         stopTraffic: false,
       })
-      setWarning('')
+      setWarning(false)
       setModalState(false)
     })
   }
 
   const onClickDeploy = () => {
-    console.log(instanceItems.some((item) => item.alias === alias))
-    console.log('items', instanceItems)
     if (instanceItems.some((item) => item.alias === alias)) {
-      setWarning('Instance with the same alias is already exist. Are you shure?')
+      setWarning(true)
     } else {
       deployInstance()
     }
@@ -234,17 +232,20 @@ export const Deploy = ({ data }: { data: IApplicationData }) => {
         <Modal
           open={modalState}
           onClose={() => {
-            setWarning('')
+            setWarning(false)
             setModalState(false)
           }}
         >
           {warning ? (
             <div className={classes.modalContainer}>
-              <div>{warning}</div>
+              <div style={{ textAlign: 'center' }}>
+                <span style={{ display: 'block', fontSize: '21px' }}>Instance with this alias already exists</span>
+                <span style={{ display: 'block', fontSize: '21px' }}>Are you sure want to redeploy it?</span>
+              </div>
               <div className={classes.warningBtnRow}>
                 <Button
                   onClick={() => {
-                    setWarning('')
+                    setWarning(false)
                   }}
                   variant='contained'
                   color='secondary'
