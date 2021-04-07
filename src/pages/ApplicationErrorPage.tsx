@@ -27,7 +27,7 @@ export const ApplicationErrorPage = () => {
     return () => {
       clearInterval(timer)
     }
-  })
+  }, [])
 
   useEffect(() => {
     if (seconds <= 0) {
