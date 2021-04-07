@@ -127,7 +127,7 @@ export const PortsTable = ({ data: { ports = {}, ...fullData } }: IApplicationPa
                   value={newPortValue}
                 />
               </TableCell>
-              <TableCell>
+              <TableCell align='center'>
                 <IconButton onClick={onChangeAddPorts} aria-label='add'>
                   <AddCircleOutlineIcon fontSize='large' style={{ color: '#3F51B5' }} />
                 </IconButton>
