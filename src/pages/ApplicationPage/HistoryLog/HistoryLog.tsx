@@ -103,11 +103,11 @@ export const HistoryLog = ({ variant }: IHistoryLogProps) => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {variant?.map((Variant) => {
+              {variant?.map((Variant, index) => {
                 const date = (Variant.date ? new Date(Variant.date) : new Date()).toISOString().split('T')[0]
 
                 return (
-                  <TableRow key={Variant.id}>
+                  <TableRow key={index}>
                     <TableCell align='center'>{date}</TableCell>
                     <TableCell align='center'>
                       <Button
