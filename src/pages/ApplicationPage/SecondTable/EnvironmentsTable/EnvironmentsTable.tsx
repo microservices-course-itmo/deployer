@@ -133,7 +133,7 @@ export const EnvironmentsTable = ({
                   value={newEnvValue}
                 />
               </TableCell>
-              <TableCell>
+              <TableCell align='center'>
                 <IconButton onClick={onChangeAddEnv} aria-label='add'>
                   <AddCircleOutlineIcon fontSize='large' style={{ color: '#3F51B5' }} />
                 </IconButton>
