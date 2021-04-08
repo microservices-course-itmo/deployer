@@ -275,6 +275,7 @@ export const HelpPage = () => {
 
   ![Картинка_45](https://github.com/DanilaPichugin/Png_photos/blob/main/Untitled%2033.png?raw=true)
   `
+
   // eslint-disable-next-line react/no-children-prop
-  render(<ReactMarkdown plugins={[gfm]} children={markdown} />, document.body)
+  return <ReactMarkdown plugins={[gfm]} children={markdown} />
 }

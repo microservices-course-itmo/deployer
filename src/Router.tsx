@@ -9,40 +9,36 @@ import { ProfilePage } from './pages/Profile/ProfilePage'
 import { HelpPage } from './pages/HelpPage/HelpPage'
 
 const Router = () => {
-  // const [isAuthenticated, setIsAuthenticated] = useState(false)
-  // const [isAuthenticationChecked, setIsAuthenticationChecked] = useState(false)
+  const [isAuthenticated, setIsAuthenticated] = useState(false)
+  const [isAuthenticationChecked, setIsAuthenticationChecked] = useState(false)
 
-  // useEffect(() => {
-  // const accessToken = window.localStorage.getItem('accessToken')
+  useEffect(() => {
+    const accessToken = window.localStorage.getItem('accessToken')
 
-  // if (accessToken) {
-  // fetch(`http://77.234.215.138:18080/user-service/validate?token=${accessToken}`, {
-  //  method: 'POST',
-  // })
-  // .then((res) => {
-  // if (res.ok) {
-  // setIsAuthenticated(true)
-  // } else {
-  // window.localStorage.clear()
-  // }
-  // })
-  // .finally(() => {
-  // setIsAuthenticationChecked(true)
-  // })
-  // } else {
-  // setIsAuthenticationChecked(true)
-  // }
-  // }, [])
-
-  const isAuthenticationChecked = true
-
-  const isAuthenticated = true
+    if (accessToken) {
+      fetch(`http://77.234.215.138:18080/user-service/validate?token=${accessToken}`, {
+        method: 'POST',
+      })
+        .then((res) => {
+          if (res.ok) {
+            setIsAuthenticated(true)
+          } else {
+            window.localStorage.clear()
+          }
+        })
+        .finally(() => {
+          setIsAuthenticationChecked(true)
+        })
+    } else {
+      setIsAuthenticationChecked(true)
+    }
+  }, [])
 
   return isAuthenticationChecked ? (
     <BrowserRouter>
       {console.log(isAuthenticated)}
       <Switch>
-        <Route exact path='/help' render={() => (isAuthenticated ? <HelpPage /> : <Redirect to='/login' />)} />
+        <Route exact path='/help' render={HelpPage} />
         <Route exact path='/new-app' render={() => (isAuthenticated ? <NewAppPage /> : <Redirect to='/login' />)} />
         <Route exact path='/settings' render={() => (isAuthenticated ? <Settings /> : <Redirect to='/login' />)} />
         <Route exact path='/login' component={SignIn} />
