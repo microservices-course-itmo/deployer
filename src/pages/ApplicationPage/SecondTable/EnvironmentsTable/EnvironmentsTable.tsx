@@ -113,7 +113,7 @@ export const EnvironmentsTable = ({
                 <TableCell align='right'>
                   <TextField id='standard' name={name} variant='filled' value={envs[name]} onChange={handleChangeEnv} />
                 </TableCell>
-                <TableCell>
+                <TableCell align='center'>
                   <IconButton onClick={() => onClickDeleteEnv(name)} aria-label='delete'>
                     <DeleteIcon fontSize='large' />
                   </IconButton>
@@ -133,7 +133,7 @@ export const EnvironmentsTable = ({
                   value={newEnvValue}
                 />
               </TableCell>
-              <TableCell>
+              <TableCell align='center'>
                 <IconButton onClick={onChangeAddEnv} aria-label='add'>
                   <AddCircleOutlineIcon fontSize='large' style={{ color: '#3F51B5' }} />
                 </IconButton>

@@ -116,7 +116,7 @@ export const VolumesTable = ({ data: { volumes = [], ...fullData } }: IApplicati
             <TextField id='standard' variant='filled' value={vol} onChange={handleChangeVolume(index)} />
             <ListItemSecondaryAction>
               <IconButton onClick={() => onClickDelete(vol)} aria-label='delete'>
-                <DeleteIcon fontSize='large' />
+                <DeleteIcon fontSize='large' style={{ marginRight: '35px' }} />
               </IconButton>
             </ListItemSecondaryAction>
           </ListItem>
@@ -128,7 +128,7 @@ export const VolumesTable = ({ data: { volumes = [], ...fullData } }: IApplicati
               <AddCircleOutlineIcon
                 onClick={() => onClickAddNewVolume(newVol)}
                 fontSize='large'
-                style={{ color: '#3F51B5' }}
+                style={{ color: '#3F51B5', marginRight: '35px' }}
               />
             </IconButton>
           </ListItemSecondaryAction>
