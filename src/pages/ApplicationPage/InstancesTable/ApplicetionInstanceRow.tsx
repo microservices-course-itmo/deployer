@@ -64,6 +64,7 @@ const ACTIONS_ICONS = {
 export const ApplicationInstanceRow = ({ data }: IApplicationInstanceTableProps) => {
   const { enqueueSnackbar } = useSnackbar()
   const [instanceData, setInstanceData] = useState<IApplicationInstance | null>(data)
+  const [loadingType, setLoadingType] = useState('')
 
   useEffect(() => {
     const accessToken = window.localStorage.getItem('accessToken')
@@ -75,7 +76,15 @@ export const ApplicationInstanceRow = ({ data }: IApplicationInstanceTableProps)
           },
         })
           .then((res) => res.json())
-          .then((newData) => setInstanceData(newData))
+          .then((newData) => {
+            setInstanceData((oldData) => {
+              if (oldData?.status !== newData.status) {
+                enqueueSnackbar(`${newData.alias} status has been changed to ${newData.status}`, { variant: 'info' })
+                setLoadingType('')
+              }
+              return newData
+            })
+          })
           .catch(() => {
             clearInterval(interval)
             setInstanceData(null)
@@ -96,12 +105,10 @@ export const ApplicationInstanceRow = ({ data }: IApplicationInstanceTableProps)
     },
   })
 
-  const [loadingType, setLoadingType] = useState('')
-
   const [changeInstanceStatus] = useMutation(API.deploymentController.changeInstanceStatus, {
     onSuccess: (newInstanceData) => {
-      setInstanceData(newInstanceData)
-      setLoadingType('')
+      // setInstanceData(newInstanceData)
+      // setLoadingType('')
     },
     onError: (error: Error) => {
       enqueueSnackbar(`${error.name} - ${error.message}`, { variant: 'error' })
