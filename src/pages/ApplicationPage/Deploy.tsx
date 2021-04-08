@@ -334,27 +334,22 @@ export const Deploy = ({ data }: { data: IApplicationData }) => {
       </Container>
       <hr className={classes.hrStyle} />
       <div style={{ display: 'flex' }}>
-        {tab === TabTypes.app && (
-          <Container>
-            <InstancesTable data={instanceItems} />
-            <HistoryLog variant={logs} />
-          </Container>
-        )}
-        {tab === TabTypes.env && (
-          <Container>
-            <EnvironmentsTable data={data} />
-          </Container>
-        )}
-        {tab === TabTypes.ports && (
-          <Container>
-            <PortsTable data={data} />
-          </Container>
-        )}
-        {tab === TabTypes.volumes && (
-          <Container>
-            <VolumesTable data={data} />
-          </Container>
-        )}
+        <Container style={{ display: tab === TabTypes.app ? 'block' : 'none' }}>
+          <InstancesTable data={instanceItems} />
+          <HistoryLog variant={logs} />
+        </Container>
+
+        <Container style={{ display: tab === TabTypes.env ? 'block' : 'none' }}>
+          <EnvironmentsTable data={data} />
+        </Container>
+
+        <Container style={{ display: tab === TabTypes.ports ? 'block' : 'none' }}>
+          <PortsTable data={data} />
+        </Container>
+
+        <Container style={{ display: tab === TabTypes.volumes ? 'block' : 'none' }}>
+          <VolumesTable data={data} />
+        </Container>
       </div>
     </div>
   )
