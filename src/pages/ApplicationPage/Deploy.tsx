@@ -102,6 +102,13 @@ const useStyles = makeStyles(({ spacing }) => ({
     justifyContent: 'space-between',
     alignItems: 'center',
   },
+  warningBtnRow: {
+    display: 'flex',
+    flexDirection: 'row',
+    marginTop: '100px',
+    width: '100%',
+    justifyContent: 'space-between',
+  },
 }))
 
 export const Deploy = ({ data }: { data: IApplicationData }) => {
@@ -114,6 +121,8 @@ export const Deploy = ({ data }: { data: IApplicationData }) => {
   const { hash } = useLocation()
 
   const [tab, setTab] = useState('')
+
+  const [warning, setWarning] = useState(false)
 
   const [version, setVersion] = useState(versions[versions.length - 1])
   const [instanceItems, setInstanceItems] = useState<IApplicationInstance[]>(instances)
@@ -168,7 +177,7 @@ export const Deploy = ({ data }: { data: IApplicationData }) => {
     setAttributeState({ ...attributesState, [event.target.name]: event.target.checked })
   }
 
-  const onClickDeploy = () => {
+  const deployInstance = () => {
     const bytes = parseInt(memoryLimit, 10) || 0
     mutate({ alias, version, name: appName, memoryBytesLimit: bytes, attributes: attributesState }).then(() => {
       setVersion(versions[versions.length - 1])
@@ -178,9 +187,17 @@ export const Deploy = ({ data }: { data: IApplicationData }) => {
         testInstance: false,
         stopTraffic: false,
       })
-
+      setWarning(false)
       setModalState(false)
     })
+  }
+
+  const onClickDeploy = () => {
+    if (instanceItems.some((item) => item.alias === alias)) {
+      setWarning(true)
+    } else {
+      deployInstance()
+    }
   }
 
   const createdAt = (dateCreated ? new Date(dateCreated) : new Date()).toISOString().split('T')[0]
@@ -212,102 +229,127 @@ export const Deploy = ({ data }: { data: IApplicationData }) => {
         >
           Deploy
         </Button>
-        <Modal open={modalState} onClose={() => setModalState(false)}>
-          <div className={classes.modalContainer}>
-            <Grid container direction='row' justify='space-between' alignItems='center'>
-              <TextField disabled label='Name' variant='outlined' value={appName} />
-              <div>
-                <InputLabel htmlFor='app_version' className={classes.inputLabelStyle}>
-                  Version
-                </InputLabel>
-                <Select inputProps={{ id: 'app_version' }} value={version} onChange={handleVersionChange}>
-                  {versions.map((vers) => (
-                    <MenuItem key={vers} value={vers}>
-                      {vers}
-                    </MenuItem>
-                  ))}
-                </Select>
+        <Modal
+          open={modalState}
+          onClose={() => {
+            setWarning(false)
+            setModalState(false)
+          }}
+        >
+          {warning ? (
+            <div className={classes.modalContainer}>
+              <div style={{ textAlign: 'center' }}>
+                <span style={{ display: 'block', fontSize: '21px' }}>Instance with this alias already exists</span>
+                <span style={{ display: 'block', fontSize: '21px' }}>Are you sure want to redeploy it?</span>
               </div>
-            </Grid>
-            <Table>
-              <TableHead>
-                <TableCell>Resources</TableCell>
-                <TableCell align='right'>Quantity</TableCell>
-              </TableHead>
-              <TableBody>
-                {resources.map((resource) => (
-                  <TableRow key={resource}>
-                    <TableCell>{resource}</TableCell>
+              <div className={classes.warningBtnRow}>
+                <Button
+                  onClick={() => {
+                    setWarning(false)
+                  }}
+                  variant='contained'
+                  color='secondary'
+                  className={classes.deployBtn}
+                >
+                  Cancel
+                </Button>
+                <Button onClick={deployInstance} variant='contained' color='primary' className={classes.deployBtn}>
+                  Deploy
+                </Button>
+              </div>
+            </div>
+          ) : (
+            <div className={classes.modalContainer}>
+              <Grid container direction='row' justify='space-between' alignItems='center'>
+                <TextField disabled label='Name' variant='outlined' value={appName} />
+                <div>
+                  <InputLabel htmlFor='app_version' className={classes.inputLabelStyle}>
+                    Version
+                  </InputLabel>
+                  <Select inputProps={{ id: 'app_version' }} value={version} onChange={handleVersionChange}>
+                    {versions.map((vers) => (
+                      <MenuItem key={vers} value={vers}>
+                        {vers}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </div>
+              </Grid>
+              <Table>
+                <TableHead>
+                  <TableCell>Resources</TableCell>
+                  <TableCell align='right'>Quantity</TableCell>
+                </TableHead>
+                <TableBody>
+                  {resources.map((resource) => (
+                    <TableRow key={resource}>
+                      <TableCell>{resource}</TableCell>
+                      <TableCell align='right'>
+                        <TextField variant='outlined' value={memoryLimit} onChange={handleMemoryLimitChange} />
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+              <br />
+              <Table>
+                <TableHead>
+                  <TableCell>Attributes</TableCell>
+                  <TableCell align='right'>Select</TableCell>
+                </TableHead>
+                <TableBody>
+                  <TableRow>
+                    <TableCell>Test instance</TableCell>
                     <TableCell align='right'>
-                      <TextField variant='outlined' value={memoryLimit} onChange={handleMemoryLimitChange} />
+                      <Checkbox
+                        checked={attributesState.testInstance}
+                        onChange={handleChangeAttributes}
+                        name='testInstance'
+                      />
                     </TableCell>
                   </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-            <br />
-            <Table>
-              <TableHead>
-                <TableCell>Attributes</TableCell>
-                <TableCell align='right'>Select</TableCell>
-              </TableHead>
-              <TableBody>
-                <TableRow>
-                  <TableCell>Test instance</TableCell>
-                  <TableCell align='right'>
-                    <Checkbox
-                      checked={attributesState.testInstance}
-                      onChange={handleChangeAttributes}
-                      name='testInstance'
-                    />
-                  </TableCell>
-                </TableRow>
-                <TableRow>
-                  <TableCell>Stop traffic</TableCell>
-                  <TableCell align='right'>
-                    <Checkbox
-                      checked={attributesState.stopTraffic}
-                      onChange={handleChangeAttributes}
-                      name='stopTraffic'
-                    />
-                  </TableCell>
-                </TableRow>
-              </TableBody>
-            </Table>
-            <br />
-            <div>
-              <TextField label='Alias' variant='outlined' value={alias} onChange={handleAliasChange} />
+                  <TableRow>
+                    <TableCell>Stop traffic</TableCell>
+                    <TableCell align='right'>
+                      <Checkbox
+                        checked={attributesState.stopTraffic}
+                        onChange={handleChangeAttributes}
+                        name='stopTraffic'
+                      />
+                    </TableCell>
+                  </TableRow>
+                </TableBody>
+              </Table>
+              <br />
+              <div>
+                <TextField label='Alias' variant='outlined' value={alias} onChange={handleAliasChange} />
+              </div>
+              <br />
+              <Button onClick={onClickDeploy} variant='contained' color='primary' className={classes.deployBtn}>
+                Deploy
+              </Button>
             </div>
-            <br />
-            <Button onClick={onClickDeploy} variant='contained' color='primary' className={classes.deployBtn}>
-              Deploy
-            </Button>
-          </div>
+          )}
         </Modal>
       </Container>
       <hr className={classes.hrStyle} />
       <div style={{ display: 'flex' }}>
-        {tab === TabTypes.app && (
-          <Container>
-            <InstancesTable data={instanceItems} />
-            <HistoryLog variant={logs} />
-          </Container>
-        )}
-        {tab === TabTypes.env && (
-          <Container>
-            <EnvironmentsTable data={data} />
-          </Container>
-        )}
-        {tab === TabTypes.ports && (
-          <Container>
-            <PortsTable data={data} />
-          </Container>
-        )}
-        {tab === TabTypes.volumes && (
-          <Container>
-            <VolumesTable data={data} />
-          </Container>
-        )}
+        <Container style={{ display: tab === TabTypes.app ? 'block' : 'none' }}>
+          <InstancesTable data={instanceItems} />
+          <HistoryLog variant={logs} />
+        </Container>
+
+        <Container style={{ display: tab === TabTypes.env ? 'block' : 'none' }}>
+          <EnvironmentsTable data={data} />
+        </Container>
+
+        <Container style={{ display: tab === TabTypes.ports ? 'block' : 'none' }}>
+          <PortsTable data={data} />
+        </Container>
+
+        <Container style={{ display: tab === TabTypes.volumes ? 'block' : 'none' }}>
+          <VolumesTable data={data} />
+        </Container>
       </div>
     </div>
   )

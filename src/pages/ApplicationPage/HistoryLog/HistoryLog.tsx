@@ -60,7 +60,6 @@ interface IListsProps {
 }
 
 const renderList = (vars?: IHistoryState, type?: string) => {
-  console.log(vars, type)
   // if (type) {
   //   return vars[type].map((item) => {
   //     const [key, val] = typeof item === 'string' ? [item, ''] : [item[0], item[1]]
@@ -87,7 +86,6 @@ const Lists = ({ type, vars }: IListsProps) => {
 }
 
 export const HistoryLog = ({ variant }: IHistoryLogProps) => {
-  console.log(variant)
   const classes = useStyles()
 
   const [isHistoryOpenWithData, setIsHistoryOpenWithData] = useState<IHistoryLog | null>(null)
@@ -105,11 +103,11 @@ export const HistoryLog = ({ variant }: IHistoryLogProps) => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {variant?.map((Variant) => {
+              {variant?.map((Variant, index) => {
                 const date = (Variant.date ? new Date(Variant.date) : new Date()).toISOString().split('T')[0]
 
                 return (
-                  <TableRow key={Variant.id}>
+                  <TableRow key={index}>
                     <TableCell align='center'>{date}</TableCell>
                     <TableCell align='center'>
                       <Button
