@@ -106,10 +106,6 @@ export const ApplicationInstanceRow = ({ data }: IApplicationInstanceTableProps)
   })
 
   const [changeInstanceStatus] = useMutation(API.deploymentController.changeInstanceStatus, {
-    onSuccess: (newInstanceData) => {
-      // setInstanceData(newInstanceData)
-      // setLoadingType('')
-    },
     onError: (error: Error) => {
       enqueueSnackbar(`${error.name} - ${error.message}`, { variant: 'error' })
     },
